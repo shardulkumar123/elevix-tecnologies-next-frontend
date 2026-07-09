@@ -1,42 +1,48 @@
 "use client";
 
 import React, { useState } from "react";
+
 import Link from "next/link";
-import { Navbar } from "@/components/common/navbar";
-import { Footer } from "@/components/common/footer";
-import { Button } from "@/components/ui/button";
-import { useAppSelector } from "@/lib/redux/hooks";
+
 import {
-  Cpu,
-  Star,
+  Activity,
   ArrowRight,
-  Quote,
-  Play,
-  CheckCircle2,
-  TrendingUp,
   BarChart3,
+  BedDouble,
+  CalendarDays,
+  CheckCircle2,
+  Cpu,
+  Factory,
+  GitMerge,
+  Globe,
+  Heart,
+  Hotel,
+  LayoutDashboard,
+  Package,
+  Plane,
+  Play,
+  Quote,
+  ShieldCheck,
+  ShoppingBag,
+  Star,
+  TrendingUp,
   Users,
   Utensils,
-  BedDouble,
-  Factory,
-  Package,
-  CalendarDays,
-  GitMerge,
-  ShoppingBag,
-  LayoutDashboard,
-  Globe,
-  Activity,
-  ShieldCheck,
   Workflow,
-  Heart,
   X,
-  Plane,
-  Hotel,
 } from "lucide-react";
 
-import { useProjects } from "@/features/projects/hooks/use-projects";
-import { Project } from "@/features/admin/types";
 import { useIndustries } from "@/features/industries/hooks/use-industries";
+import { useProjects } from "@/features/projects/hooks/use-projects";
+
+import { Footer } from "@/components/common/footer";
+import { Navbar } from "@/components/common/navbar";
+import { Button } from "@/components/ui/button";
+
+import { useAppSelector } from "@/lib/redux/hooks";
+
+import { Project } from "@/features/admin/types";
+
 import { INITIAL_PROJECTS } from "@/constants/admin-dummy";
 
 // Testimonials data
@@ -145,7 +151,7 @@ export default function Home() {
   const config = useAppSelector((state) => state.config);
   const [activeTab, setActiveTab] = useState<string>("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  
+
   const { data: apiProjectsList = [] } = useProjects();
   const { data: apiIndustries = [] } = useIndustries();
 
@@ -159,12 +165,17 @@ export default function Home() {
     icon: ind.icon,
     color: getIndustryColorStyles(ind.color),
   }));
-  
-  const categories = ["All", ...Array.from(new Set(activeProjectsList.map((p) => p.category).filter(Boolean)))];
+
+  const categories = [
+    "All",
+    ...Array.from(new Set(activeProjectsList.map((p) => p.category).filter(Boolean))),
+  ];
 
   // Filter projects by category
   const filteredProjects =
-    activeTab === "All" ? activeProjectsList : activeProjectsList.filter((p) => p.category === activeTab);
+    activeTab === "All"
+      ? activeProjectsList
+      : activeProjectsList.filter((p) => p.category === activeTab);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground antialiased transition-colors duration-300">
@@ -391,26 +402,35 @@ export default function Home() {
           <div className="mx-auto mt-16 max-w-7xl grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {resolvedIndustries.map((service, index) => {
               const IconComp = INDUSTRIES_ICON_MAP[service.icon] || Globe;
-              
+
               // Resolve icon colors matching the screenshot mockup
-              let colorClasses = "bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 dark:bg-indigo-500/8 dark:border-indigo-500/20 dark:text-indigo-500";
+              let colorClasses =
+                "bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 dark:bg-indigo-500/8 dark:border-indigo-500/20 dark:text-indigo-500";
               const lowerTitle = service.title.toLowerCase();
               if (lowerTitle.includes("restaurant")) {
-                colorClasses = "bg-orange-500/10 border border-orange-500/20 text-orange-500 dark:bg-orange-500/8 dark:border-orange-500/20 dark:text-orange-500";
+                colorClasses =
+                  "bg-orange-500/10 border border-orange-500/20 text-orange-500 dark:bg-orange-500/8 dark:border-orange-500/20 dark:text-orange-500";
               } else if (lowerTitle.includes("hotel")) {
-                colorClasses = "bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:bg-blue-500/8 dark:border-blue-500/20 dark:text-blue-500";
+                colorClasses =
+                  "bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:bg-blue-500/8 dark:border-blue-500/20 dark:text-blue-500";
               } else if (lowerTitle.includes("manufacturing")) {
-                colorClasses = "bg-slate-500/10 border border-slate-500/20 text-slate-500 dark:bg-slate-500/8 dark:border-slate-500/20 dark:text-slate-400";
+                colorClasses =
+                  "bg-slate-500/10 border border-slate-500/20 text-slate-500 dark:bg-slate-500/8 dark:border-slate-500/20 dark:text-slate-400";
               } else if (lowerTitle.includes("inventory")) {
-                colorClasses = "bg-amber-500/10 border border-amber-500/20 text-amber-500 dark:bg-amber-500/8 dark:border-amber-500/20 dark:text-amber-500";
+                colorClasses =
+                  "bg-amber-500/10 border border-amber-500/20 text-amber-500 dark:bg-amber-500/8 dark:border-amber-500/20 dark:text-amber-500";
               } else if (lowerTitle.includes("booking")) {
-                colorClasses = "bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:bg-emerald-500/8 dark:border-emerald-500/20 dark:text-emerald-500";
+                colorClasses =
+                  "bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:bg-emerald-500/8 dark:border-emerald-500/20 dark:text-emerald-500";
               } else if (lowerTitle.includes("automation")) {
-                colorClasses = "bg-purple-500/10 border border-purple-500/20 text-purple-500 dark:bg-purple-500/8 dark:border-purple-500/20 dark:text-purple-500";
+                colorClasses =
+                  "bg-purple-500/10 border border-purple-500/20 text-purple-500 dark:bg-purple-500/8 dark:border-purple-500/20 dark:text-purple-500";
               } else if (lowerTitle.includes("commerce")) {
-                colorClasses = "bg-rose-500/10 border border-rose-500/20 text-rose-500 dark:bg-rose-500/8 dark:border-rose-500/20 dark:text-rose-500";
+                colorClasses =
+                  "bg-rose-500/10 border border-rose-500/20 text-rose-500 dark:bg-rose-500/8 dark:border-rose-500/20 dark:text-rose-500";
               } else if (lowerTitle.includes("portal")) {
-                colorClasses = "bg-cyan-500/10 border border-cyan-500/20 text-cyan-500 dark:bg-cyan-500/8 dark:border-cyan-500/20 dark:text-cyan-500";
+                colorClasses =
+                  "bg-cyan-500/10 border border-cyan-500/20 text-cyan-500 dark:bg-cyan-500/8 dark:border-cyan-500/20 dark:text-cyan-500";
               }
 
               return (
@@ -458,7 +478,8 @@ export default function Home() {
               Our Products
             </p>
             <p className="mt-4 text-base text-muted-foreground">
-              Production-ready platforms designed to deploy rapidly and customize around your specific requirements.
+              Production-ready platforms designed to deploy rapidly and customize around your
+              specific requirements.
             </p>
           </div>
 
@@ -466,7 +487,7 @@ export default function Home() {
           <div className="mx-auto mt-12 max-w-5xl rounded-3xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/20 via-background to-cyan-950/20 p-8 sm:p-10 shadow-xl relative overflow-hidden group">
             {/* Ambient Background Glow */}
             <div className="absolute top-0 right-0 h-72 w-72 bg-gradient-to-br from-indigo-500 to-cyan-500 opacity-10 blur-[80px] -z-10 group-hover:opacity-15 transition-opacity" />
-            
+
             <div className="grid grid-cols-1 gap-8 md:grid-cols-12 md:items-center">
               {/* Info Column */}
               <div className="md:col-span-8 space-y-6 text-left">
@@ -488,7 +509,10 @@ export default function Home() {
                     Complete ERP Solution for Travel Businesses
                   </p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    TravelERP is an all-in-one cloud-based ERP platform designed for travel agencies, tour operators, DMCs, and travel businesses. Manage leads, quotations, bookings, partners, finances, operations, and customer relationships from a single dashboard.
+                    TravelERP is an all-in-one cloud-based ERP platform designed for travel
+                    agencies, tour operators, DMCs, and travel businesses. Manage leads, quotations,
+                    bookings, partners, finances, operations, and customer relationships from a
+                    single dashboard.
                   </p>
                 </div>
 
@@ -534,9 +558,7 @@ export default function Home() {
               {/* Stats / Graphic Column */}
               <div className="md:col-span-4 flex flex-col items-center justify-center p-6 bg-indigo-500/5 border border-indigo-500/10 rounded-2xl md:h-full">
                 <Plane className="h-12 w-12 text-indigo-500 mb-4 animate-bounce" />
-                <div className="text-4xl font-black text-indigo-600 dark:text-indigo-400">
-                  50%
-                </div>
+                <div className="text-4xl font-black text-indigo-600 dark:text-indigo-400">50%</div>
                 <div className="text-[11px] font-bold text-muted-foreground mt-1 text-center">
                   Reduction in manual operations
                 </div>
@@ -742,17 +764,17 @@ export default function Home() {
 
       {/* Project Details Modal */}
       {selectedProject && (
-        <div 
+        <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto"
           onClick={() => setSelectedProject(null)}
         >
-          <div 
+          <div
             className="relative w-full max-w-2xl rounded-3xl border border-border/40 bg-card p-0 overflow-hidden shadow-2xl space-y-0"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header Graphic Gradient */}
             <div className={`h-2.5 bg-gradient-to-r ${selectedProject.color}`} />
-            
+
             <div className="p-8 space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex flex-wrap gap-2 items-center">
@@ -812,7 +834,10 @@ export default function Home() {
                   asChild
                   className="rounded-xl px-5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-11"
                 >
-                  <Link href={`/contact?type=${encodeURIComponent(selectedProject.title)}`} className="flex items-center gap-2">
+                  <Link
+                    href={`/contact?type=${encodeURIComponent(selectedProject.title)}`}
+                    className="flex items-center gap-2"
+                  >
                     Request Integration Details <ArrowRight className="h-4 w-4" />
                   </Link>
                 </Button>

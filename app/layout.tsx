@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
+import { Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
+
 import { QueryProvider } from "@/components/providers/query-provider";
 import { StoreProvider } from "@/components/providers/store-provider";
 import { ThemeSyncProvider } from "@/components/providers/theme-sync-provider";
 import { ToastProvider } from "@/components/ui/toast";
+
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({

@@ -1,14 +1,27 @@
 "use client";
 
 import React from "react";
+
 import Link from "next/link";
-import { Briefcase, Building2, Cpu, Users, MessageSquare, ArrowUpRight, Clock, FolderGit } from "lucide-react";
-import { getStaff } from "@/features/admin/services/mock-data";
+
+import {
+  ArrowUpRight,
+  Briefcase,
+  Building2,
+  Clock,
+  Cpu,
+  FolderGit,
+  MessageSquare,
+  Users,
+} from "lucide-react";
+
 import { useCareers } from "@/features/careers/hooks/use-careers";
-import { useIndustries } from "@/features/industries/hooks/use-industries";
-import { useServices } from "@/features/services/hooks/use-services";
 import { useContactQueries } from "@/features/contact/hooks/use-contact";
+import { useIndustries } from "@/features/industries/hooks/use-industries";
 import { useProjects } from "@/features/projects/hooks/use-projects";
+import { useServices } from "@/features/services/hooks/use-services";
+
+import { getStaff } from "@/features/admin/services/mock-data";
 
 export default function AdminDashboardPage() {
   const { data: jobs = [] } = useCareers();
@@ -25,7 +38,7 @@ export default function AdminDashboardPage() {
     services: services.filter((s) => s.status === "Active").length,
     staffCount: staff.filter((s) => s.status === "Active").length,
     unreadQueries: queries.filter((q) => q.status === "New").length,
-    projectsCount: projects.length
+    projectsCount: projects.length,
   };
 
   const recentQueries = queries.slice(0, 3);
@@ -38,7 +51,7 @@ export default function AdminDashboardPage() {
       icon: Briefcase,
       color: "indigo",
       desc: "Live portal listings",
-      href: "/admin/manage-jobs"
+      href: "/admin/manage-jobs",
     },
     {
       title: "Industries",
@@ -46,7 +59,7 @@ export default function AdminDashboardPage() {
       icon: Building2,
       color: "indigo",
       desc: "Target industry segments",
-      href: "/admin/industries"
+      href: "/admin/industries",
     },
     {
       title: "Active Services",
@@ -54,7 +67,7 @@ export default function AdminDashboardPage() {
       icon: Cpu,
       color: "indigo",
       desc: "Service offerings listed",
-      href: "/admin/services"
+      href: "/admin/services",
     },
     {
       title: "Staff Count",
@@ -62,7 +75,7 @@ export default function AdminDashboardPage() {
       icon: Users,
       color: "indigo",
       desc: "Enrolled admin staff",
-      href: "/admin/staff"
+      href: "/admin/staff",
     },
     {
       title: "Unread Queries",
@@ -70,7 +83,7 @@ export default function AdminDashboardPage() {
       icon: MessageSquare,
       color: stats.unreadQueries > 0 ? "rose" : "indigo",
       desc: "New contact leads waiting",
-      href: "/admin/queries"
+      href: "/admin/queries",
     },
     {
       title: "Projects",
@@ -78,8 +91,8 @@ export default function AdminDashboardPage() {
       icon: FolderGit,
       color: "indigo",
       desc: "Case studies listed",
-      href: "/admin/projects"
-    }
+      href: "/admin/projects",
+    },
   ];
 
   return (
@@ -157,14 +170,10 @@ export default function AdminDashboardPage() {
                         {q.name}
                       </span>
                       {q.company && (
-                        <span className="text-[10px] text-muted-foreground">
-                          ({q.company})
-                        </span>
+                        <span className="text-[10px] text-muted-foreground">({q.company})</span>
                       )}
                     </div>
-                    <p className="text-xs text-muted-foreground line-clamp-1">
-                      {q.message}
-                    </p>
+                    <p className="text-xs text-muted-foreground line-clamp-1">{q.message}</p>
                   </div>
 
                   <span
@@ -193,9 +202,7 @@ export default function AdminDashboardPage() {
               <h3 className="text-sm font-extrabold text-neutral-900 dark:text-white">
                 Active Careers
               </h3>
-              <p className="text-[11px] text-muted-foreground">
-                Currently hiring job roles
-              </p>
+              <p className="text-[11px] text-muted-foreground">Currently hiring job roles</p>
             </div>
             <Link
               href="/admin/manage-jobs"
@@ -226,9 +233,7 @@ export default function AdminDashboardPage() {
                 </div>
               ))
             ) : (
-              <p className="text-xs text-muted-foreground text-center py-6">
-                No jobs posted yet.
-              </p>
+              <p className="text-xs text-muted-foreground text-center py-6">No jobs posted yet.</p>
             )}
           </div>
         </div>

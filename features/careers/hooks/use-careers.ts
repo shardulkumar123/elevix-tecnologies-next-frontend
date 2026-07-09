@@ -1,7 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import { axiosInstance } from "@/lib/api-client";
-import { Job } from "@/features/admin/types";
+
 import { getJobs, saveJobs } from "@/features/admin/services/mock-data";
+import { Job } from "@/features/admin/types";
 
 // Type definitions matching NestJS Career schema
 export interface CareerBackendModel {

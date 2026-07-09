@@ -1,9 +1,12 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { useAuth } from "../context/auth-context";
+
+import { usePathname, useRouter } from "next/navigation";
+
 import { Loader2, ShieldAlert } from "lucide-react";
+
+import { useAuth } from "../context/auth-context";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -52,11 +55,13 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children, allowedRoles }) 
             <ShieldAlert className="h-8 w-8" />
           </div>
           <div className="space-y-2">
-            <h3 className="text-xl font-black text-neutral-900 dark:text-white">
-              Access Denied
-            </h3>
+            <h3 className="text-xl font-black text-neutral-900 dark:text-white">Access Denied</h3>
             <p className="text-xs text-muted-foreground font-semibold leading-relaxed">
-              Your role <span className="text-indigo-600 dark:text-indigo-400 font-bold uppercase">{user.role}</span> does not have permissions to access this administrative console section.
+              Your role{" "}
+              <span className="text-indigo-600 dark:text-indigo-400 font-bold uppercase">
+                {user.role}
+              </span>{" "}
+              does not have permissions to access this administrative console section.
             </p>
           </div>
           <button

@@ -32,32 +32,16 @@ export function Logo({ className = "", size = 36 }: LogoProps) {
       </defs>
 
       {/* Slanted spine on the left */}
-      <polygon
-        points="25,20 40,20 30,80 15,80"
-        fill="url(#elevix-primary)"
-      />
+      <polygon points="25,20 40,20 30,80 15,80" fill="url(#elevix-primary)" />
 
       {/* Top Bar of the "E" */}
-      <polygon
-        points="40,20 80,20 75,35 37,35"
-        fill="url(#elevix-glow)"
-      />
+      <polygon points="40,20 80,20 75,35 37,35" fill="url(#elevix-glow)" />
 
       {/* Middle Bar of the "E" */}
-      <polygon
-        points="35,47 70,47 65,60 32,60"
-        fill="url(#elevix-accent)"
-        opacity="0.9"
-      />
+      <polygon points="35,47 70,47 65,60 32,60" fill="url(#elevix-accent)" opacity="0.9" />
 
       {/* Bottom Bar of the "E" */}
-      <polygon
-        points="30,72 80,72 75,85 25,85"
-        fill="url(#elevix-primary)"
-        opacity="0.8"
-      />
+      <polygon points="30,72 80,72 75,85 25,85" fill="url(#elevix-primary)" opacity="0.8" />
     </svg>
   );
 }
-
-

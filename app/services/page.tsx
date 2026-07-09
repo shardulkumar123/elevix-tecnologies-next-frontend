@@ -1,22 +1,25 @@
 "use client";
 
 import React from "react";
+
 import Link from "next/link";
-import { Navbar } from "@/components/common/navbar";
-import { Footer } from "@/components/common/footer";
-import { Button } from "@/components/ui/button";
+
 import {
-  Utensils,
-  BedDouble,
-  Factory,
-  Package,
-  CalendarDays,
-  GitMerge,
-  ShoppingBag,
-  LayoutDashboard,
   ArrowRight,
+  BedDouble,
+  CalendarDays,
   CheckCircle2,
+  Factory,
+  GitMerge,
+  LayoutDashboard,
+  Package,
+  ShoppingBag,
+  Utensils,
 } from "lucide-react";
+
+import { Footer } from "@/components/common/footer";
+import { Navbar } from "@/components/common/navbar";
+import { Button } from "@/components/ui/button";
 
 const detailedServices = [
   {

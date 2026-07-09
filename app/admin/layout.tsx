@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { AuthProvider } from "@/features/auth/context/auth-context";
 
 import { AdminLayoutWrapper } from "@/features/admin/components/admin-layout-wrapper";
+
+import { AuthProvider } from "@/features/auth/context/auth-context";
 
 export const metadata: Metadata = {
   title: "Admin Portal | Hopes Technologies",

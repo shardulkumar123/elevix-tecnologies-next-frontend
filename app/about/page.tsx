@@ -1,12 +1,16 @@
 "use client";
 
 import React from "react";
+
 import Link from "next/link";
-import { Navbar } from "@/components/common/navbar";
-import { Footer } from "@/components/common/footer";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Shield, Zap, Target, Heart } from "lucide-react";
+
+import { ArrowRight, Heart, Shield, Target, Zap } from "lucide-react";
+
 import { useAbout } from "@/features/about/hooks/use-about";
+
+import { Footer } from "@/components/common/footer";
+import { Navbar } from "@/components/common/navbar";
+import { Button } from "@/components/ui/button";
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Zap,
@@ -35,37 +39,41 @@ export default function AboutPage() {
 
   const title = about?.title || "Engineering High-Performance";
   const subtitle = about?.subtitle || "Software";
-  const description = about?.description || "Elevix Technologies is a specialized software engineering studio building performant digital tools, secure enterprise portals, and bespoke AI applications.";
+  const description =
+    about?.description ||
+    "Elevix Technologies is a specialized software engineering studio building performant digital tools, secure enterprise portals, and bespoke AI applications.";
   const missionTitle = about?.missionTitle || "Our Core Mission";
   const missionPoints = about?.missionPoints || [
     "We believe that software should fit your business operations perfectly, rather than forcing you to adjust your workflows to generic template solutions.",
-    "Our focus remains squarely on software architecture, clean state management, security boundaries, and responsive interfaces that load instantly across all form factors."
+    "Our focus remains squarely on software architecture, clean state management, security boundaries, and responsive interfaces that load instantly across all form factors.",
   ];
   const stats = about?.stats || [
     { value: "150+", label: "Projects Delivered" },
     { value: "50+", label: "Active Clients" },
     { value: "5+", label: "Years of Operations" },
-    { value: "99%", label: "Client Retention" }
+    { value: "99%", label: "Client Retention" },
   ];
   const values = about?.values || [
     {
       title: "Performance First",
       desc: "We measure system speeds in milliseconds and page loading times in sub-seconds. Speed directly impacts conversions and business efficiency.",
-      icon: "Zap"
+      icon: "Zap",
     },
     {
       title: "Secure-by-Design",
       desc: "From strict role-based access controls to encrypted file handling, data integrity and compliance form the baseline of every architecture we deploy.",
-      icon: "Shield"
+      icon: "Shield",
     },
     {
       title: "Client-Centric Collaboration",
       desc: "We act as your technical engineering partners, translating business operations directly into custom, maintainable digital platforms.",
-      icon: "Heart"
-    }
+      icon: "Heart",
+    },
   ];
   const ctaTitle = about?.ctaTitle || "Want to Collaborate with Us?";
-  const ctaDescription = about?.ctaDescription || "Let's build software that makes your business operations run automatically.";
+  const ctaDescription =
+    about?.ctaDescription ||
+    "Let's build software that makes your business operations run automatically.";
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground antialiased transition-colors duration-300">
@@ -160,9 +168,7 @@ export default function AboutPage() {
 
         {/* CTA section */}
         <section className="mx-auto max-w-5xl px-4 py-10 sm:py-14 text-center space-y-8">
-          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
-            {ctaTitle}
-          </h2>
+          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">{ctaTitle}</h2>
           <p className="mx-auto max-w-xl text-muted-foreground text-sm leading-relaxed">
             {ctaDescription}
           </p>

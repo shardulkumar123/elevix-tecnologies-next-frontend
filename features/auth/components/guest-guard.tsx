@@ -1,9 +1,12 @@
 "use client";
 
 import React, { useEffect } from "react";
+
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAuth } from "../context/auth-context";
+
 import { Loader2 } from "lucide-react";
+
+import { useAuth } from "../context/auth-context";
 
 interface GuestGuardProps {
   children: React.ReactNode;

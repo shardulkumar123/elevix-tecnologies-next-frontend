@@ -1,12 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+import { Moon, Sun } from "lucide-react";
+
+import { Logo } from "@/components/common/logo";
 import { Button } from "@/components/ui/button";
+
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { toggleTheme } from "@/lib/redux/slices/theme-slice";
-import { usePathname } from "next/navigation";
-import { Sun, Moon } from "lucide-react";
-import { Logo } from "@/components/common/logo";
 
 export function Navbar() {
   const dispatch = useAppDispatch();

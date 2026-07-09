@@ -1,13 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
+
 import Link from "next/link";
-import { Navbar } from "@/components/common/navbar";
-import { Footer } from "@/components/common/footer";
-import { Button } from "@/components/ui/button";
+
 import { ArrowRight, ExternalLink, X } from "lucide-react";
 
 import { useProjects } from "@/features/projects/hooks/use-projects";
+
+import { Footer } from "@/components/common/footer";
+import { Navbar } from "@/components/common/navbar";
+import { Button } from "@/components/ui/button";
+
 import { Project } from "@/features/admin/types";
 
 // Expanded projects list matching homepage
@@ -22,7 +26,7 @@ const defaultProjectsData: Project[] = [
     stats: "2.5M+ requests/day",
     techStack: ["Next.js", "Nest.js", "Redis", "PostgreSQL", "Docker"],
     color: "from-blue-500 to-indigo-500",
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   },
   {
     id: "project-2",
@@ -34,7 +38,7 @@ const defaultProjectsData: Project[] = [
     stats: "99.8% precision",
     techStack: ["TypeScript", "Python", "OpenAI API", "LangChain", "VectorDB"],
     color: "from-purple-500 to-pink-500",
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   },
   {
     id: "project-3",
@@ -46,7 +50,7 @@ const defaultProjectsData: Project[] = [
     stats: "500k+ active users",
     techStack: ["React", "Express.js", "AWS S3", "Tailwind CSS", "Jest"],
     color: "from-emerald-500 to-teal-500",
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   },
   {
     id: "project-4",
@@ -58,7 +62,7 @@ const defaultProjectsData: Project[] = [
     stats: "15ms avg latency",
     techStack: ["Go", "Cloudflare Workers", "gRPC", "Redis Enterprise"],
     color: "from-amber-500 to-orange-500",
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   },
 ];
 
@@ -69,10 +73,15 @@ export default function ProjectsPage() {
 
   const activeProjectsList = apiProjects.length > 0 ? apiProjects : defaultProjectsData;
 
-  const categories = ["All", ...Array.from(new Set(activeProjectsList.map((p) => p.category).filter(Boolean)))];
+  const categories = [
+    "All",
+    ...Array.from(new Set(activeProjectsList.map((p) => p.category).filter(Boolean))),
+  ];
 
   const filteredProjects =
-    activeTab === "All" ? activeProjectsList : activeProjectsList.filter((p) => p.category === activeTab);
+    activeTab === "All"
+      ? activeProjectsList
+      : activeProjectsList.filter((p) => p.category === activeTab);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground antialiased transition-colors duration-300">
@@ -180,7 +189,7 @@ export default function ProjectsPage() {
                   </div>
                 </div>
               ))}
-          </div>
+            </div>
           )}
         </section>
 
@@ -210,17 +219,17 @@ export default function ProjectsPage() {
 
       {/* Project Details Modal */}
       {selectedProject && (
-        <div 
+        <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto"
           onClick={() => setSelectedProject(null)}
         >
-          <div 
+          <div
             className="relative w-full max-w-2xl rounded-3xl border border-border/40 bg-card p-0 overflow-hidden shadow-2xl space-y-0"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header Graphic Gradient */}
             <div className={`h-2.5 bg-gradient-to-r ${selectedProject.color}`} />
-            
+
             <div className="p-8 space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex flex-wrap gap-2 items-center">
@@ -280,7 +289,10 @@ export default function ProjectsPage() {
                   asChild
                   className="rounded-xl px-5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-11"
                 >
-                  <Link href={`/contact?type=${encodeURIComponent(selectedProject.title)}`} className="flex items-center gap-2">
+                  <Link
+                    href={`/contact?type=${encodeURIComponent(selectedProject.title)}`}
+                    className="flex items-center gap-2"
+                  >
                     Request Integration Details <ArrowRight className="h-4 w-4" />
                   </Link>
                 </Button>

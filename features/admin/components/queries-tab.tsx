@@ -1,10 +1,24 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { ContactQuery } from "../types";
+import React, { useEffect, useState } from "react";
+
+import {
+  Building,
+  CheckCircle,
+  Eye,
+  Mail,
+  MessageSquare,
+  Phone,
+  Search,
+  Send,
+  Trash2,
+  X,
+} from "lucide-react";
+
 import { useContactQueries } from "@/features/contact/hooks/use-contact";
+
 import { saveQueries } from "../services/mock-data";
-import { Search, Eye, Trash2, X, MessageSquare, Send, CheckCircle, Mail, Phone, Building } from "lucide-react";
+import { ContactQuery } from "../types";
 
 export function QueriesTab() {
   const { data: apiQueries = [], isLoading: isQueriesLoading } = useContactQueries();
@@ -52,7 +66,7 @@ export function QueriesTab() {
         return {
           ...q,
           status: "Replied" as const,
-          replyMessage: replyText
+          replyMessage: replyText,
         };
       }
       return q;
@@ -65,7 +79,7 @@ export function QueriesTab() {
     setSelectedQuery({
       ...selectedQuery,
       status: "Replied",
-      replyMessage: replyText
+      replyMessage: replyText,
     });
 
     alert(`Reply successfully simulated to ${selectedQuery.email}!`);
@@ -78,7 +92,7 @@ export function QueriesTab() {
       if (q.id === selectedQuery.id) {
         return {
           ...q,
-          status: "Resolved" as const
+          status: "Resolved" as const,
         };
       }
       return q;
@@ -89,7 +103,7 @@ export function QueriesTab() {
 
     setSelectedQuery({
       ...selectedQuery,
-      status: "Resolved"
+      status: "Resolved",
     });
   };
 
@@ -254,21 +268,27 @@ export function QueriesTab() {
                 <Mail className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
                 <div>
                   <p className="text-[9px] text-neutral-400 uppercase">Email</p>
-                  <p className="text-neutral-800 dark:text-white font-mono break-all">{selectedQuery.email}</p>
+                  <p className="text-neutral-800 dark:text-white font-mono break-all">
+                    {selectedQuery.email}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
                 <div>
                   <p className="text-[9px] text-neutral-400 uppercase">Phone</p>
-                  <p className="text-neutral-800 dark:text-white">{selectedQuery.phone || "Not provided"}</p>
+                  <p className="text-neutral-800 dark:text-white">
+                    {selectedQuery.phone || "Not provided"}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <Building className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
                 <div>
                   <p className="text-[9px] text-neutral-400 uppercase">Company</p>
-                  <p className="text-neutral-800 dark:text-white">{selectedQuery.company || "Not provided"}</p>
+                  <p className="text-neutral-800 dark:text-white">
+                    {selectedQuery.company || "Not provided"}
+                  </p>
                 </div>
               </div>
             </div>

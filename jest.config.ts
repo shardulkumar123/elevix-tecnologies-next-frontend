@@ -1,5 +1,6 @@
-import type { Config } from "jest";
 import nextJest from "next/jest.js";
+
+import type { Config } from "jest";
 
 const createJestConfig = nextJest({
   // Path to Next.js app to load next.config.js and .env files

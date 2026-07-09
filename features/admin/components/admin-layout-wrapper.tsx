@@ -1,10 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
+
 import { usePathname } from "next/navigation";
-import { AdminSidebar, AdminTab } from "./admin-sidebar";
-import { AdminHeader } from "./admin-header";
+
 import { AuthGuard } from "@/features/auth/components/auth-guard";
+
+import { AdminHeader } from "./admin-header";
+import { AdminSidebar, AdminTab } from "./admin-sidebar";
 
 interface AdminLayoutWrapperProps {
   children: React.ReactNode;
@@ -67,13 +70,8 @@ export function AdminLayoutWrapper({ children }: AdminLayoutWrapperProps) {
 
         {/* Main Content Pane */}
         <div className="flex-1 flex flex-col overflow-y-auto min-w-0">
-          <AdminHeader
-            activeTab={activeTab}
-            onMenuToggle={() => setMobileSidebarOpen(true)}
-          />
-          <main className="flex-1 p-6 md:p-8 max-w-7xl w-full mx-auto">
-            {children}
-          </main>
+          <AdminHeader activeTab={activeTab} onMenuToggle={() => setMobileSidebarOpen(true)} />
+          <main className="flex-1 p-6 md:p-8 max-w-7xl w-full mx-auto">{children}</main>
         </div>
       </div>
     </AuthGuard>

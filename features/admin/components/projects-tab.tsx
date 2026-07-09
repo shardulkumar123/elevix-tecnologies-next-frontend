@@ -1,16 +1,24 @@
 "use client";
 
 import React, { useState } from "react";
+
+import { Edit, Plus, Search, Trash2, X } from "lucide-react";
+
+import {
+  useCreateProject,
+  useDeleteProject,
+  useProjects,
+  useUpdateProject,
+} from "@/features/projects/hooks/use-projects";
+
 import { Project } from "../types";
-import { useProjects, useCreateProject, useUpdateProject, useDeleteProject } from "@/features/projects/hooks/use-projects";
-import { Plus, Search, Edit, Trash2, X } from "lucide-react";
 
 const CATEGORIES = ["All", "Web Apps", "AI/ML", "Cloud API"];
 const DEFAULT_COLORS = [
   { label: "Indigo Glow", value: "from-blue-500 to-indigo-500" },
   { label: "Purple Velvet", value: "from-purple-500 to-pink-500" },
   { label: "Emerald Mint", value: "from-emerald-500 to-teal-500" },
-  { label: "Amber Orange", value: "from-amber-500 to-orange-500" }
+  { label: "Amber Orange", value: "from-amber-500 to-orange-500" },
 ];
 
 export function ProjectsTab() {
@@ -82,7 +90,7 @@ export function ProjectsTab() {
       longDesc,
       stats: stats || "N/A",
       techStack: techArray,
-      color
+      color,
     };
 
     if (editingProject) {
@@ -91,14 +99,14 @@ export function ProjectsTab() {
         {
           onSuccess: () => {
             setIsModalOpen(false);
-          }
+          },
         }
       );
     } else {
       createMutation.mutate(payload, {
         onSuccess: () => {
           setIsModalOpen(false);
-        }
+        },
       });
     }
   };
@@ -124,7 +132,7 @@ export function ProjectsTab() {
               className="w-full rounded-xl border border-border bg-card pl-10 pr-4 py-2.5 text-xs font-semibold focus:border-indigo-600 focus:outline-none"
             />
           </div>
-          
+
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
@@ -259,7 +267,7 @@ export function ProjectsTab() {
                     onChange={(e) => setCategory(e.target.value)}
                     className="w-full rounded-xl border border-border bg-muted/10 px-3 py-2 text-xs font-semibold focus:border-indigo-600 focus:outline-none"
                   >
-                    {CATEGORIES.filter(c => c !== "All").map((c) => (
+                    {CATEGORIES.filter((c) => c !== "All").map((c) => (
                       <option key={c} value={c}>
                         {c}
                       </option>
@@ -351,7 +359,11 @@ export function ProjectsTab() {
                   disabled={createMutation.isPending || updateMutation.isPending}
                   className="rounded-xl bg-indigo-600 hover:bg-indigo-700 px-6 py-2.5 text-xs font-bold text-white shadow-lg shadow-indigo-600/10 transition-all disabled:opacity-50"
                 >
-                  {createMutation.isPending || updateMutation.isPending ? "Saving..." : (editingProject ? "Update Study" : "Add Project")}
+                  {createMutation.isPending || updateMutation.isPending
+                    ? "Saving..."
+                    : editingProject
+                      ? "Update Study"
+                      : "Add Project"}
                 </button>
               </div>
             </form>

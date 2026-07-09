@@ -1,7 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback } from "react";
-import { CheckCircle2, AlertCircle, X, Info } from "lucide-react";
+import React, { createContext, useCallback, useContext, useState } from "react";
+
+import { AlertCircle, CheckCircle2, Info, X } from "lucide-react";
 
 export type ToastType = "success" | "error" | "info";
 
@@ -28,32 +29,44 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
-  const toast = useCallback((message: string, type: ToastType = "info", title?: string) => {
-    const id = Math.random().toString(36).substring(2, 9);
-    setToasts((prev) => [...prev, { id, message, type, title }]);
-    
-    // Auto dismiss after 4 seconds
-    setTimeout(() => {
-      removeToast(id);
-    }, 4000);
-  }, [removeToast]);
+  const toast = useCallback(
+    (message: string, type: ToastType = "info", title?: string) => {
+      const id = Math.random().toString(36).substring(2, 9);
+      setToasts((prev) => [...prev, { id, message, type, title }]);
 
-  const success = useCallback((message: string, title?: string) => {
-    toast(message, "success", title || "Success");
-  }, [toast]);
+      // Auto dismiss after 4 seconds
+      setTimeout(() => {
+        removeToast(id);
+      }, 4000);
+    },
+    [removeToast]
+  );
 
-  const error = useCallback((message: string, title?: string) => {
-    toast(message, "error", title || "Error");
-  }, [toast]);
+  const success = useCallback(
+    (message: string, title?: string) => {
+      toast(message, "success", title || "Success");
+    },
+    [toast]
+  );
 
-  const info = useCallback((message: string, title?: string) => {
-    toast(message, "info", title || "Notification");
-  }, [toast]);
+  const error = useCallback(
+    (message: string, title?: string) => {
+      toast(message, "error", title || "Error");
+    },
+    [toast]
+  );
+
+  const info = useCallback(
+    (message: string, title?: string) => {
+      toast(message, "info", title || "Notification");
+    },
+    [toast]
+  );
 
   return (
     <ToastContext.Provider value={{ toast, success, error, info }}>
       {children}
-      
+
       {/* Toast Portal Container */}
       <div className="fixed top-5 right-5 z-[9999] flex flex-col gap-3 w-full max-w-sm pointer-events-none">
         {toasts.map((t) => {
@@ -67,8 +80,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                 isSuccess
                   ? "border-emerald-500/20 text-emerald-950 dark:text-emerald-100"
                   : isError
-                  ? "border-rose-500/20 text-rose-950 dark:text-rose-100"
-                  : "border-indigo-500/20 text-neutral-900 dark:text-white"
+                    ? "border-rose-500/20 text-rose-950 dark:text-rose-100"
+                    : "border-indigo-500/20 text-neutral-900 dark:text-white"
               }`}
             >
               {/* Type Icon */}

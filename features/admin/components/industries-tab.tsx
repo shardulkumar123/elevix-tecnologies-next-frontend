@@ -1,28 +1,36 @@
 "use client";
 
 import React, { useState } from "react";
-import { Industry } from "../types";
-import { useIndustries, useCreateIndustry, useUpdateIndustry, useDeleteIndustry } from "@/features/industries/hooks/use-industries";
+
 import {
+  Activity,
+  CalendarDays,
+  Cloud,
+  CreditCard,
+  Database,
+  Edit,
+  Factory,
+  Globe,
+  Layers,
+  Network,
   Plus,
   Search,
-  Edit,
-  Trash2,
-  X,
-  CreditCard,
-  Activity,
-  ShoppingBag,
   ShieldCheck,
-  Globe,
-  Database,
-  Network,
+  ShoppingBag,
   Terminal,
-  Cloud,
-  Layers,
+  Trash2,
   Utensils,
-  Factory,
-  CalendarDays
+  X,
 } from "lucide-react";
+
+import {
+  useCreateIndustry,
+  useDeleteIndustry,
+  useIndustries,
+  useUpdateIndustry,
+} from "@/features/industries/hooks/use-industries";
+
+import { Industry } from "../types";
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   CreditCard,
@@ -37,7 +45,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Layers,
   Utensils,
   Factory,
-  CalendarDays
+  CalendarDays,
 };
 
 export function IndustriesTab() {
@@ -56,7 +64,7 @@ export function IndustriesTab() {
   const [description, setDescription] = useState("");
   const [icon, setIcon] = useState("Globe");
   const [status, setStatus] = useState<"Active" | "Inactive">("Active");
-  
+
   // Extra fields mapping to NestJS ServicesDomain
   const [tagline, setTagline] = useState("");
   const [color, setColor] = useState("from-indigo-600 to-cyan-500");
@@ -128,7 +136,7 @@ export function IndustriesTab() {
       tagline,
       color,
       stats: { value: statValue || "100%", label: statLabel || "Satisfaction" },
-      solutions: solArray
+      solutions: solArray,
     };
 
     if (editingIndustry) {
@@ -137,14 +145,14 @@ export function IndustriesTab() {
         {
           onSuccess: () => {
             setIsModalOpen(false);
-          }
+          },
         }
       );
     } else {
       createMutation.mutate(payload, {
         onSuccess: () => {
           setIsModalOpen(false);
-        }
+        },
       });
     }
   };
@@ -426,7 +434,11 @@ export function IndustriesTab() {
                   disabled={createMutation.isPending || updateMutation.isPending}
                   className="rounded-xl bg-indigo-600 hover:bg-indigo-700 px-6 py-2.5 text-xs font-bold text-white shadow-lg shadow-indigo-600/10 transition-all disabled:opacity-50"
                 >
-                  {createMutation.isPending || updateMutation.isPending ? "Saving..." : (editingIndustry ? "Update Profile" : "Add Industry")}
+                  {createMutation.isPending || updateMutation.isPending
+                    ? "Saving..."
+                    : editingIndustry
+                      ? "Update Profile"
+                      : "Add Industry"}
                 </button>
               </div>
             </form>
@@ -436,4 +448,3 @@ export function IndustriesTab() {
     </div>
   );
 }
-

@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Service } from "../types";
+import React, { useEffect, useState } from "react";
+
+import { CheckCircle, Code, Cpu, Edit, Plus, Search, Trash2, X } from "lucide-react";
+
 import { getServices, saveServices } from "../services/mock-data";
-import { Plus, Search, Edit, Trash2, X, CheckCircle, Cpu, Code } from "lucide-react";
+import { Service } from "../types";
 
 export function ServicesTab() {
   const [services, setServices] = useState<Service[]>([]);
@@ -85,7 +87,7 @@ export function ServicesTab() {
         features: featureArray,
         technologies: techArray,
         status,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
       const updated = [...services, newSrv];
       setServices(updated);
@@ -151,9 +153,7 @@ export function ServicesTab() {
                   {srv.name}
                 </h3>
 
-                <p className="text-xs leading-relaxed text-muted-foreground">
-                  {srv.description}
-                </p>
+                <p className="text-xs leading-relaxed text-muted-foreground">{srv.description}</p>
 
                 {/* Features List */}
                 {srv.features.length > 0 && (
@@ -163,7 +163,10 @@ export function ServicesTab() {
                     </p>
                     <ul className="space-y-1.5">
                       {srv.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <li
+                          key={idx}
+                          className="flex items-start gap-2 text-xs text-muted-foreground"
+                        >
                           <CheckCircle className="h-4 w-4 shrink-0 text-indigo-600 dark:text-indigo-400 mt-0.5" />
                           <span>{feature}</span>
                         </li>

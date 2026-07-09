@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks";
+
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { syncThemeFromStorage } from "@/lib/redux/slices/theme-slice";
 
 interface ThemeSyncProviderProps {

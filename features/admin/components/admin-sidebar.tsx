@@ -1,24 +1,36 @@
 "use client";
 
 import React from "react";
+
 import Link from "next/link";
-import { Logo } from "@/components/common/logo";
-import { useAuth } from "@/features/auth/context/auth-context";
+
 import {
-  LayoutDashboard,
   Briefcase,
   Building2,
-  Cpu,
-  Users,
-  MessageSquare,
-  Settings,
-  LogOut,
   ChevronLeft,
   ChevronRight,
-  FolderGit
+  Cpu,
+  FolderGit,
+  LayoutDashboard,
+  LogOut,
+  MessageSquare,
+  Settings,
+  Users,
 } from "lucide-react";
 
-export type AdminTab = "dashboard" | "jobs" | "industries" | "services" | "staff" | "queries" | "settings" | "projects";
+import { Logo } from "@/components/common/logo";
+
+import { useAuth } from "@/features/auth/context/auth-context";
+
+export type AdminTab =
+  | "dashboard"
+  | "jobs"
+  | "industries"
+  | "services"
+  | "staff"
+  | "queries"
+  | "settings"
+  | "projects";
 
 interface AdminSidebarProps {
   activeTab: AdminTab;
@@ -27,9 +39,14 @@ interface AdminSidebarProps {
   onNavigate?: () => void;
 }
 
-export function AdminSidebar({ activeTab, collapsed, setCollapsed, onNavigate }: AdminSidebarProps) {
+export function AdminSidebar({
+  activeTab,
+  collapsed,
+  setCollapsed,
+  onNavigate,
+}: AdminSidebarProps) {
   const { user, logout } = useAuth();
-  
+
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
     { id: "jobs", label: "Manage Jobs", icon: Briefcase, href: "/admin/manage-jobs" },
@@ -56,7 +73,7 @@ export function AdminSidebar({ activeTab, collapsed, setCollapsed, onNavigate }:
     const namePart = user.email.split("@")[0];
     return namePart
       .split(/[\._-]/)
-      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
       .join(" ");
   };
 
@@ -80,7 +97,11 @@ export function AdminSidebar({ activeTab, collapsed, setCollapsed, onNavigate }:
           onClick={() => setCollapsed(!collapsed)}
           className="hidden md:flex h-6 w-6 items-center justify-center rounded-md border border-border bg-background hover:bg-muted text-muted-foreground transition-colors absolute -right-3 top-5 z-20"
         >
-          {collapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronLeft className="h-3.5 w-3.5" />}
+          {collapsed ? (
+            <ChevronRight className="h-3.5 w-3.5" />
+          ) : (
+            <ChevronLeft className="h-3.5 w-3.5" />
+          )}
         </button>
       </div>
 
@@ -115,7 +136,9 @@ export function AdminSidebar({ activeTab, collapsed, setCollapsed, onNavigate }:
           </div>
           {!collapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold truncate text-foreground leading-normal">{getDisplayName()}</p>
+              <p className="text-xs font-bold truncate text-foreground leading-normal">
+                {getDisplayName()}
+              </p>
               <p className="text-[10px] text-muted-foreground truncate font-semibold uppercase leading-normal">
                 {user?.role || "PORTAL USER"}
               </p>

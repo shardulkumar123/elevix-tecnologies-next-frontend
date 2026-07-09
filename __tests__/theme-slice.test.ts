@@ -1,4 +1,4 @@
-import themeReducer, { toggleTheme, setTheme, ThemeMode } from "../lib/redux/slices/theme-slice";
+import themeReducer, { ThemeMode, setTheme, toggleTheme } from "../lib/redux/slices/theme-slice";
 
 describe("theme slice reducer", () => {
   it("should return the initial state", () => {

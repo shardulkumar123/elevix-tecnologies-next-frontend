@@ -1,7 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import { axiosInstance } from "@/lib/api-client";
-import { Project } from "@/features/admin/types";
+
 import { getProjects, saveProjects } from "@/features/admin/services/mock-data";
+import { Project } from "@/features/admin/types";
 
 export interface ProjectBackendModel {
   id: string;
@@ -24,7 +26,7 @@ export const mapBackendToFrontendProject = (p: ProjectBackendModel): Project => 
   stats: p.stats,
   techStack: p.techStack,
   color: p.color,
-  createdAt: p.createdAt || new Date().toISOString()
+  createdAt: p.createdAt || new Date().toISOString(),
 });
 
 export const mapFrontendToBackendProject = (p: Partial<Project>) => ({
@@ -34,7 +36,7 @@ export const mapFrontendToBackendProject = (p: Partial<Project>) => ({
   longDesc: p.longDesc || "",
   stats: p.stats || "",
   techStack: p.techStack || [],
-  color: p.color || "from-blue-500 to-indigo-500"
+  color: p.color || "from-blue-500 to-indigo-500",
 });
 
 export const useProjects = () => {
@@ -42,16 +44,19 @@ export const useProjects = () => {
     queryKey: ["projects"],
     queryFn: async () => {
       try {
-        const response = await axiosInstance.get("/projects") as ProjectBackendModel[];
+        const response = (await axiosInstance.get("/projects")) as ProjectBackendModel[];
         if (Array.isArray(response)) {
           return response.map(mapBackendToFrontendProject);
         }
         throw new Error("Invalid response format");
       } catch (err: unknown) {
-        console.warn("Backend /projects API is offline. Using simulated localStorage database.", err);
+        console.warn(
+          "Backend /projects API is offline. Using simulated localStorage database.",
+          err
+        );
         return getProjects();
       }
-    }
+    },
   });
 };
 
@@ -61,10 +66,13 @@ export const useCreateProject = () => {
     mutationFn: async (newProject) => {
       try {
         const payload = mapFrontendToBackendProject(newProject);
-        const response = await axiosInstance.post("/projects", payload) as ProjectBackendModel;
+        const response = (await axiosInstance.post("/projects", payload)) as ProjectBackendModel;
         return mapBackendToFrontendProject(response);
       } catch (err: unknown) {
-        console.warn("Backend /projects API is offline. Creating in simulated local database.", err);
+        console.warn(
+          "Backend /projects API is offline. Creating in simulated local database.",
+          err
+        );
         const projects = getProjects();
         const createdProject: Project = {
           id: `project-${Date.now()}`,
@@ -75,7 +83,7 @@ export const useCreateProject = () => {
           stats: newProject.stats || "",
           techStack: newProject.techStack || [],
           color: newProject.color || "from-blue-500 to-indigo-500",
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
         };
         saveProjects([...projects, createdProject]);
         return createdProject;
@@ -83,7 +91,7 @@ export const useCreateProject = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
-    }
+    },
   });
 };
 
@@ -93,16 +101,22 @@ export const useUpdateProject = () => {
     mutationFn: async ({ id, data }) => {
       try {
         const payload = mapFrontendToBackendProject(data);
-        const response = await axiosInstance.patch(`/projects/${id}`, payload) as ProjectBackendModel;
+        const response = (await axiosInstance.patch(
+          `/projects/${id}`,
+          payload
+        )) as ProjectBackendModel;
         return mapBackendToFrontendProject(response);
       } catch (err: unknown) {
-        console.warn("Backend /projects API is offline. Updating in simulated local database.", err);
+        console.warn(
+          "Backend /projects API is offline. Updating in simulated local database.",
+          err
+        );
         const projects = getProjects();
         const updated = projects.map((p) =>
           p.id === id
             ? {
                 ...p,
-                ...data
+                ...data,
               }
             : p
         );
@@ -112,7 +126,7 @@ export const useUpdateProject = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
-    }
+    },
   });
 };
 
@@ -123,7 +137,10 @@ export const useDeleteProject = () => {
       try {
         await axiosInstance.delete(`/projects/${id}`);
       } catch (err: unknown) {
-        console.warn("Backend /projects API is offline. Deleting from simulated local database.", err);
+        console.warn(
+          "Backend /projects API is offline. Deleting from simulated local database.",
+          err
+        );
         const projects = getProjects();
         const updated = projects.filter((p) => p.id !== id);
         saveProjects(updated);
@@ -131,6 +148,6 @@ export const useDeleteProject = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
-    }
+    },
   });
 };

@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { StaffMember, RolePermissions } from "../types";
-import { getStaff, saveStaff, getRoles, saveRoles } from "../services/mock-data";
-import { Plus, Search, Edit, Trash2, X, Shield, ShieldAlert, Check } from "lucide-react";
+import React, { useEffect, useState } from "react";
+
+import { Check, Edit, Plus, Search, Shield, ShieldAlert, Trash2, X } from "lucide-react";
+
+import { getRoles, getStaff, saveRoles, saveStaff } from "../services/mock-data";
+import { RolePermissions, StaffMember } from "../types";
 
 export function StaffTab() {
   const [staff, setStaff] = useState<StaffMember[]>([]);
@@ -75,7 +77,7 @@ export function StaffTab() {
         email: staffEmail,
         role: staffRole,
         status: staffStatus,
-        joinedDate: new Date().toISOString().split("T")[0]
+        joinedDate: new Date().toISOString().split("T")[0],
       };
       const updated = [...staff, newMember];
       setStaff(updated);
@@ -104,9 +106,9 @@ export function StaffTab() {
             ...r.permissions,
             [resource]: {
               ...r.permissions[resource],
-              [action]: !r.permissions[resource][action]
-            }
-          }
+              [action]: !r.permissions[resource][action],
+            },
+          },
         };
       }
       return r;
@@ -116,9 +118,10 @@ export function StaffTab() {
     saveRoles(updated);
   };
 
-  const filteredStaff = staff.filter((m) =>
-    m.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    m.email.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredStaff = staff.filter(
+    (m) =>
+      m.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      m.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const availableRolesList = ["Super Admin", "Editor", "Recruiter"];
@@ -223,9 +226,7 @@ export function StaffTab() {
                             {member.status}
                           </span>
                         </td>
-                        <td className="px-6 py-4.5 text-muted-foreground">
-                          {member.joinedDate}
-                        </td>
+                        <td className="px-6 py-4.5 text-muted-foreground">{member.joinedDate}</td>
                         <td className="px-6 py-4.5 text-right space-x-2">
                           <button
                             onClick={() => openEditStaffModal(member)}
@@ -237,7 +238,11 @@ export function StaffTab() {
                             onClick={() => handleDeleteStaff(member.id)}
                             className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground hover:text-destructive hover:border-destructive/30 transition-all"
                             disabled={member.id === "staff-1" || member.id === "staff-3"}
-                            title={member.id === "staff-1" || member.id === "staff-3" ? "Cannot remove original Super Admins" : "Remove"}
+                            title={
+                              member.id === "staff-1" || member.id === "staff-3"
+                                ? "Cannot remove original Super Admins"
+                                : "Remove"
+                            }
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>
@@ -263,7 +268,8 @@ export function StaffTab() {
               Interactive Permission Rules Mapping
             </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Define access rights across portal modules. Changes updated in real-time. Super Admin rights remain fixed.
+              Define access rights across portal modules. Changes updated in real-time. Super Admin
+              rights remain fixed.
             </p>
           </div>
 

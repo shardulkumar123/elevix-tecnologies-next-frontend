@@ -1,17 +1,21 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
+
 import { useSearchParams } from "next/navigation";
-import { Navbar } from "@/components/common/navbar";
-import { Footer } from "@/components/common/footer";
-import { Button } from "@/components/ui/button";
-import { Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react";
+
+import { CheckCircle, Clock, Mail, MapPin, Send } from "lucide-react";
 
 import { useCreateContactQuery } from "@/features/contact/hooks/use-contact";
-import { getSettings } from "@/features/admin/services/mock-data";
-import { SystemSettings } from "@/features/admin/types";
 import { useIndustries } from "@/features/industries/hooks/use-industries";
 import { useServices } from "@/features/services/hooks/use-services";
+
+import { Footer } from "@/components/common/footer";
+import { Navbar } from "@/components/common/navbar";
+import { Button } from "@/components/ui/button";
+
+import { getSettings } from "@/features/admin/services/mock-data";
+import { SystemSettings } from "@/features/admin/types";
 
 function ContactFormContent() {
   const searchParams = useSearchParams();
@@ -26,19 +30,25 @@ function ContactFormContent() {
 
   const dynamicOptions = [
     ...apiIndustries.map((ind) => ({ value: ind.name, label: `${ind.name} (Industry Solution)` })),
-    ...services.map((srv) => ({ value: srv.name, label: srv.name }))
+    ...services.map((srv) => ({ value: srv.name, label: srv.name })),
   ];
 
-  const finalOptions = dynamicOptions.length > 0 ? dynamicOptions : [
-    { value: "Custom Enterprise Software / ERP", label: "Custom Enterprise Software / ERP" },
-    { value: "Headless E-Commerce / Website", label: "Headless E-Commerce / Website" },
-    { value: "Mobile Application (iOS / Android)", label: "Mobile Application (iOS / Android)" },
-    { value: "AI Agent / LLM Integration", label: "AI Agent / LLM Integration" },
-    { value: "Cloud Infrastructure & DevOps", label: "Cloud Infrastructure & DevOps" },
-    { value: "Data Engineering & Analytics", label: "Data Engineering & Analytics" },
-    { value: "UI/UX Design & Prototyping", label: "UI/UX Design & Prototyping" },
-    { value: "Operational Tech Consulting", label: "Operational Tech Consulting" }
-  ];
+  const finalOptions =
+    dynamicOptions.length > 0
+      ? dynamicOptions
+      : [
+          { value: "Custom Enterprise Software / ERP", label: "Custom Enterprise Software / ERP" },
+          { value: "Headless E-Commerce / Website", label: "Headless E-Commerce / Website" },
+          {
+            value: "Mobile Application (iOS / Android)",
+            label: "Mobile Application (iOS / Android)",
+          },
+          { value: "AI Agent / LLM Integration", label: "AI Agent / LLM Integration" },
+          { value: "Cloud Infrastructure & DevOps", label: "Cloud Infrastructure & DevOps" },
+          { value: "Data Engineering & Analytics", label: "Data Engineering & Analytics" },
+          { value: "UI/UX Design & Prototyping", label: "UI/UX Design & Prototyping" },
+          { value: "Operational Tech Consulting", label: "Operational Tech Consulting" },
+        ];
 
   const [formData, setFormData] = useState({
     name: "",
@@ -57,10 +67,14 @@ function ContactFormContent() {
   }, []);
 
   // Compute selected project type dynamically on-the-fly to avoid cascading renders
-  const selectedProjectType = formData.projectType || (() => {
-    const match = finalOptions.find(opt => opt.value.toLowerCase() === initialType.toLowerCase());
-    return match ? match.value : (initialType || finalOptions[0]?.value || "");
-  })();
+  const selectedProjectType =
+    formData.projectType ||
+    (() => {
+      const match = finalOptions.find(
+        (opt) => opt.value.toLowerCase() === initialType.toLowerCase()
+      );
+      return match ? match.value : initialType || finalOptions[0]?.value || "";
+    })();
 
   const contactEmail = settings?.siteEmail || "hello@elevixtechnologies.com";
   const address = settings?.address || "Indiranagar, Bangalore, Karnataka, India — 560038";
@@ -149,9 +163,7 @@ function ContactFormContent() {
                   </div>
                   <div className="space-y-1">
                     <h3 className="text-sm font-bold">Studio Headquarters</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {address}
-                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{address}</p>
                   </div>
                 </div>
 
@@ -161,9 +173,7 @@ function ContactFormContent() {
                   </div>
                   <div className="space-y-1">
                     <h3 className="text-sm font-bold">Operating Hours</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {supportHours}
-                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{supportHours}</p>
                   </div>
                 </div>
               </div>
@@ -184,7 +194,8 @@ function ContactFormContent() {
                         Specification Received
                       </h2>
                       <p className="mx-auto max-w-sm text-sm text-muted-foreground leading-relaxed">
-                        Thank you for reaching out. Our engineering leads will review your request and contact you shortly.
+                        Thank you for reaching out. Our engineering leads will review your request
+                        and contact you shortly.
                       </p>
                     </div>
                   </div>
@@ -300,11 +311,13 @@ function ContactFormContent() {
 
 export default function ContactPage() {
   return (
-    <Suspense fallback={
-      <div className="flex min-h-screen flex-col bg-background text-foreground antialiased items-center justify-center">
-        <span className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent" />
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen flex-col bg-background text-foreground antialiased items-center justify-center">
+          <span className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent" />
+        </div>
+      }
+    >
       <ContactFormContent />
     </Suspense>
   );

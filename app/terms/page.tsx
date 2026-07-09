@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Navbar } from "@/components/common/navbar";
+import React, { useEffect, useState } from "react";
+
 import { Footer } from "@/components/common/footer";
+import { Navbar } from "@/components/common/navbar";
+
 import { getSettings } from "@/features/admin/services/mock-data";
 import { SystemSettings } from "@/features/admin/types";
 

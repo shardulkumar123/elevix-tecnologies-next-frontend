@@ -1,58 +1,199 @@
 "use client";
 
 import React, { useState } from "react";
-import { Navbar } from "@/components/common/navbar";
-import { Footer } from "@/components/common/footer";
-import { Button } from "@/components/ui/button";
+
 import * as LucideIcons from "lucide-react";
 
+import { Footer } from "@/components/common/footer";
+import { Navbar } from "@/components/common/navbar";
+import { Button } from "@/components/ui/button";
+
 const modules = [
-  { name: "Lead Management", desc: "Capture, qualify, and track business inquiries from multiple channels automatically.", icon: "Filter" },
-  { name: "Customer CRM", desc: "Maintain full traveler histories, preferences, loyalty tiers, and communications.", icon: "Users" },
-  { name: "Quotation Builder", desc: "Compile beautiful, itemized travel quotes and PDF proposals in minutes.", icon: "FileText" },
-  { name: "Package Creator", desc: "Build standard or customized itinerary packages with flexible markups.", icon: "Package" },
-  { name: "Booking System", desc: "Manage bookings, passenger manifests, seat grids, and voucher generation.", icon: "Calendar" },
-  { name: "Partner Network", desc: "Establish portal access, commission structures, and ledger accounts for agents.", icon: "Network" },
-  { name: "Supplier Manager", desc: "Coordinate supply inventories, bulk contracts, and payment transactions.", icon: "Handshake" },
-  { name: "Hotel Coordinator", desc: "Link direct room allocations, booking statuses, and meal plan records.", icon: "Hotel" },
-  { name: "Transport Sync", desc: "Oversee vehicle schedules, driver assignments, flight tickets, and airport transfers.", icon: "Plane" },
-  { name: "Visa Operations", desc: "Track application stages, document lists, expiry notifications, and fees.", icon: "FileCheck" },
-  { name: "Payment Gateway", desc: "Process secure online transactions and track credit limits for B2B partners.", icon: "CreditCard" },
-  { name: "Invoice & Accounting", desc: "Generate GST-compliant invoices, track billing dues, and auto-generate receipts.", icon: "Receipt" },
-  { name: "Expense Tracker", desc: "Log company operating expenses, vendor bills, commissions, and overheads.", icon: "TrendingDown" },
-  { name: "Task Scheduler", desc: "Delegate tasks to team members with priority levels and automated deadlines.", icon: "CheckSquare" },
-  { name: "Employee Hub", desc: "Manage staff directory, access permissions, work performance, and activity logs.", icon: "UserCog" },
-  { name: "Reports & Analytics", desc: "Extract rich metrics on profit margins, sales performance, and popular destinations.", icon: "BarChart3" },
-  { name: "Role-Based Security", desc: "Assign strict user permissions, restricting access to sensitive pricing data.", icon: "ShieldAlert" },
-  { name: "Alerts & Notifications", desc: "Send automated updates, reminders, and payment alerts via WhatsApp/SMS/Email.", icon: "Bell" },
-  { name: "Document Vault", desc: "Securely store traveler passports, visas, vouchers, and contracts in one place.", icon: "FolderLock" },
-  { name: "API Integration Hub", desc: "Connect directly to global GDS networks, flight aggregators, and CRM platforms.", icon: "Cpu" }
+  {
+    name: "Lead Management",
+    desc: "Capture, qualify, and track business inquiries from multiple channels automatically.",
+    icon: "Filter",
+  },
+  {
+    name: "Customer CRM",
+    desc: "Maintain full traveler histories, preferences, loyalty tiers, and communications.",
+    icon: "Users",
+  },
+  {
+    name: "Quotation Builder",
+    desc: "Compile beautiful, itemized travel quotes and PDF proposals in minutes.",
+    icon: "FileText",
+  },
+  {
+    name: "Package Creator",
+    desc: "Build standard or customized itinerary packages with flexible markups.",
+    icon: "Package",
+  },
+  {
+    name: "Booking System",
+    desc: "Manage bookings, passenger manifests, seat grids, and voucher generation.",
+    icon: "Calendar",
+  },
+  {
+    name: "Partner Network",
+    desc: "Establish portal access, commission structures, and ledger accounts for agents.",
+    icon: "Network",
+  },
+  {
+    name: "Supplier Manager",
+    desc: "Coordinate supply inventories, bulk contracts, and payment transactions.",
+    icon: "Handshake",
+  },
+  {
+    name: "Hotel Coordinator",
+    desc: "Link direct room allocations, booking statuses, and meal plan records.",
+    icon: "Hotel",
+  },
+  {
+    name: "Transport Sync",
+    desc: "Oversee vehicle schedules, driver assignments, flight tickets, and airport transfers.",
+    icon: "Plane",
+  },
+  {
+    name: "Visa Operations",
+    desc: "Track application stages, document lists, expiry notifications, and fees.",
+    icon: "FileCheck",
+  },
+  {
+    name: "Payment Gateway",
+    desc: "Process secure online transactions and track credit limits for B2B partners.",
+    icon: "CreditCard",
+  },
+  {
+    name: "Invoice & Accounting",
+    desc: "Generate GST-compliant invoices, track billing dues, and auto-generate receipts.",
+    icon: "Receipt",
+  },
+  {
+    name: "Expense Tracker",
+    desc: "Log company operating expenses, vendor bills, commissions, and overheads.",
+    icon: "TrendingDown",
+  },
+  {
+    name: "Task Scheduler",
+    desc: "Delegate tasks to team members with priority levels and automated deadlines.",
+    icon: "CheckSquare",
+  },
+  {
+    name: "Employee Hub",
+    desc: "Manage staff directory, access permissions, work performance, and activity logs.",
+    icon: "UserCog",
+  },
+  {
+    name: "Reports & Analytics",
+    desc: "Extract rich metrics on profit margins, sales performance, and popular destinations.",
+    icon: "BarChart3",
+  },
+  {
+    name: "Role-Based Security",
+    desc: "Assign strict user permissions, restricting access to sensitive pricing data.",
+    icon: "ShieldAlert",
+  },
+  {
+    name: "Alerts & Notifications",
+    desc: "Send automated updates, reminders, and payment alerts via WhatsApp/SMS/Email.",
+    icon: "Bell",
+  },
+  {
+    name: "Document Vault",
+    desc: "Securely store traveler passports, visas, vouchers, and contracts in one place.",
+    icon: "FolderLock",
+  },
+  {
+    name: "API Integration Hub",
+    desc: "Connect directly to global GDS networks, flight aggregators, and CRM platforms.",
+    icon: "Cpu",
+  },
 ];
 
-const integrations = ["Razorpay", "WhatsApp Business", "Google Maps", "Google Calendar", "Cloudinary", "Email Sync", "SMS Gateways", "GST Billing Engine"];
+const integrations = [
+  "Razorpay",
+  "WhatsApp Business",
+  "Google Maps",
+  "Google Calendar",
+  "Cloudinary",
+  "Email Sync",
+  "SMS Gateways",
+  "GST Billing Engine",
+];
 
-const highlights = ["Cloud-Based", "Multi-Branch Support", "Multi-User Access", "Role-Based Permissions", "Real-Time Reports", "Secure & Scalable", "Responsive Dashboard", "API Ready"];
+const highlights = [
+  "Cloud-Based",
+  "Multi-Branch Support",
+  "Multi-User Access",
+  "Role-Based Permissions",
+  "Real-Time Reports",
+  "Secure & Scalable",
+  "Responsive Dashboard",
+  "API Ready",
+];
 
-const targetAudience = ["Travel Agencies", "Tour Operators", "Destination Management Companies (DMCs)", "Corporate Travel Companies", "Holiday Package Providers", "B2B Travel Partners"];
+const targetAudience = [
+  "Travel Agencies",
+  "Tour Operators",
+  "Destination Management Companies (DMCs)",
+  "Corporate Travel Companies",
+  "Holiday Package Providers",
+  "B2B Travel Partners",
+];
 
 const faqs = [
-  { q: "What is TravelERP?", a: "TravelERP is an all-in-one cloud platform engineered to automate travel operations, booking systems, GDS ledgers, invoices, and CRM profiles." },
-  { q: "When is the launch date?", a: "TravelERP is currently in development and is scheduled for initial beta launch in Q4 2026. Register today to reserve early access." },
-  { q: "Can I connect it to GDS APIs like Amadeus or Sabre?", a: "Yes, TravelERP features an integration hub designed to bridge direct bookings with global distribution systems (GDS)." },
-  { q: "Is the platform mobile-responsive?", a: "Absolutely. TravelERP is designed with a fully responsive framework, allowing administrators and agents to manage bookings on any mobile device." },
-  { q: "How secure is user and customer data?", a: "We apply industry-standard encryption, secure VPC boundaries, and role-based permissions to protect your proprietary data and customer information." }
+  {
+    q: "What is TravelERP?",
+    a: "TravelERP is an all-in-one cloud platform engineered to automate travel operations, booking systems, GDS ledgers, invoices, and CRM profiles.",
+  },
+  {
+    q: "When is the launch date?",
+    a: "TravelERP is currently in development and is scheduled for initial beta launch in Q4 2026. Register today to reserve early access.",
+  },
+  {
+    q: "Can I connect it to GDS APIs like Amadeus or Sabre?",
+    a: "Yes, TravelERP features an integration hub designed to bridge direct bookings with global distribution systems (GDS).",
+  },
+  {
+    q: "Is the platform mobile-responsive?",
+    a: "Absolutely. TravelERP is designed with a fully responsive framework, allowing administrators and agents to manage bookings on any mobile device.",
+  },
+  {
+    q: "How secure is user and customer data?",
+    a: "We apply industry-standard encryption, secure VPC boundaries, and role-based permissions to protect your proprietary data and customer information.",
+  },
 ];
 
 const testimonials = [
-  { quote: "TravelERP will save our agents hours of manual copy-paste work between spreadsheets and booking engines.", author: "Rajesh Mehta", role: "Director, Wandermiles Travel" },
-  { quote: "Having customer history, invoicing, and quotation builders in a single software is a game-changer.", author: "Sarah Fernandes", role: "Operations Lead, GlobeTrek Holidays" }
+  {
+    quote:
+      "TravelERP will save our agents hours of manual copy-paste work between spreadsheets and booking engines.",
+    author: "Rajesh Mehta",
+    role: "Director, Wandermiles Travel",
+  },
+  {
+    quote:
+      "Having customer history, invoicing, and quotation builders in a single software is a game-changer.",
+    author: "Sarah Fernandes",
+    role: "Operations Lead, GlobeTrek Holidays",
+  },
 ];
 
 export default function TravelERPPage() {
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "", company: "", role: "Owner", message: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    company: "",
+    role: "Owner",
+    message: "",
+  });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -92,7 +233,10 @@ export default function TravelERPPage() {
                   Complete ERP Solution for Travel Businesses
                 </p>
                 <p className="max-w-2xl text-base leading-relaxed text-muted-foreground">
-                  TravelERP is an all-in-one cloud-based ERP platform designed for travel agencies, tour operators, DMCs, and travel businesses. Manage leads, quotations, bookings, partners, finances, operations, and customer relationships from a single dashboard.
+                  TravelERP is an all-in-one cloud-based ERP platform designed for travel agencies,
+                  tour operators, DMCs, and travel businesses. Manage leads, quotations, bookings,
+                  partners, finances, operations, and customer relationships from a single
+                  dashboard.
                 </p>
 
                 <div className="flex flex-wrap gap-4 pt-2">
@@ -119,8 +263,12 @@ export default function TravelERPPage() {
                 <div className="absolute top-0 right-0 h-40 w-40 bg-gradient-to-br from-indigo-500 to-cyan-500 opacity-5 blur-2xl group-hover:opacity-10 transition-opacity" />
                 <LucideIcons.Plane className="h-14 w-14 text-indigo-500 mx-auto mb-6 animate-bounce" />
                 <h3 className="text-5xl font-black text-indigo-600 dark:text-indigo-400">50%</h3>
-                <p className="mt-2 text-sm font-extrabold text-neutral-900 dark:text-white">Reduction in Manual Operations</p>
-                <p className="mt-1 text-xs text-muted-foreground">Automating workflows cuts administrative hours in half.</p>
+                <p className="mt-2 text-sm font-extrabold text-neutral-900 dark:text-white">
+                  Reduction in Manual Operations
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Automating workflows cuts administrative hours in half.
+                </p>
               </div>
             </div>
           </div>
@@ -136,13 +284,15 @@ export default function TravelERPPage() {
               Built to Control Every Aspect of Your Studio
             </p>
             <p className="text-sm text-muted-foreground">
-              A comprehensive system of 20 fully integrated modules working together to power your travel business.
+              A comprehensive system of 20 fully integrated modules working together to power your
+              travel business.
             </p>
           </div>
 
           <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {modules.map((mod, index) => {
-              const IconComp = (LucideIcons[mod.icon as keyof typeof LucideIcons] || LucideIcons.Globe) as React.ComponentType<{ className?: string }>;
+              const IconComp = (LucideIcons[mod.icon as keyof typeof LucideIcons] ||
+                LucideIcons.Globe) as React.ComponentType<{ className?: string }>;
               return (
                 <div
                   key={index}
@@ -155,9 +305,7 @@ export default function TravelERPPage() {
                     <h3 className="mt-4 text-sm font-bold text-neutral-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                       {mod.name}
                     </h3>
-                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                      {mod.desc}
-                    </p>
+                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{mod.desc}</p>
                   </div>
                 </div>
               );
@@ -166,7 +314,10 @@ export default function TravelERPPage() {
         </section>
 
         {/* 3. COMPARISON SECTION */}
-        <section id="comparison" className="mx-auto max-w-5xl px-4 py-16 border-b border-border/40 scroll-mt-20">
+        <section
+          id="comparison"
+          className="mx-auto max-w-5xl px-4 py-16 border-b border-border/40 scroll-mt-20"
+        >
           <div className="text-center space-y-3 mb-12">
             <h2 className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">
               The Digital Upgrade
@@ -185,34 +336,56 @@ export default function TravelERPPage() {
                 <tr>
                   <th className="px-6 py-4">Capability</th>
                   <th className="px-6 py-4">Legacy Spreadsheets</th>
-                  <th className="px-6 py-4 text-indigo-600 dark:text-indigo-400">TravelERP System</th>
+                  <th className="px-6 py-4 text-indigo-600 dark:text-indigo-400">
+                    TravelERP System
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/20 text-neutral-800 dark:text-neutral-200">
                 <tr>
                   <td className="px-6 py-4 font-bold">Automatic Quotations</td>
-                  <td className="px-6 py-4 text-red-500">❌ Manual copy-paste, slow layout compiling</td>
-                  <td className="px-6 py-4 text-emerald-500 font-semibold">✅ One-click PDF proposals in minutes</td>
+                  <td className="px-6 py-4 text-red-500">
+                    ❌ Manual copy-paste, slow layout compiling
+                  </td>
+                  <td className="px-6 py-4 text-emerald-500 font-semibold">
+                    ✅ One-click PDF proposals in minutes
+                  </td>
                 </tr>
                 <tr>
                   <td className="px-6 py-4 font-bold">Booking Ledger Sync</td>
-                  <td className="px-6 py-4 text-red-500">❌ Prone to duplicate logs and human error</td>
-                  <td className="px-6 py-4 text-emerald-500 font-semibold">✅ Live database tracking booking items</td>
+                  <td className="px-6 py-4 text-red-500">
+                    ❌ Prone to duplicate logs and human error
+                  </td>
+                  <td className="px-6 py-4 text-emerald-500 font-semibold">
+                    ✅ Live database tracking booking items
+                  </td>
                 </tr>
                 <tr>
                   <td className="px-6 py-4 font-bold">GDS Integrations</td>
-                  <td className="px-6 py-4 text-red-500">❌ None. Requires switching back & forth</td>
-                  <td className="px-6 py-4 text-emerald-500 font-semibold">✅ Connects directly via flight APIs</td>
+                  <td className="px-6 py-4 text-red-500">
+                    ❌ None. Requires switching back & forth
+                  </td>
+                  <td className="px-6 py-4 text-emerald-500 font-semibold">
+                    ✅ Connects directly via flight APIs
+                  </td>
                 </tr>
                 <tr>
                   <td className="px-6 py-4 font-bold">Payment Deadlines</td>
-                  <td className="px-6 py-4 text-red-500">❌ Relies on calendar checks and memory</td>
-                  <td className="px-6 py-4 text-emerald-500 font-semibold">✅ Automated WhatsApp & email alerts</td>
+                  <td className="px-6 py-4 text-red-500">
+                    ❌ Relies on calendar checks and memory
+                  </td>
+                  <td className="px-6 py-4 text-emerald-500 font-semibold">
+                    ✅ Automated WhatsApp & email alerts
+                  </td>
                 </tr>
                 <tr>
                   <td className="px-6 py-4 font-bold">Data Privacy Controls</td>
-                  <td className="px-6 py-4 text-red-500">❌ Sheets can be easily shared or copied</td>
-                  <td className="px-6 py-4 text-emerald-500 font-semibold">✅ Strict role-based permissions access</td>
+                  <td className="px-6 py-4 text-red-500">
+                    ❌ Sheets can be easily shared or copied
+                  </td>
+                  <td className="px-6 py-4 text-emerald-500 font-semibold">
+                    ✅ Strict role-based permissions access
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -228,7 +401,10 @@ export default function TravelERPPage() {
             </h3>
             <div className="flex flex-wrap gap-2">
               {targetAudience.map((item, idx) => (
-                <span key={idx} className="px-2.5 py-1 text-[11px] font-semibold bg-muted text-muted-foreground rounded-lg border border-border/20">
+                <span
+                  key={idx}
+                  className="px-2.5 py-1 text-[11px] font-semibold bg-muted text-muted-foreground rounded-lg border border-border/20"
+                >
                   {item}
                 </span>
               ))}
@@ -242,7 +418,10 @@ export default function TravelERPPage() {
             </h3>
             <div className="flex flex-wrap gap-2">
               {integrations.map((item, idx) => (
-                <span key={idx} className="px-2.5 py-1 text-[11px] font-semibold bg-muted text-muted-foreground rounded-lg border border-border/20">
+                <span
+                  key={idx}
+                  className="px-2.5 py-1 text-[11px] font-semibold bg-muted text-muted-foreground rounded-lg border border-border/20"
+                >
                   {item}
                 </span>
               ))}
@@ -256,7 +435,10 @@ export default function TravelERPPage() {
             </h3>
             <div className="flex flex-wrap gap-2">
               {highlights.map((item, idx) => (
-                <span key={idx} className="px-2.5 py-1 text-[11px] font-semibold bg-muted text-muted-foreground rounded-lg border border-border/20">
+                <span
+                  key={idx}
+                  className="px-2.5 py-1 text-[11px] font-semibold bg-muted text-muted-foreground rounded-lg border border-border/20"
+                >
                   {item}
                 </span>
               ))}
@@ -277,7 +459,10 @@ export default function TravelERPPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {testimonials.map((t, idx) => (
-              <div key={idx} className="bg-card border border-border/60 rounded-2xl p-6 relative overflow-hidden shadow-sm">
+              <div
+                key={idx}
+                className="bg-card border border-border/60 rounded-2xl p-6 relative overflow-hidden shadow-sm"
+              >
                 <LucideIcons.Quote className="absolute right-6 top-6 h-12 w-12 text-muted/5 -z-0 pointer-events-none" />
                 <p className="text-xs italic text-muted-foreground leading-relaxed relative z-10">
                   &quot;{t.quote}&quot;
@@ -310,12 +495,8 @@ export default function TravelERPPage() {
           <div className="space-y-6">
             {faqs.map((faq, idx) => (
               <div key={idx} className="bg-card border border-border/50 rounded-xl p-5 space-y-2">
-                <h4 className="text-sm font-bold text-neutral-900 dark:text-white">
-                  {faq.q}
-                </h4>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  {faq.a}
-                </p>
+                <h4 className="text-sm font-bold text-neutral-900 dark:text-white">{faq.q}</h4>
+                <p className="text-xs text-muted-foreground leading-relaxed">{faq.a}</p>
               </div>
             ))}
           </div>
@@ -329,22 +510,28 @@ export default function TravelERPPage() {
                 Request a Demo
               </h2>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Reserve early beta access and receive a guided tour of the TravelERP environment when available.
+                Reserve early beta access and receive a guided tour of the TravelERP environment
+                when available.
               </p>
             </div>
 
             {formSubmitted ? (
               <div className="py-6 px-4 bg-emerald-500/10 border border-emerald-500/25 rounded-2xl space-y-3">
                 <LucideIcons.CheckCircle2 className="h-10 w-10 text-emerald-500 mx-auto" />
-                <h3 className="text-sm font-bold text-emerald-600 dark:text-emerald-400">Demo Reserved Successfully!</h3>
+                <h3 className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
+                  Demo Reserved Successfully!
+                </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Thank you for your interest, {formData.name}. We will reach out to you at {formData.email} to coordinate early beta access credentials.
+                  Thank you for your interest, {formData.name}. We will reach out to you at{" "}
+                  {formData.email} to coordinate early beta access credentials.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4 text-left">
                 <div className="space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-muted-foreground">Full Name</label>
+                  <label className="text-[10px] uppercase font-bold text-muted-foreground">
+                    Full Name
+                  </label>
                   <input
                     required
                     name="name"
@@ -357,7 +544,9 @@ export default function TravelERPPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] uppercase font-bold text-muted-foreground">Work Email</label>
+                    <label className="text-[10px] uppercase font-bold text-muted-foreground">
+                      Work Email
+                    </label>
                     <input
                       required
                       type="email"
@@ -369,7 +558,9 @@ export default function TravelERPPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] uppercase font-bold text-muted-foreground">Phone Number</label>
+                    <label className="text-[10px] uppercase font-bold text-muted-foreground">
+                      Phone Number
+                    </label>
                     <input
                       required
                       name="phone"
@@ -383,7 +574,9 @@ export default function TravelERPPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] uppercase font-bold text-muted-foreground">Company Name</label>
+                    <label className="text-[10px] uppercase font-bold text-muted-foreground">
+                      Company Name
+                    </label>
                     <input
                       required
                       name="company"
@@ -394,7 +587,9 @@ export default function TravelERPPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] uppercase font-bold text-muted-foreground">Your Role</label>
+                    <label className="text-[10px] uppercase font-bold text-muted-foreground">
+                      Your Role
+                    </label>
                     <select
                       name="role"
                       value={formData.role}
@@ -410,7 +605,9 @@ export default function TravelERPPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-muted-foreground">Custom Requirements / Notes</label>
+                  <label className="text-[10px] uppercase font-bold text-muted-foreground">
+                    Custom Requirements / Notes
+                  </label>
                   <textarea
                     name="message"
                     value={formData.message}

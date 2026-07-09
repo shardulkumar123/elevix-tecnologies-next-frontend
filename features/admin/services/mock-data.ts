@@ -1,24 +1,25 @@
 import {
-  Job,
+  INITIAL_INDUSTRIES,
+  INITIAL_JOBS,
+  INITIAL_PROJECTS,
+  INITIAL_QUERIES,
+  INITIAL_ROLES,
+  INITIAL_SERVICES,
+  INITIAL_SETTINGS,
+  INITIAL_STAFF,
+} from "@/constants/admin-dummy";
+
+import {
+  About,
+  ContactQuery,
   Industry,
+  Job,
+  Project,
+  RolePermissions,
   Service,
   StaffMember,
-  RolePermissions,
-  ContactQuery,
   SystemSettings,
-  Project,
-  About,
 } from "../types";
-import {
-  INITIAL_JOBS,
-  INITIAL_INDUSTRIES,
-  INITIAL_SERVICES,
-  INITIAL_STAFF,
-  INITIAL_ROLES,
-  INITIAL_QUERIES,
-  INITIAL_SETTINGS,
-  INITIAL_PROJECTS,
-} from "@/constants/admin-dummy";
 
 const getStorageItem = <T>(key: string, defaultValue: T): T => {
   if (typeof window === "undefined") return defaultValue;
@@ -74,39 +75,39 @@ export const INITIAL_ABOUT: About = {
   id: "about-singleton",
   title: "Engineering High-Performance",
   subtitle: "Software",
-  description: "Elevix Technologies is a specialized software engineering studio building performant digital tools, secure enterprise portals, and bespoke AI applications.",
+  description:
+    "Elevix Technologies is a specialized software engineering studio building performant digital tools, secure enterprise portals, and bespoke AI applications.",
   missionTitle: "Our Core Mission",
   missionPoints: [
     "We believe that software should fit your business operations perfectly, rather than forcing you to adjust your workflows to generic template solutions.",
-    "Our focus remains squarely on software architecture, clean state management, security boundaries, and responsive interfaces that load instantly across all form factors."
+    "Our focus remains squarely on software architecture, clean state management, security boundaries, and responsive interfaces that load instantly across all form factors.",
   ],
   stats: [
     { value: "150+", label: "Projects Delivered" },
     { value: "50+", label: "Active Clients" },
     { value: "5+", label: "Years of Operations" },
-    { value: "99%", label: "Client Retention" }
+    { value: "99%", label: "Client Retention" },
   ],
   values: [
     {
       title: "Performance First",
       desc: "We measure system speeds in milliseconds and page loading times in sub-seconds. Speed directly impacts conversions and business efficiency.",
-      icon: "Zap"
+      icon: "Zap",
     },
     {
       title: "Secure-by-Design",
       desc: "From strict role-based access controls to encrypted file handling, data integrity and compliance form the baseline of every architecture we deploy.",
-      icon: "Shield"
+      icon: "Shield",
     },
     {
       title: "Client-Centric Collaboration",
       desc: "We act as your technical engineering partners, translating business operations directly into custom, maintainable digital platforms.",
-      icon: "Heart"
-    }
+      icon: "Heart",
+    },
   ],
   ctaTitle: "Want to Collaborate with Us?",
-  ctaDescription: "Let's build software that makes your business operations run automatically."
+  ctaDescription: "Let's build software that makes your business operations run automatically.",
 };
 
 export const getAboutInfo = (): About => getStorageItem("admin_about", INITIAL_ABOUT);
 export const saveAboutInfo = (about: About): void => setStorageItem("admin_about", about);
-

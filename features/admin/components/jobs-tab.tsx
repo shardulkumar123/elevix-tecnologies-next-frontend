@@ -1,9 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
+
+import { Briefcase, DollarSign, Edit, MapPin, Plus, Search, Trash2, X } from "lucide-react";
+
+import {
+  useCareers,
+  useCreateCareer,
+  useDeleteCareer,
+  useUpdateCareer,
+} from "@/features/careers/hooks/use-careers";
+
 import { Job } from "../types";
-import { useCareers, useCreateCareer, useUpdateCareer, useDeleteCareer } from "@/features/careers/hooks/use-careers";
-import { Plus, Search, Edit, Trash2, X, MapPin, Briefcase, DollarSign } from "lucide-react";
 
 export function JobsTab() {
   const { data: jobs = [], isLoading: isCareersLoading } = useCareers();
@@ -22,7 +30,9 @@ export function JobsTab() {
   const [department, setDepartment] = useState("");
   const [location, setLocation] = useState("");
   const [locationType, setLocationType] = useState<"Remote" | "Hybrid" | "Onsite">("Remote");
-  const [type, setType] = useState<"Full-time" | "Part-time" | "Contract" | "Internship">("Full-time");
+  const [type, setType] = useState<"Full-time" | "Part-time" | "Contract" | "Internship">(
+    "Full-time"
+  );
   const [salaryRange, setSalaryRange] = useState("");
   const [description, setDescription] = useState("");
   const [requirements, setRequirements] = useState("");
@@ -89,8 +99,8 @@ export function JobsTab() {
       id: job.id,
       data: {
         ...job,
-        status: newStatus
-      }
+        status: newStatus,
+      },
     });
   };
 
@@ -114,7 +124,7 @@ export function JobsTab() {
       description,
       requirements: reqArray,
       benefits: benArray,
-      status: status as "Active" | "Draft" | "Closed"
+      status: status as "Active" | "Draft" | "Closed",
     };
 
     if (editingJob) {
@@ -123,14 +133,14 @@ export function JobsTab() {
         {
           onSuccess: () => {
             setIsModalOpen(false);
-          }
+          },
         }
       );
     } else {
       createMutation.mutate(payload, {
         onSuccess: () => {
           setIsModalOpen(false);
-        }
+        },
       });
     }
   };
@@ -271,15 +281,19 @@ export function JobsTab() {
                               ? "bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border-amber-100 dark:border-amber-900/30 hover:bg-amber-100 dark:hover:bg-amber-900/50"
                               : "bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border-rose-100 dark:border-rose-900/30 hover:bg-rose-100 dark:hover:bg-rose-900/50"
                         }`}
-                        title={job.status === "Active" ? "Click to Deactivate" : "Click to Activate"}
+                        title={
+                          job.status === "Active" ? "Click to Deactivate" : "Click to Activate"
+                        }
                       >
-                        <span className={`h-1.5 w-1.5 rounded-full ${
-                          job.status === "Active"
-                            ? "bg-emerald-500"
-                            : job.status === "Draft"
-                              ? "bg-amber-500"
-                              : "bg-rose-500"
-                        }`} />
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full ${
+                            job.status === "Active"
+                              ? "bg-emerald-500"
+                              : job.status === "Draft"
+                                ? "bg-amber-500"
+                                : "bg-rose-500"
+                          }`}
+                        />
                         <span>{job.status}</span>
                       </button>
                     </td>
@@ -379,7 +393,9 @@ export function JobsTab() {
                   </label>
                   <select
                     value={locationType}
-                    onChange={(e) => setLocationType(e.target.value as "Remote" | "Hybrid" | "Onsite")}
+                    onChange={(e) =>
+                      setLocationType(e.target.value as "Remote" | "Hybrid" | "Onsite")
+                    }
                     className="w-full rounded-xl border border-border bg-muted/10 px-3 py-2 text-xs font-semibold focus:border-indigo-600 focus:outline-none"
                   >
                     <option value="Remote">Remote</option>
@@ -393,7 +409,11 @@ export function JobsTab() {
                   </label>
                   <select
                     value={type}
-                    onChange={(e) => setType(e.target.value as "Full-time" | "Part-time" | "Contract" | "Internship")}
+                    onChange={(e) =>
+                      setType(
+                        e.target.value as "Full-time" | "Part-time" | "Contract" | "Internship"
+                      )
+                    }
                     className="w-full rounded-xl border border-border bg-muted/10 px-3 py-2 text-xs font-semibold focus:border-indigo-600 focus:outline-none"
                   >
                     <option value="Full-time">Full-time</option>
@@ -424,7 +444,9 @@ export function JobsTab() {
                   </label>
                   <select
                     value={status}
-                    onChange={(e) => handleStatusChange(e.target.value as "Active" | "Draft" | "Closed")}
+                    onChange={(e) =>
+                      handleStatusChange(e.target.value as "Active" | "Draft" | "Closed")
+                    }
                     className="w-full rounded-xl border border-border bg-muted/10 px-3 py-2 text-xs font-semibold focus:border-indigo-600 focus:outline-none"
                   >
                     <option value="Active">Active / Public</option>

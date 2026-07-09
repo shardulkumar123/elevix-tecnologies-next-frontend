@@ -1,7 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import { axiosInstance } from "@/lib/api-client";
-import { Industry } from "@/features/admin/types";
+
 import { getIndustries, saveIndustries } from "@/features/admin/services/mock-data";
+import { Industry } from "@/features/admin/types";
 
 export interface ServicesDomainBackendModel {
   id: string;
@@ -65,17 +67,22 @@ export const useIndustries = () => {
     queryKey: ["industries"],
     queryFn: async () => {
       try {
-        const response = await axiosInstance.get("/services-domain") as ServicesDomainBackendModel[];
+        const response = (await axiosInstance.get(
+          "/services-domain"
+        )) as ServicesDomainBackendModel[];
         if (Array.isArray(response)) {
           return response.map(mapBackendToFrontendIndustry);
         }
         throw new Error("Invalid response format");
       } catch (err: unknown) {
         checkAndPropagateError(err);
-        console.warn("Backend /services-domain API is offline. Using simulated localStorage database.", err);
+        console.warn(
+          "Backend /services-domain API is offline. Using simulated localStorage database.",
+          err
+        );
         return getIndustries();
       }
-    }
+    },
   });
 };
 
@@ -85,11 +92,17 @@ export const useCreateIndustry = () => {
     mutationFn: async (newIndustry) => {
       try {
         const payload = mapFrontendToBackendIndustry(newIndustry);
-        const response = await axiosInstance.post("/services-domain", payload) as ServicesDomainBackendModel;
+        const response = (await axiosInstance.post(
+          "/services-domain",
+          payload
+        )) as ServicesDomainBackendModel;
         return mapBackendToFrontendIndustry(response);
       } catch (err: unknown) {
         checkAndPropagateError(err);
-        console.warn("Backend /services-domain API is offline. Creating in simulated local database.", err);
+        console.warn(
+          "Backend /services-domain API is offline. Creating in simulated local database.",
+          err
+        );
         const industries = getIndustries();
         const createdIndustry: Industry = {
           id: newIndustry.id || `ind-${Date.now()}`,
@@ -102,7 +115,7 @@ export const useCreateIndustry = () => {
           tagline: newIndustry.tagline,
           color: newIndustry.color,
           stats: newIndustry.stats,
-          solutions: newIndustry.solutions
+          solutions: newIndustry.solutions,
         };
         saveIndustries([...industries, createdIndustry]);
         return createdIndustry;
@@ -110,7 +123,7 @@ export const useCreateIndustry = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["industries"] });
-    }
+    },
   });
 };
 
@@ -120,17 +133,23 @@ export const useUpdateIndustry = () => {
     mutationFn: async ({ id, data }) => {
       try {
         const payload = mapFrontendToBackendIndustry(data);
-        const response = await axiosInstance.patch(`/services-domain/${id}`, payload) as ServicesDomainBackendModel;
+        const response = (await axiosInstance.patch(
+          `/services-domain/${id}`,
+          payload
+        )) as ServicesDomainBackendModel;
         return mapBackendToFrontendIndustry(response);
       } catch (err: unknown) {
         checkAndPropagateError(err);
-        console.warn("Backend /services-domain API is offline. Updating in simulated local database.", err);
+        console.warn(
+          "Backend /services-domain API is offline. Updating in simulated local database.",
+          err
+        );
         const industries = getIndustries();
         const updated = industries.map((ind) =>
           ind.id === id
             ? {
                 ...ind,
-                ...data
+                ...data,
               }
             : ind
         );
@@ -140,7 +159,7 @@ export const useUpdateIndustry = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["industries"] });
-    }
+    },
   });
 };
 
@@ -152,7 +171,10 @@ export const useDeleteIndustry = () => {
         await axiosInstance.delete(`/services-domain/${id}`);
       } catch (err: unknown) {
         checkAndPropagateError(err);
-        console.warn("Backend /services-domain API is offline. Deleting from simulated local database.", err);
+        console.warn(
+          "Backend /services-domain API is offline. Deleting from simulated local database.",
+          err
+        );
         const industries = getIndustries();
         const updated = industries.filter((ind) => ind.id !== id);
         saveIndustries(updated);
@@ -160,6 +182,6 @@ export const useDeleteIndustry = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["industries"] });
-    }
+    },
   });
 };

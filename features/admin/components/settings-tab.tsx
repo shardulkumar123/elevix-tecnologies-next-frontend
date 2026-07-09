@@ -1,16 +1,31 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { SystemSettings } from "../types";
-import { getSettings, saveSettings } from "../services/mock-data";
-import { Save, Info, Sliders, ToggleLeft, ToggleRight, Mail, Phone, MapPin, FileText, Clock } from "lucide-react";
+import React, { useEffect, useState } from "react";
+
+import {
+  Clock,
+  FileText,
+  Info,
+  Mail,
+  MapPin,
+  Phone,
+  Save,
+  Sliders,
+  ToggleLeft,
+  ToggleRight,
+} from "lucide-react";
+
 import { useAbout, useUpdateAbout } from "@/features/about/hooks/use-about";
+
 import { useToast } from "@/components/ui/toast";
+
+import { getSettings, saveSettings } from "../services/mock-data";
+import { SystemSettings } from "../types";
 
 export function SettingsTab() {
   const { success, error } = useToast();
   const [settings, setSettings] = useState<SystemSettings | null>(null);
-  
+
   const { data: aboutData } = useAbout();
   const updateAboutMutation = useUpdateAbout();
 
@@ -80,7 +95,7 @@ export function SettingsTab() {
       maxUploadSizeMb,
       supportHours,
       privacyPolicy,
-      termsOfService
+      termsOfService,
     };
     saveSettings(updated);
     setSettings(updated);
@@ -91,18 +106,21 @@ export function SettingsTab() {
       subtitle: aboutSubtitle,
       description: aboutDesc,
       missionTitle,
-      missionPoints: missionPointsText.split("\n").map(x => x.trim()).filter(Boolean),
+      missionPoints: missionPointsText
+        .split("\n")
+        .map((x) => x.trim())
+        .filter(Boolean),
       ctaTitle: aboutCtaTitle,
       ctaDescription: aboutCtaDesc,
     };
-    
+
     updateAboutMutation.mutate(aboutPayload, {
       onSuccess: () => {
         success("Portal system settings and About page content saved successfully!");
       },
       onError: (err: Error) => {
         error("System settings saved, but failed to save About content: " + err.message);
-      }
+      },
     });
   };
 
@@ -224,7 +242,9 @@ export function SettingsTab() {
             {/* Toggle 1 */}
             <div className="flex items-center justify-between border-b border-border/10 pb-4">
               <div className="space-y-0.5">
-                <p className="text-xs font-bold text-neutral-800 dark:text-white">Maintenance Mode</p>
+                <p className="text-xs font-bold text-neutral-800 dark:text-white">
+                  Maintenance Mode
+                </p>
                 <p className="text-[11px] text-muted-foreground">
                   Lock all client portal traffic and display a static maintenance message.
                 </p>
@@ -245,7 +265,9 @@ export function SettingsTab() {
             {/* Toggle 2 */}
             <div className="flex items-center justify-between pb-2">
               <div className="space-y-0.5">
-                <p className="text-xs font-bold text-neutral-800 dark:text-white">Allow Public Job Applications</p>
+                <p className="text-xs font-bold text-neutral-800 dark:text-white">
+                  Allow Public Job Applications
+                </p>
                 <p className="text-[11px] text-muted-foreground">
                   If deactivated, public users can view jobs but cannot submit resumes.
                 </p>

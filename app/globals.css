@@ -121,14 +121,14 @@
 /* System dark preference */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #110B11;
+    --background: #110b11;
     --foreground: oklch(0.985 0 0);
-    --card: #110B11;
+    --card: #110b11;
     --card-foreground: oklch(0.985 0 0);
-    --popover: #110B11;
+    --popover: #110b11;
     --popover-foreground: oklch(0.985 0 0);
     --primary: oklch(0.922 0 0);
-    --primary-foreground: #110B11;
+    --primary-foreground: #110b11;
     --secondary: oklch(0.269 0 0);
     --secondary-foreground: oklch(0.985 0 0);
     --muted: oklch(0.269 0 0);
@@ -170,14 +170,14 @@
 
 /* Manual override classes */
 .dark {
-  --background: #110B11;
+  --background: #110b11;
   --foreground: oklch(0.985 0 0);
-  --card: #110B11;
+  --card: #110b11;
   --card-foreground: oklch(0.985 0 0);
-  --popover: #110B11;
+  --popover: #110b11;
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.922 0 0);
-  --primary-foreground: #110B11;
+  --primary-foreground: #110b11;
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);

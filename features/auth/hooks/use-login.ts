@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+
 import { axiosInstance } from "@/lib/api-client";
 
 export interface LoginCredentials {
@@ -17,6 +18,6 @@ export const useLogin = () => {
   return useMutation<LoginResponse, Error, LoginCredentials>({
     mutationFn: async ({ email, password }) => {
       return axiosInstance.post("/auth/login", { email, password });
-    }
+    },
   });
 };

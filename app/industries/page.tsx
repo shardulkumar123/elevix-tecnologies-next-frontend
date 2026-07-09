@@ -1,12 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
 import Link from "next/link";
-import { Navbar } from "@/components/common/navbar";
-import { Footer } from "@/components/common/footer";
-import { Button } from "@/components/ui/button";
+
 import * as LucideIcons from "lucide-react";
+
 import { useIndustries } from "@/features/industries/hooks/use-industries";
+
+import { Footer } from "@/components/common/footer";
+import { Navbar } from "@/components/common/navbar";
+import { Button } from "@/components/ui/button";
+
 import { Industry } from "@/features/admin/types";
 
 const defaultIndustriesData: Industry[] = [
@@ -16,7 +21,8 @@ const defaultIndustriesData: Industry[] = [
     slug: "restaurants",
     tagline: "Hospitality",
     desc: "POS, table ordering, kitchen display, delivery integration, and loyalty programs.",
-    description: "POS, table ordering, kitchen display, delivery integration, and loyalty programs.",
+    description:
+      "POS, table ordering, kitchen display, delivery integration, and loyalty programs.",
     icon: "Utensils",
     color: "from-orange-500 to-red-500",
     stats: { value: "30%", label: "Increase in table turnover" },
@@ -56,7 +62,8 @@ const defaultIndustriesData: Industry[] = [
     slug: "manufacturing",
     tagline: "Enterprise",
     desc: "Production tracking, quality control, shift management, and supply chain dashboards.",
-    description: "Production tracking, quality control, shift management, and supply chain dashboards.",
+    description:
+      "Production tracking, quality control, shift management, and supply chain dashboards.",
     icon: "Factory",
     color: "from-slate-600 to-gray-800",
     stats: { value: "20%", label: "Reduction in cycle times" },
@@ -76,7 +83,8 @@ const defaultIndustriesData: Industry[] = [
     slug: "inventory-systems",
     tagline: "Operations",
     desc: "Real-time stock management, barcode scanning, reorder alerts, and supplier portals.",
-    description: "Real-time stock management, barcode scanning, reorder alerts, and supplier portals.",
+    description:
+      "Real-time stock management, barcode scanning, reorder alerts, and supplier portals.",
     icon: "Package",
     color: "from-yellow-500 to-amber-600",
     stats: { value: "99.9%", label: "Stock tracking accuracy" },
@@ -176,7 +184,8 @@ const defaultIndustriesData: Industry[] = [
     slug: "travel",
     tagline: "Operations",
     desc: "Custom flight/hotel booking engines, GDS integrations, itinerary builders, and agent portals.",
-    description: "Custom flight/hotel booking engines, GDS integrations, itinerary builders, and agent portals.",
+    description:
+      "Custom flight/hotel booking engines, GDS integrations, itinerary builders, and agent portals.",
     icon: "Plane",
     color: "from-blue-600 to-teal-500",
     stats: { value: "40%", label: "Booking flow automation" },
@@ -196,7 +205,8 @@ const defaultIndustriesData: Industry[] = [
     slug: "custom-software",
     tagline: "Engineering",
     desc: "Tailor-made web applications, bespoke CMS integrations, responsive websites, and enterprise systems.",
-    description: "Tailor-made web applications, bespoke CMS integrations, responsive websites, and enterprise systems.",
+    description:
+      "Tailor-made web applications, bespoke CMS integrations, responsive websites, and enterprise systems.",
     icon: "Code2",
     color: "from-indigo-500 to-purple-600",
     stats: { value: "100%", label: "Bespoke custom solutions" },
@@ -231,11 +241,13 @@ export default function IndustriesPage() {
     return () => clearTimeout(timer);
   }, [activeIndustriesList, activeTab]);
 
-  const selectedIndustry = activeIndustriesList.find((ind) => ind.id === activeTab) || activeIndustriesList[0];
-  
+  const selectedIndustry =
+    activeIndustriesList.find((ind) => ind.id === activeTab) || activeIndustriesList[0];
+
   // Dynamically resolve icon component
   const SelectedIcon = selectedIndustry
-    ? ((LucideIcons[selectedIndustry.icon as keyof typeof LucideIcons] || LucideIcons.Globe) as React.ComponentType<{ className?: string }>)
+    ? ((LucideIcons[selectedIndustry.icon as keyof typeof LucideIcons] ||
+        LucideIcons.Globe) as React.ComponentType<{ className?: string }>)
     : LucideIcons.Globe;
 
   return (
@@ -278,7 +290,8 @@ export default function IndustriesPage() {
               {/* Industry Selection Tabs */}
               <div className="flex flex-wrap justify-center gap-3 border-b border-border/60 pb-8">
                 {activeIndustriesList.map((ind) => {
-                  const TabIcon = ((LucideIcons[ind.icon as keyof typeof LucideIcons] || LucideIcons.Globe) as React.ComponentType<{ className?: string }>);
+                  const TabIcon = (LucideIcons[ind.icon as keyof typeof LucideIcons] ||
+                    LucideIcons.Globe) as React.ComponentType<{ className?: string }>;
                   const isActive = activeTab === ind.id;
                   return (
                     <button
@@ -430,4 +443,3 @@ export default function IndustriesPage() {
     </div>
   );
 }
-

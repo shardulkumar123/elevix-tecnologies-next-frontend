@@ -1,13 +1,19 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
 import { useRouter } from "next/navigation";
-import { Logo } from "@/components/common/logo";
-import { Mail, Lock, ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react";
+
 import { LOCAL_STORAGE_KEYS } from "@/constants";
+import { ArrowRight, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
+
 import { useLogin } from "@/features/auth/hooks/use-login";
-import { useAuth } from "@/features/auth/context/auth-context";
+
+import { Logo } from "@/components/common/logo";
+
 import { GuestGuard } from "@/features/auth/components/guest-guard";
+
+import { useAuth } from "@/features/auth/context/auth-context";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -69,8 +75,12 @@ export default function AdminLoginPage() {
     try {
       // 1. Try hitting the NestJS backend API /auth/login using useLogin hook
       const response = await loginMutation.mutateAsync({ email, password });
-      
-      const token = response.access_token || response.token || response.accessToken || (response.data && response.data.token);
+
+      const token =
+        response.access_token ||
+        response.token ||
+        response.accessToken ||
+        (response.data && response.data.token);
       if (token) {
         login(token);
         setSuccessMsg("Logged in successfully! Redirecting...");
@@ -78,9 +88,16 @@ export default function AdminLoginPage() {
         throw new Error("Invalid token received from server");
       }
     } catch (err) {
-      const error = err as Error & { message?: string; statusCode?: number; validationDetails?: string[] };
-      console.warn("Backend auth failed or is offline. Falling back to local offline sandbox simulation:", error);
-      
+      const error = err as Error & {
+        message?: string;
+        statusCode?: number;
+        validationDetails?: string[];
+      };
+      console.warn(
+        "Backend auth failed or is offline. Falling back to local offline sandbox simulation:",
+        error
+      );
+
       // If validation details exist, route them to field errors
       if (error.statusCode === 400 && error.validationDetails) {
         const errors: { email?: string; password?: string } = {};
@@ -97,27 +114,34 @@ export default function AdminLoginPage() {
         setIsLoading(false);
         return;
       }
-      
+
       // 2. Offline simulation fallback: Allow testing with seeded roles
       if (
-        (email === "shardul@elevixtechnologies.com" || email === "aditya@elevixtechnologies.com" || email === "neha.s@elevixtechnologies.com" || email === "rohan.v@elevixtechnologies.com") &&
+        (email === "shardul@elevixtechnologies.com" ||
+          email === "aditya@elevixtechnologies.com" ||
+          email === "neha.s@elevixtechnologies.com" ||
+          email === "rohan.v@elevixtechnologies.com") &&
         password === "admin123"
       ) {
-        const role = email === "shardul@elevixtechnologies.com" || email === "aditya@elevixtechnologies.com" ? "ADMIN" : "EDITOR";
+        const role =
+          email === "shardul@elevixtechnologies.com" || email === "aditya@elevixtechnologies.com"
+            ? "ADMIN"
+            : "EDITOR";
         const simulatedPayload = {
           sub: "simulated_id",
           email,
           role,
-          exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24), // 24 hours
+          exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24, // 24 hours
         };
         const base64Payload = window.btoa(JSON.stringify(simulatedPayload));
         const simulatedToken = `simulated_header.${base64Payload}.simulated_signature`;
-        
+
         login(simulatedToken);
         setSuccessMsg("Logged in successfully (Offline Sandbox)! Redirecting...");
       } else {
         setErrorMsg(
-          error.message || "Invalid credentials. Use 'shardul@elevixtechnologies.com' and 'admin123' to test offline."
+          error.message ||
+            "Invalid credentials. Use 'shardul@elevixtechnologies.com' and 'admin123' to test offline."
         );
       }
     } finally {
@@ -133,16 +157,18 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <React.Suspense fallback={
-      <div className="flex-1 min-h-screen flex items-center justify-center bg-background text-foreground">
-        <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
-          <span className="text-xs font-bold text-muted-foreground tracking-wide">
-            Checking session...
-          </span>
+    <React.Suspense
+      fallback={
+        <div className="flex-1 min-h-screen flex items-center justify-center bg-background text-foreground">
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+            <span className="text-xs font-bold text-muted-foreground tracking-wide">
+              Checking session...
+            </span>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <GuestGuard>
         <div className="flex-1 min-h-screen flex items-center justify-center bg-background text-foreground px-4 relative overflow-hidden">
           {/* Background patterns */}
@@ -185,7 +211,9 @@ export default function AdminLoginPage() {
                     Email Address
                   </label>
                   <div className="relative">
-                    <Mail className={`absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 ${fieldErrors.email ? "text-rose-500" : "text-muted-foreground"}`} />
+                    <Mail
+                      className={`absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 ${fieldErrors.email ? "text-rose-500" : "text-muted-foreground"}`}
+                    />
                     <input
                       type="email"
                       required
@@ -193,11 +221,12 @@ export default function AdminLoginPage() {
                       value={email}
                       onChange={(e) => {
                         setEmail(e.target.value);
-                        if (fieldErrors.email) setFieldErrors(prev => ({ ...prev, email: undefined }));
+                        if (fieldErrors.email)
+                          setFieldErrors((prev) => ({ ...prev, email: undefined }));
                       }}
                       className={`w-full rounded-xl border bg-muted/10 pl-10 pr-4 py-2.5 text-xs font-semibold focus:outline-none transition-colors ${
-                        fieldErrors.email 
-                          ? "border-rose-500/80 focus:border-rose-500 text-rose-600 dark:text-rose-400" 
+                        fieldErrors.email
+                          ? "border-rose-500/80 focus:border-rose-500 text-rose-600 dark:text-rose-400"
                           : "border-border focus:border-indigo-600"
                       }`}
                     />
@@ -216,7 +245,9 @@ export default function AdminLoginPage() {
                     </label>
                   </div>
                   <div className="relative">
-                    <Lock className={`absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 ${fieldErrors.password ? "text-rose-500" : "text-muted-foreground"}`} />
+                    <Lock
+                      className={`absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 ${fieldErrors.password ? "text-rose-500" : "text-muted-foreground"}`}
+                    />
                     <input
                       type={showPassword ? "text" : "password"}
                       required
@@ -224,11 +255,12 @@ export default function AdminLoginPage() {
                       value={password}
                       onChange={(e) => {
                         setPassword(e.target.value);
-                        if (fieldErrors.password) setFieldErrors(prev => ({ ...prev, password: undefined }));
+                        if (fieldErrors.password)
+                          setFieldErrors((prev) => ({ ...prev, password: undefined }));
                       }}
                       className={`w-full rounded-xl border bg-muted/10 pl-10 pr-10 py-2.5 text-xs font-semibold focus:outline-none transition-colors ${
-                        fieldErrors.password 
-                          ? "border-rose-500/80 focus:border-rose-500 text-rose-600 dark:text-rose-400" 
+                        fieldErrors.password
+                          ? "border-rose-500/80 focus:border-rose-500 text-rose-600 dark:text-rose-400"
                           : "border-border focus:border-indigo-600"
                       }`}
                     />

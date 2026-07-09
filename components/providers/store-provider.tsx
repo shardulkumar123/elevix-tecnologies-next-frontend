@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+
 import { Provider } from "react-redux";
+
 import { makeStore } from "@/lib/redux/store";
 
 interface StoreProviderProps {

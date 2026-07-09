@@ -1,10 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
 import Link from "next/link";
-import { Logo } from "@/components/common/logo";
-import { Mail, MapPin, Clock } from "lucide-react";
+
+import { Clock, Mail, MapPin } from "lucide-react";
+
 import { useServices } from "@/features/services/hooks/use-services";
+
+import { Logo } from "@/components/common/logo";
+
 import { getSettings } from "@/features/admin/services/mock-data";
 import { SystemSettings } from "@/features/admin/types";
 
@@ -20,15 +25,16 @@ export function Footer() {
     return () => clearTimeout(timer);
   }, []);
 
-  const solutionsList = services.length > 0
-    ? services.slice(0, 5).map((s) => ({ id: s.id, name: s.name, href: "/services" }))
-    : [
-        { id: "fallback-1", name: "Hospitality POS & Booking", href: "/services" },
-        { id: "fallback-2", name: "Manufacturing & ERP", href: "/services" },
-        { id: "fallback-3", name: "Inventory & Operations", href: "/services" },
-        { id: "fallback-4", name: "E-Commerce Storefronts", href: "/services" },
-        { id: "fallback-5", name: "Custom Admin Portals", href: "/services" },
-      ];
+  const solutionsList =
+    services.length > 0
+      ? services.slice(0, 5).map((s) => ({ id: s.id, name: s.name, href: "/services" }))
+      : [
+          { id: "fallback-1", name: "Hospitality POS & Booking", href: "/services" },
+          { id: "fallback-2", name: "Manufacturing & ERP", href: "/services" },
+          { id: "fallback-3", name: "Inventory & Operations", href: "/services" },
+          { id: "fallback-4", name: "E-Commerce Storefronts", href: "/services" },
+          { id: "fallback-5", name: "Custom Admin Portals", href: "/services" },
+        ];
 
   const brandName = settings?.siteName || "Elevix Technologies";
   const contactEmail = settings?.siteEmail || "hello@elevixtechnologies.com";
@@ -40,7 +46,6 @@ export function Footer() {
     <footer className="mt-auto border-t border-border/60 bg-muted/20 dark:bg-zinc-950/20">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5 lg:gap-8">
-          
           {/* Brand Info Column */}
           <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center gap-3">
@@ -52,7 +57,8 @@ export function Footer() {
               </span>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed max-w-sm">
-              We engineer custom software systems, automation pipelines, and high-performance applications designed to scale with your business requirements.
+              We engineer custom software systems, automation pipelines, and high-performance
+              applications designed to scale with your business requirements.
             </p>
             {/* Contact Details */}
             <div className="space-y-2.5 text-xs text-muted-foreground">
@@ -63,7 +69,10 @@ export function Footer() {
               {contactEmail && (
                 <div className="flex items-center gap-2.5">
                   <Mail className="h-4 w-4 shrink-0 text-indigo-500" />
-                  <a href={`mailto:${contactEmail}`} className="hover:text-foreground transition-colors">
+                  <a
+                    href={`mailto:${contactEmail}`}
+                    className="hover:text-foreground transition-colors"
+                  >
                     {contactEmail}
                   </a>
                 </div>
@@ -149,13 +158,13 @@ export function Footer() {
               </li>
             </ul>
           </div>
-
         </div>
 
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-border/40 flex flex-col items-center justify-between gap-4 sm:flex-row text-xs text-muted-foreground">
           <p className="text-center sm:text-left">
-            &copy; {currentYear} {brandName} Inc. All rights reserved. High-performance software engineering.
+            &copy; {currentYear} {brandName} Inc. All rights reserved. High-performance software
+            engineering.
           </p>
           <div className="flex gap-6">
             <Link href="/privacy" className="hover:text-foreground transition-colors">

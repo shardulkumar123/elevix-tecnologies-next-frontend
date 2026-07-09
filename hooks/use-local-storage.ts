@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 
 /**
  * A custom hook to synchronize state with localStorage, supporting SSR environments safely.

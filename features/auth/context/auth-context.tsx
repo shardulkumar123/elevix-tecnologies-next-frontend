@@ -1,9 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+
 import { useRouter } from "next/navigation";
+
 import { LOCAL_STORAGE_KEYS } from "@/constants";
-import { decodeToken, isTokenExpired, DecodedUser } from "../utils/jwt";
+
+import { DecodedUser, decodeToken, isTokenExpired } from "../utils/jwt";
 
 interface AuthContextType {
   user: DecodedUser | null;

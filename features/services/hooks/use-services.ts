@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { axiosInstance } from "@/lib/api-client";
-import { Service } from "@/features/admin/types";
+
 import { getServices } from "@/features/admin/services/mock-data";
+import { Service } from "@/features/admin/types";
 
 export interface ServiceBackendModel {
   id: string;

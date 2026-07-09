@@ -1,20 +1,25 @@
 "use client";
 
 import React, { useState } from "react";
+
 import Link from "next/link";
-import { Navbar } from "@/components/common/navbar";
-import { Footer } from "@/components/common/footer";
-import { Button } from "@/components/ui/button";
+
 import {
   ArrowRight,
   Briefcase,
-  MapPin,
   Clock,
-  DollarSign,
   Coffee,
-  Heart,
+  DollarSign,
   Globe,
+  Heart,
+  MapPin,
 } from "lucide-react";
+
+import { useCareers } from "@/features/careers/hooks/use-careers";
+
+import { Footer } from "@/components/common/footer";
+import { Navbar } from "@/components/common/navbar";
+import { Button } from "@/components/ui/button";
 
 // Dummy career opportunities data
 const jobsData = [
@@ -79,8 +84,6 @@ const perks = [
     icon: Heart,
   },
 ];
-
-import { useCareers } from "@/features/careers/hooks/use-careers";
 
 export default function CareersPage() {
   const { data: apiJobs = [] } = useCareers();
@@ -186,7 +189,7 @@ export default function CareersPage() {
                 };
                 const displaySalary = job.salary || job.salaryRange || "";
                 const displayDesc = job.desc || job.description || "";
-                
+
                 return (
                   <div
                     key={job.id}
