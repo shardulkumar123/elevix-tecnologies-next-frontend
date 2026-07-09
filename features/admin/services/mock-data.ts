@@ -81,6 +81,7 @@ export const INITIAL_ABOUT: About = {
   missionPoints: [
     "We believe that software should fit your business operations perfectly, rather than forcing you to adjust your workflows to generic template solutions.",
     "Our focus remains squarely on software architecture, clean state management, security boundaries, and responsive interfaces that load instantly across all form factors.",
+    "We deliver our work as fast as possible with high-quality code, utilizing industry-standard methods and agile development practices.",
   ],
   stats: [
     { value: "150+", label: "Projects Delivered" },
@@ -103,6 +104,11 @@ export const INITIAL_ABOUT: About = {
       title: "Client-Centric Collaboration",
       desc: "We act as your technical engineering partners, translating business operations directly into custom, maintainable digital platforms.",
       icon: "Heart",
+    },
+    {
+      title: "Rapid & Reliable Delivery",
+      desc: "We deliver your projects as fast as possible using industry-standard methodologies and high-quality, maintainable code.",
+      icon: "Target",
     },
   ],
   ctaTitle: "Want to Collaborate with Us?",
