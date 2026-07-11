@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import * as LucideIcons from "lucide-react";
 
@@ -180,26 +183,49 @@ const testimonials = [
   },
 ];
 
+const demoSchema = yup.object().shape({
+  name: yup.string().required("Full name is required").min(2, "Name must be at least 2 characters"),
+  email: yup.string().email("Please enter a valid work email").required("Work email is required"),
+  phone: yup
+    .string()
+    .required("Phone number is required")
+    .matches(/^[+]?[(]?[0-9]{1,4}[)]?[-s./0-9]*$/, "Please enter a valid phone number"),
+  company: yup.string().required("Company name is required"),
+  role: yup.string().required("Role is required"),
+  message: yup.string().ensure(),
+});
+
+interface DemoFormData {
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  role: string;
+  message: string;
+}
+
 export default function TravelERPPage() {
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    role: "Owner",
-    message: "",
+  const [submittedData, setSubmittedData] = useState<DemoFormData | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<DemoFormData>({
+    resolver: yupResolver(demoSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      company: "",
+      role: "Owner",
+      message: "",
+    },
   });
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = (data: DemoFormData) => {
+    setSubmittedData(data);
     setFormSubmitted(true);
   };
 
@@ -515,31 +541,31 @@ export default function TravelERPPage() {
               </p>
             </div>
 
-            {formSubmitted ? (
+            {formSubmitted && submittedData ? (
               <div className="py-6 px-4 bg-emerald-500/10 border border-emerald-500/25 rounded-2xl space-y-3">
                 <LucideIcons.CheckCircle2 className="h-10 w-10 text-emerald-500 mx-auto" />
                 <h3 className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
                   Demo Reserved Successfully!
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Thank you for your interest, {formData.name}. We will reach out to you at{" "}
-                  {formData.email} to coordinate early beta access credentials.
+                  Thank you for your interest, {submittedData.name}. We will reach out to you at{" "}
+                  {submittedData.email} to coordinate early beta access credentials.
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4 text-left">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 text-left">
                 <div className="space-y-1">
                   <label className="text-[10px] uppercase font-bold text-muted-foreground">
                     Full Name
                   </label>
                   <input
-                    required
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
+                    {...register("name")}
                     placeholder="Enter your name"
                     className="w-full rounded-xl h-10 border border-input bg-background px-3 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                   />
+                  {errors.name && (
+                    <p className="text-red-500 text-[10px] mt-1 font-semibold">{errors.name.message}</p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -548,27 +574,27 @@ export default function TravelERPPage() {
                       Work Email
                     </label>
                     <input
-                      required
                       type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
+                      {...register("email")}
                       placeholder="email@company.com"
                       className="w-full rounded-xl h-10 border border-input bg-background px-3 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                     />
+                    {errors.email && (
+                      <p className="text-red-500 text-[10px] mt-1 font-semibold">{errors.email.message}</p>
+                    )}
                   </div>
                   <div className="space-y-1">
                     <label className="text-[10px] uppercase font-bold text-muted-foreground">
                       Phone Number
                     </label>
                     <input
-                      required
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
+                      {...register("phone")}
                       placeholder="e.g. +91 9876543210"
                       className="w-full rounded-xl h-10 border border-input bg-background px-3 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                     />
+                    {errors.phone && (
+                      <p className="text-red-500 text-[10px] mt-1 font-semibold">{errors.phone.message}</p>
+                    )}
                   </div>
                 </div>
 
@@ -578,22 +604,20 @@ export default function TravelERPPage() {
                       Company Name
                     </label>
                     <input
-                      required
-                      name="company"
-                      value={formData.company}
-                      onChange={handleInputChange}
+                      {...register("company")}
                       placeholder="Your agency name"
                       className="w-full rounded-xl h-10 border border-input bg-background px-3 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                     />
+                    {errors.company && (
+                      <p className="text-red-500 text-[10px] mt-1 font-semibold">{errors.company.message}</p>
+                    )}
                   </div>
                   <div className="space-y-1">
                     <label className="text-[10px] uppercase font-bold text-muted-foreground">
                       Your Role
                     </label>
                     <select
-                      name="role"
-                      value={formData.role}
-                      onChange={handleInputChange}
+                      {...register("role")}
                       className="w-full rounded-xl h-10 border border-input bg-background px-3 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                     >
                       <option value="Owner">Owner / CEO</option>
@@ -601,6 +625,9 @@ export default function TravelERPPage() {
                       <option value="Agent">Travel Agent</option>
                       <option value="Developer">Technical Specialist</option>
                     </select>
+                    {errors.role && (
+                      <p className="text-red-500 text-[10px] mt-1 font-semibold">{errors.role.message}</p>
+                    )}
                   </div>
                 </div>
 
@@ -609,12 +636,13 @@ export default function TravelERPPage() {
                     Custom Requirements / Notes
                   </label>
                   <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
+                    {...register("message")}
                     placeholder="Tell us about your agency size and GDS requirements..."
                     className="w-full rounded-xl min-h-[80px] pt-2.5 border border-input bg-background px-3 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none"
                   />
+                  {errors.message && (
+                    <p className="text-red-500 text-[10px] mt-1 font-semibold">{errors.message.message}</p>
+                  )}
                 </div>
 
                 <Button
