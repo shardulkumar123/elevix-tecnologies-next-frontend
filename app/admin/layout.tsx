@@ -5,7 +5,7 @@ import { AdminLayoutWrapper } from "@/features/admin/components/admin-layout-wra
 import { AuthProvider } from "@/features/auth/context/auth-context";
 
 export const metadata: Metadata = {
-  title: "Admin Portal | Hopes Technologies",
+  title: "Admin Portal | Elevix Technologies",
   description:
     "Secure administrative dashboard to coordinate jobs, industries, services, staff members, queries, and system properties.",
 };
