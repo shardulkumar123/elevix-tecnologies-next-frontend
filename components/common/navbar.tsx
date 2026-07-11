@@ -31,13 +31,8 @@ export function Navbar() {
       <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand/Logo */}
         <div className="flex items-center gap-8">
-          <Link href="/" className="flex items-center space-x-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600/10 dark:bg-indigo-600/20 p-1 border border-indigo-500/20">
-              <Logo size={32} />
-            </div>
-            <span className="text-xl font-extrabold tracking-tight text-neutral-900 dark:text-white">
-              Elevix Technologies
-            </span>
+          <Link href="/" className="flex items-center">
+            <Logo height={80} />
           </Link>
         </div>
 

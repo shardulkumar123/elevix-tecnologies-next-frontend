@@ -49,7 +49,7 @@ export function Footer() {
           {/* Brand Info Column */}
           <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600/10 dark:bg-indigo-600/20 p-1 border border-indigo-500/20">
+              <div className="flex h-9 w-9 items-center justify-center">
                 <Logo size={28} />
               </div>
               <span className="text-lg font-black tracking-tight text-neutral-900 dark:text-white">

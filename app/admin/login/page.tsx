@@ -178,7 +178,7 @@ export default function AdminLoginPage() {
           <div className="w-full max-w-md space-y-8 animate-fade-in relative z-10">
             {/* Branding header */}
             <div className="text-center space-y-4">
-              <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/40 p-2.5 shadow-md">
+              <div className="inline-flex h-16 w-16 items-center justify-center">
                 <Logo size={48} />
               </div>
               <div className="space-y-1.5">
