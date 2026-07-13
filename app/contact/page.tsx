@@ -14,8 +14,7 @@ import { Footer } from "@/components/common/footer";
 import { Navbar } from "@/components/common/navbar";
 import { Button } from "@/components/ui/button";
 
-import { getSettings } from "@/features/admin/services/mock-data";
-import { SystemSettings } from "@/features/admin/types";
+import { useSettings } from "@/features/admin/hooks/use-settings";
 
 function ContactFormContent() {
   const searchParams = useSearchParams();
@@ -23,7 +22,7 @@ function ContactFormContent() {
 
   const createQueryMutation = useCreateContactQuery();
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [settings, setSettings] = useState<SystemSettings | null>(null);
+  const { data: settings } = useSettings();
 
   const { data: apiIndustries = [] } = useIndustries();
   const { data: services = [] } = useServices();
@@ -59,12 +58,6 @@ function ContactFormContent() {
     message: "",
   });
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSettings(getSettings());
-    }, 0);
-    return () => clearTimeout(timer);
-  }, []);
 
   // Compute selected project type dynamically on-the-fly to avoid cascading renders
   const selectedProjectType =

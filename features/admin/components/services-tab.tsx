@@ -4,11 +4,20 @@ import React, { useEffect, useState } from "react";
 
 import { CheckCircle, Code, Cpu, Edit, Plus, Search, Trash2, X } from "lucide-react";
 
-import { getServices, saveServices } from "../services/mock-data";
+import {
+  useCreateService,
+  useDeleteService,
+  useServices,
+  useUpdateService,
+} from "@/features/services/hooks/use-services";
 import { Service } from "../types";
 
 export function ServicesTab() {
-  const [services, setServices] = useState<Service[]>([]);
+  const { data: services = [], isLoading } = useServices();
+  const createMutation = useCreateService();
+  const updateMutation = useUpdateService();
+  const deleteMutation = useDeleteService();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingService, setEditingService] = useState<Service | null>(null);
@@ -19,13 +28,6 @@ export function ServicesTab() {
   const [features, setFeatures] = useState("");
   const [technologies, setTechnologies] = useState("");
   const [status, setStatus] = useState<"Active" | "Inactive">("Active");
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setServices(getServices());
-    }, 0);
-    return () => clearTimeout(timer);
-  }, []);
 
   const openCreateModal = () => {
     setEditingService(null);
@@ -49,9 +51,7 @@ export function ServicesTab() {
 
   const handleDelete = (id: string) => {
     if (confirm("Are you sure you want to delete this service?")) {
-      const updated = services.filter((srv) => srv.id !== id);
-      setServices(updated);
-      saveServices(updated);
+      deleteMutation.mutate(id);
     }
   };
 
@@ -72,30 +72,23 @@ export function ServicesTab() {
       .filter((t) => t !== "");
 
     if (editingService) {
-      const updated = services.map((srv) =>
-        srv.id === editingService.id
-          ? { ...srv, name, description, features: featureArray, technologies: techArray, status }
-          : srv
-      );
-      setServices(updated);
-      saveServices(updated);
+      updateMutation.mutate({
+        id: editingService.id,
+        data: { name, description, features: featureArray, technologies: techArray, status },
+      });
     } else {
-      const newSrv: Service = {
-        id: `srv-${Date.now()}`,
+      createMutation.mutate({
         name,
         description,
         features: featureArray,
         technologies: techArray,
         status,
-        createdAt: new Date().toISOString(),
-      };
-      const updated = [...services, newSrv];
-      setServices(updated);
-      saveServices(updated);
+      });
     }
 
     setIsModalOpen(false);
   };
+
 
   const filtered = services.filter((srv) =>
     srv.name.toLowerCase().includes(searchTerm.toLowerCase())

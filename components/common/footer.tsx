@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import Link from "next/link";
 
@@ -10,20 +10,12 @@ import { useServices } from "@/features/services/hooks/use-services";
 
 import { Logo } from "@/components/common/logo";
 
-import { getSettings } from "@/features/admin/services/mock-data";
-import { SystemSettings } from "@/features/admin/types";
+import { useSettings } from "@/features/admin/hooks/use-settings";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
   const { data: services = [] } = useServices();
-  const [settings, setSettings] = useState<SystemSettings | null>(null);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSettings(getSettings());
-    }, 0);
-    return () => clearTimeout(timer);
-  }, []);
+  const { data: settings } = useSettings();
 
   const solutionsList =
     services.length > 0
@@ -41,6 +33,7 @@ export function Footer() {
   const contactPhone = settings?.contactPhone || "+91 98765 43210";
   const address = settings?.address || "Indiranagar, Bangalore, Karnataka, India — 560038";
   const supportHours = settings?.supportHours || "Mon - Fri: 9:00 AM - 6:00 PM IST";
+
 
   return (
     <footer className="mt-auto border-t border-border/60 bg-muted/20 dark:bg-zinc-950/20">

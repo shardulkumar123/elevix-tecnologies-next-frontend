@@ -15,14 +15,18 @@ import {
   X,
 } from "lucide-react";
 
-import { useContactQueries } from "@/features/contact/hooks/use-contact";
-
-import { saveQueries } from "../services/mock-data";
+import {
+  useContactQueries,
+  useDeleteContactQuery,
+  useUpdateContactQuery,
+} from "@/features/contact/hooks/use-contact";
 import { ContactQuery } from "../types";
 
 export function QueriesTab() {
-  const { data: apiQueries = [], isLoading: isQueriesLoading } = useContactQueries();
-  const [queries, setQueries] = useState<ContactQuery[]>([]);
+  const { data: queries = [], isLoading: isQueriesLoading } = useContactQueries();
+  const updateMutation = useUpdateContactQuery();
+  const deleteMutation = useDeleteContactQuery();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [selectedQuery, setSelectedQuery] = useState<ContactQuery | null>(null);
@@ -30,20 +34,9 @@ export function QueriesTab() {
   // Reply state
   const [replyText, setReplyText] = useState("");
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (apiQueries.length > 0) {
-        setQueries(apiQueries);
-      }
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [apiQueries]);
-
   const handleDelete = (id: string) => {
     if (confirm("Are you sure you want to delete this query submission?")) {
-      const updated = queries.filter((q) => q.id !== id);
-      setQueries(updated);
-      saveQueries(updated);
+      deleteMutation.mutate(id);
       if (selectedQuery?.id === id) {
         setSelectedQuery(null);
       }
@@ -53,59 +46,47 @@ export function QueriesTab() {
   const handleOpenDetails = (q: ContactQuery) => {
     setSelectedQuery(q);
     setReplyText(q.replyMessage || "");
-
-    // Automatically mark "New" queries as "Resolved" or just read if desired. Let's keep it until they reply or resolve.
   };
 
   const handleSendReply = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedQuery || !replyText.trim()) return;
 
-    const updated = queries.map((q) => {
-      if (q.id === selectedQuery.id) {
-        return {
-          ...q,
-          status: "Replied" as const,
+    updateMutation.mutate(
+      {
+        id: selectedQuery.id,
+        data: {
+          status: "Replied",
           replyMessage: replyText,
-        };
+        },
+      },
+      {
+        onSuccess: (updatedQuery) => {
+          setSelectedQuery(updatedQuery);
+          alert(`Reply successfully simulated to ${selectedQuery.email}!`);
+        },
       }
-      return q;
-    });
-
-    setQueries(updated);
-    saveQueries(updated);
-
-    // Update locally selected
-    setSelectedQuery({
-      ...selectedQuery,
-      status: "Replied",
-      replyMessage: replyText,
-    });
-
-    alert(`Reply successfully simulated to ${selectedQuery.email}!`);
+    );
   };
 
   const handleMarkResolved = () => {
     if (!selectedQuery) return;
 
-    const updated = queries.map((q) => {
-      if (q.id === selectedQuery.id) {
-        return {
-          ...q,
-          status: "Resolved" as const,
-        };
+    updateMutation.mutate(
+      {
+        id: selectedQuery.id,
+        data: {
+          status: "Resolved",
+        },
+      },
+      {
+        onSuccess: (updatedQuery) => {
+          setSelectedQuery(updatedQuery);
+        },
       }
-      return q;
-    });
-
-    setQueries(updated);
-    saveQueries(updated);
-
-    setSelectedQuery({
-      ...selectedQuery,
-      status: "Resolved",
-    });
+    );
   };
+
 
   const filtered = queries.filter((q) => {
     const matchesSearch =

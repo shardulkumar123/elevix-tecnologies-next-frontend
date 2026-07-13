@@ -99,3 +99,58 @@ export const useCreateContactQuery = () => {
     },
   });
 };
+
+export const useUpdateContactQuery = () => {
+  const queryClient = useQueryClient();
+  return useMutation<ContactQuery, Error, { id: string; data: Partial<ContactQuery> }>({
+    mutationFn: async ({ id, data }) => {
+      try {
+        const payload = {
+          status: data.status,
+          replyMessage: data.replyMessage,
+        };
+        const response = (await axiosInstance.patch(
+          `/contact-us/${id}`,
+          payload
+        )) as ContactQueryBackendModel;
+        return mapBackendToFrontendQuery(response);
+      } catch (err: unknown) {
+        console.warn(
+          "Backend /contact-us API is offline. Updating in simulated local database.",
+          err
+        );
+        const queries = getQueries();
+        const updated = queries.map((q) =>
+          q.id === id ? { ...q, ...data } : q
+        );
+        saveQueries(updated);
+        return updated.find((q) => q.id === id) as ContactQuery;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contact-queries"] });
+    },
+  });
+};
+
+export const useDeleteContactQuery = () => {
+  const queryClient = useQueryClient();
+  return useMutation<void, Error, string>({
+    mutationFn: async (id) => {
+      try {
+        await axiosInstance.delete(`/contact-us/${id}`);
+      } catch (err: unknown) {
+        console.warn(
+          "Backend /contact-us API is offline. Deleting from simulated local database.",
+          err
+        );
+        const queries = getQueries();
+        saveQueries(queries.filter((q) => q.id !== id));
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contact-queries"] });
+    },
+  });
+};
+

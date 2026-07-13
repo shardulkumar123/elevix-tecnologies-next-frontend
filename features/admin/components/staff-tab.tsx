@@ -4,11 +4,21 @@ import React, { useEffect, useState } from "react";
 
 import { Check, Edit, Plus, Search, Shield, ShieldAlert, Trash2, X } from "lucide-react";
 
-import { getRoles, getStaff, saveRoles, saveStaff } from "../services/mock-data";
+import {
+  useCreateStaff,
+  useDeleteStaff,
+  useStaff,
+  useUpdateStaff,
+} from "@/features/admin/hooks/use-staff";
+import { getRoles, saveRoles } from "../services/mock-data";
 import { RolePermissions, StaffMember } from "../types";
 
 export function StaffTab() {
-  const [staff, setStaff] = useState<StaffMember[]>([]);
+  const { data: staff = [], isLoading } = useStaff();
+  const createMutation = useCreateStaff();
+  const updateMutation = useUpdateStaff();
+  const deleteMutation = useDeleteStaff();
+
   const [roles, setRoles] = useState<RolePermissions[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeSubTab, setActiveSubTab] = useState<"roster" | "matrix">("roster");
@@ -23,7 +33,6 @@ export function StaffTab() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setStaff(getStaff());
       setRoles(getRoles());
     }, 0);
     return () => clearTimeout(timer);
@@ -49,9 +58,7 @@ export function StaffTab() {
 
   const handleDeleteStaff = (id: string) => {
     if (confirm("Are you sure you want to remove this staff member?")) {
-      const updated = staff.filter((m) => m.id !== id);
-      setStaff(updated);
-      saveStaff(updated);
+      deleteMutation.mutate(id);
     }
   };
 
@@ -63,29 +70,22 @@ export function StaffTab() {
     }
 
     if (editingStaff) {
-      const updated = staff.map((m) =>
-        m.id === editingStaff.id
-          ? { ...m, name: staffName, email: staffEmail, role: staffRole, status: staffStatus }
-          : m
-      );
-      setStaff(updated);
-      saveStaff(updated);
+      updateMutation.mutate({
+        id: editingStaff.id,
+        data: { name: staffName, email: staffEmail, role: staffRole, status: staffStatus },
+      });
     } else {
-      const newMember: StaffMember = {
-        id: `staff-${Date.now()}`,
+      createMutation.mutate({
         name: staffName,
         email: staffEmail,
         role: staffRole,
         status: staffStatus,
-        joinedDate: new Date().toISOString().split("T")[0],
-      };
-      const updated = [...staff, newMember];
-      setStaff(updated);
-      saveStaff(updated);
+      });
     }
 
     setIsStaffModalOpen(false);
   };
+
 
   // Matrix permission toggle
   const togglePermission = (

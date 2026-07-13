@@ -1,24 +1,17 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { Footer } from "@/components/common/footer";
 import { Navbar } from "@/components/common/navbar";
 
-import { getSettings } from "@/features/admin/services/mock-data";
-import { SystemSettings } from "@/features/admin/types";
+import { useSettings } from "@/features/admin/hooks/use-settings";
 
 export default function PrivacyPolicyPage() {
-  const [settings, setSettings] = useState<SystemSettings | null>(null);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSettings(getSettings());
-    }, 0);
-    return () => clearTimeout(timer);
-  }, []);
+  const { data: settings } = useSettings();
 
   const privacyText = settings?.privacyPolicy || "Privacy Policy has not been configured yet.";
+
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground antialiased transition-colors duration-300">

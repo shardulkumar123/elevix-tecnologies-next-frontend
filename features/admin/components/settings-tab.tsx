@@ -19,12 +19,14 @@ import { useAbout, useUpdateAbout } from "@/features/about/hooks/use-about";
 
 import { useToast } from "@/components/ui/toast";
 
-import { getSettings, saveSettings } from "../services/mock-data";
+import { useSettings, useUpdateSettings } from "@/features/admin/hooks/use-settings";
 import { SystemSettings } from "../types";
 
 export function SettingsTab() {
   const { success, error } = useToast();
-  const [settings, setSettings] = useState<SystemSettings | null>(null);
+
+  const { data: systemSettings } = useSettings();
+  const updateSettingsMutation = useUpdateSettings();
 
   const { data: aboutData } = useAbout();
   const updateAboutMutation = useUpdateAbout();
@@ -51,22 +53,22 @@ export function SettingsTab() {
   const [aboutCtaDesc, setAboutCtaDesc] = useState("");
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const s = getSettings();
-      setSettings(s);
-      setSiteName(s.siteName);
-      setSiteEmail(s.siteEmail);
-      setContactPhone(s.contactPhone);
-      setAddress(s.address);
-      setMaintenanceMode(s.maintenanceMode);
-      setAllowPublicApplications(s.allowPublicApplications);
-      setMaxUploadSizeMb(s.maxUploadSizeMb);
-      setSupportHours(s.supportHours || "");
-      setPrivacyPolicy(s.privacyPolicy || "");
-      setTermsOfService(s.termsOfService || "");
-    }, 0);
-    return () => clearTimeout(timer);
-  }, []);
+    if (systemSettings) {
+      const timer = setTimeout(() => {
+        setSiteName(systemSettings.siteName);
+        setSiteEmail(systemSettings.siteEmail);
+        setContactPhone(systemSettings.contactPhone);
+        setAddress(systemSettings.address);
+        setMaintenanceMode(systemSettings.maintenanceMode);
+        setAllowPublicApplications(systemSettings.allowPublicApplications);
+        setMaxUploadSizeMb(systemSettings.maxUploadSizeMb);
+        setSupportHours(systemSettings.supportHours || "");
+        setPrivacyPolicy(systemSettings.privacyPolicy || "");
+        setTermsOfService(systemSettings.termsOfService || "");
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  }, [systemSettings]);
 
   useEffect(() => {
     if (aboutData) {
@@ -97,34 +99,40 @@ export function SettingsTab() {
       privacyPolicy,
       termsOfService,
     };
-    saveSettings(updated);
-    setSettings(updated);
 
-    // Save About settings
-    const aboutPayload = {
-      title: aboutTitle,
-      subtitle: aboutSubtitle,
-      description: aboutDesc,
-      missionTitle,
-      missionPoints: missionPointsText
-        .split("\n")
-        .map((x) => x.trim())
-        .filter(Boolean),
-      ctaTitle: aboutCtaTitle,
-      ctaDescription: aboutCtaDesc,
-    };
-
-    updateAboutMutation.mutate(aboutPayload, {
+    updateSettingsMutation.mutate(updated, {
       onSuccess: () => {
-        success("Portal system settings and About page content saved successfully!");
+        // Save About settings
+        const aboutPayload = {
+          title: aboutTitle,
+          subtitle: aboutSubtitle,
+          description: aboutDesc,
+          missionTitle,
+          missionPoints: missionPointsText
+            .split("\n")
+            .map((x) => x.trim())
+            .filter(Boolean),
+          ctaTitle: aboutCtaTitle,
+          ctaDescription: aboutCtaDesc,
+        };
+
+        updateAboutMutation.mutate(aboutPayload, {
+          onSuccess: () => {
+            success("Portal system settings and About page content saved successfully!");
+          },
+          onError: (err: Error) => {
+            error("System settings saved, but failed to save About content: " + err.message);
+          },
+        });
       },
       onError: (err: Error) => {
-        error("System settings saved, but failed to save About content: " + err.message);
+        error("Failed to save system settings: " + err.message);
       },
     });
   };
 
-  if (!settings) return null;
+  if (!systemSettings) return null;
+
 
   return (
     <div className="space-y-6 max-w-4xl">

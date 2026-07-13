@@ -21,7 +21,7 @@ import { useIndustries } from "@/features/industries/hooks/use-industries";
 import { useProjects } from "@/features/projects/hooks/use-projects";
 import { useServices } from "@/features/services/hooks/use-services";
 
-import { getStaff } from "@/features/admin/services/mock-data";
+import { useStaff } from "@/features/admin/hooks/use-staff";
 
 export default function AdminDashboardPage() {
   const { data: jobs = [] } = useCareers();
@@ -29,8 +29,8 @@ export default function AdminDashboardPage() {
   const { data: services = [] } = useServices();
   const { data: queries = [] } = useContactQueries();
   const { data: projects = [] } = useProjects();
+  const { data: staff = [] } = useStaff();
 
-  const staff = getStaff();
 
   const stats = {
     activeJobs: jobs.filter((j) => j.status === "Active").length,
