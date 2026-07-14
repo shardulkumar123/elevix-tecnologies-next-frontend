@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Logo } from "@/components/common/logo";
 import { Button } from "@/components/ui/button";
 import {
   Mail,
@@ -91,10 +90,7 @@ export default function ComingSoon() {
       {/* 2. HEADER */}
       <header className="relative z-10 w-full px-6 py-6 md:px-12">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/10 p-1 border border-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
-              <Logo size={32} />
-            </div>
+          <div className="flex items-center">
             <span className="text-xl font-black tracking-wider bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
               ELEVIX
             </span>
