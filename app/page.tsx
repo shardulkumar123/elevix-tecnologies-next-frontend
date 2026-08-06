@@ -47,80 +47,6 @@ import { INITIAL_PROJECTS } from "@/constants/admin-dummy";
 
 import { getFeedback } from "@/features/admin/services/mock-data";
 
-// Initial Testimonials & Client Feedback data
-const INITIAL_TESTIMONIALS = [
-  {
-    quote:
-      "Elevix Technologies transformed our legacy backend into a high-performance microservices engine. Their architectural foresight and execution scaled our daily transaction capacity 5x with zero downtime.",
-    author: "Elena Rostova",
-    role: "VP of Engineering, Justravels",
-    stars: 5,
-  },
-  {
-    quote:
-      "The modular design system and Next.js frontend structure delivered by Elevix reduced our feature delivery cycles by nearly 40%. Their team feels like a seamless extension of our core product engineering team.",
-    author: "Marcus Chen",
-    role: "Co-Founder & CTO, Aegis Health Tech",
-    stars: 5,
-  },
-  {
-    quote:
-      "Working with Elevix on our TravelERP migration was phenomenal. They integrated complex multi-currency payment gateways and real-time inventory synchronization without interrupting live customer bookings.",
-    author: "Sophia Al-Mansoor",
-    role: "Head of Digital Transformation, Oasis Global Logistics",
-    stars: 5,
-  },
-  {
-    quote:
-      "Their data engineering capabilities are top tier. Elevix built real-time streaming analytics pipelines using Cloud Dataflow and BigQuery that powered our executive dashboards with sub-second queries.",
-    author: "David Vance",
-    role: "Director of Analytics, Nexus Financial",
-    stars: 5,
-  },
-  {
-    quote:
-      "Elevix took our concept from initial wireframes to a fully responsive, enterprise-grade SaaS application in record time. Their code quality and test coverage gave us total peace of mind for our Series A audit.",
-    author: "Priya Sharma",
-    role: "Product Lead, Innovate Retail Solutions",
-    stars: 5,
-  },
-  {
-    quote:
-      "The team's deep mastery of Cloud Native architectures, Kubernetes deployments, and automated CI/CD pipelines saved our internal DevOps team months of trial and error. Exceptional execution throughout.",
-    author: "Liam O'Connor",
-    role: "Principal Infrastructure Architect, CoreCloud Technologies",
-    stars: 5,
-  },
-  {
-    quote:
-      "Elevix redesigned our guest booking workflow for our hotel chain portfolio. Conversion rates increased by 28% within the first month post-launch due to optimized UX micro-interactions and blazing fast web performance.",
-    author: "Isabella Rossi",
-    role: "Chief Operating Officer, Vesta Hospitality Group",
-    stars: 5,
-  },
-  {
-    quote:
-      "Security and strict compliance were non-negotiable for our healthcare platform. Elevix delivered HIPAA-compliant RBAC controls and encrypted data pipelines that passed our external security audit seamlessly.",
-    author: "Dr. Jonathan Hayes",
-    role: "Chief Information Security Officer, CarePulse Network",
-    stars: 5,
-  },
-  {
-    quote:
-      "Our AI customer support engine required complex backend integrations with LLM APIs and Vector databases. Elevix designed an asynchronous queue pipeline that slashed latency by over 60%.",
-    author: "Samantha Wright",
-    role: "VP of Product AI, NextGen Automations",
-    stars: 5,
-  },
-  {
-    quote:
-      "From technical scoping to final deployment, Elevix demonstrated unmatched professionalism. Their bi-weekly sprint reviews and transparent code reviews made collaboration effortless and predictable.",
-    author: "Vikram Patel",
-    role: "Founder & CEO, Apex Supply Chain",
-    stars: 5,
-  },
-];
-
 const INDUSTRIES_ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Utensils,
   Bed: BedDouble,
@@ -211,18 +137,15 @@ export default function Home() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const [testimonials] = useState(() => {
-    if (typeof window === "undefined") return INITIAL_TESTIMONIALS;
+    if (typeof window === "undefined") return [];
     const storedFeedback = getFeedback();
     const published = storedFeedback.filter((f) => f.status === "Published");
-    if (published.length > 0) {
-      return published.map((item) => ({
-        quote: item.quote,
-        author: item.author,
-        role: item.company ? `${item.role}, ${item.company}` : item.role,
-        stars: item.stars,
-      }));
-    }
-    return INITIAL_TESTIMONIALS;
+    return published.map((item) => ({
+      quote: item.quote,
+      author: item.author,
+      role: item.company ? `${item.role}, ${item.company}` : item.role,
+      stars: item.stars,
+    }));
   });
 
   const { data: apiProjectsList = [] } = useProjects();
