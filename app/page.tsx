@@ -465,6 +465,7 @@ export default function Home() {
         </section>
 
         {/* 2.5. PRODUCTS SECTION */}
+        {/*
         <section
           id="products"
           className="mx-auto max-w-7xl px-4 pt-12 pb-12 sm:pt-16 sm:pb-16 lg:px-8 border-b border-border/40 scroll-mt-20"
@@ -482,13 +483,10 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Featured Flagship Product Spotlight */}
           <div className="mx-auto mt-12 max-w-5xl rounded-3xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/20 via-background to-cyan-950/20 p-8 sm:p-10 shadow-xl relative overflow-hidden group">
-            {/* Ambient Background Glow */}
             <div className="absolute top-0 right-0 h-72 w-72 bg-gradient-to-br from-indigo-500 to-cyan-500 opacity-10 blur-[80px] -z-10 group-hover:opacity-15 transition-opacity" />
 
             <div className="grid grid-cols-1 gap-8 md:grid-cols-12 md:items-center">
-              {/* Info Column */}
               <div className="md:col-span-8 space-y-6 text-left">
                 <div className="flex flex-wrap items-center gap-3">
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 text-xs font-bold text-indigo-600 dark:text-indigo-400">
@@ -515,7 +513,6 @@ export default function Home() {
                   </p>
                 </div>
 
-                {/* Bullet Highlights */}
                 <div className="grid grid-cols-2 gap-4 pt-2">
                   <div className="flex items-center gap-2 text-xs text-neutral-700 dark:text-neutral-300">
                     <CheckCircle2 className="h-4 w-4 text-indigo-500" />
@@ -554,7 +551,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Stats / Graphic Column */}
               <div className="md:col-span-4 flex flex-col items-center justify-center p-6 bg-indigo-500/5 border border-indigo-500/10 rounded-2xl md:h-full">
                 <Plane className="h-12 w-12 text-indigo-500 mb-4 animate-bounce" />
                 <div className="text-4xl font-black text-indigo-600 dark:text-indigo-400">50%</div>
@@ -574,7 +570,6 @@ export default function Home() {
                   className="flex flex-col justify-between rounded-3xl border border-border bg-card p-8 shadow-sm hover:shadow-md hover:-translate-y-1 hover:border-indigo-500/20 dark:hover:border-indigo-500/30 dark:bg-[#141118] dark:border-white/[0.04] transition-all duration-300"
                 >
                   <div>
-                    {/* Header Row: Icon + Tag */}
                     <div className="flex items-center justify-between">
                       <div
                         className={`flex h-12 w-12 items-center justify-center rounded-xl ${product.colorBg}`}
@@ -586,7 +581,6 @@ export default function Home() {
                       </span>
                     </div>
 
-                    {/* Content */}
                     <h3 className="mt-8 text-xl font-bold text-neutral-900 dark:text-white">
                       {product.title}
                     </h3>
@@ -594,7 +588,6 @@ export default function Home() {
                       {product.desc}
                     </p>
 
-                    {/* Features checklist */}
                     <ul className="mt-6 space-y-2.5">
                       {product.features.map((feat, idx) => (
                         <li
@@ -628,6 +621,7 @@ export default function Home() {
             })}
           </div>
         </section>
+        */}
 
         {/* 3. OUR WORK SECTION */}
         <section
