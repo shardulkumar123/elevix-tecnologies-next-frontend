@@ -48,9 +48,11 @@ import { useProjects } from "@/features/projects/hooks/use-projects";
 import { useServices } from "@/features/services/hooks/use-services";
 
 import { useAbout } from "@/features/about/hooks/use-about";
+import { useSettings } from "@/features/settings/hooks/use-settings";
 import { Footer } from "@/components/common/footer";
 import { Navbar } from "@/components/common/navbar";
 import { Button } from "@/components/ui/button";
+import MaintenancePage from "./maintenance/page";
 
 import { useAppSelector } from "@/lib/redux/hooks";
 
@@ -155,8 +157,14 @@ const contactFormSchema = yup.object({
 type ContactFormData = yup.InferType<typeof contactFormSchema>;
 
 export default function Home() {
+  const { data: settings } = useSettings();
   const config = useAppSelector((state) => state.config);
   const { data: aboutData } = useAbout();
+
+  const { data: apiProjectsList = [] } = useProjects();
+  const { data: apiIndustries = [] } = useIndustries();
+  const { data: apiServices = [] } = useServices();
+
   const [activeTab, setActiveTab] = useState<string>("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
@@ -223,14 +231,14 @@ export default function Home() {
     );
   };
 
-  const { data: apiProjectsList = [] } = useProjects();
-  const { data: apiIndustries = [] } = useIndustries();
-  const { data: apiServices = [] } = useServices();
-
   const serviceOptions = [
     ...apiServices.map((s) => ({ value: s.name, label: s.name })),
     ...apiIndustries.map((ind) => ({ value: ind.name, label: `${ind.name} (Industry Solution)` })),
   ];
+
+  if (settings?.maintenanceMode) {
+    return <MaintenancePage />;
+  }
 
   const activeProjectsList = apiProjectsList;
 
