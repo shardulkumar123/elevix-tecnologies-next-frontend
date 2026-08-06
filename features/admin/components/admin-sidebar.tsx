@@ -10,6 +10,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Cpu,
+  FileText,
   FolderGit,
   LayoutDashboard,
   LogOut,
@@ -31,6 +32,7 @@ export type AdminTab =
   | "staff"
   | "queries"
   | "feedback"
+  | "about-cms"
   | "settings"
   | "projects";
 
@@ -58,6 +60,7 @@ export function AdminSidebar({
     { id: "staff", label: "Staff & Roles", icon: Users, href: "/admin/staff" },
     { id: "queries", label: "Queries", icon: MessageSquare, href: "/admin/queries" },
     { id: "feedback", label: "Client Feedback", icon: Star, href: "/admin/feedback" },
+    { id: "about-cms", label: "About Page CMS", icon: FileText, href: "/admin/about" },
     { id: "settings", label: "Portal Settings", icon: Settings, href: "/admin/settings" },
   ] as const;
 

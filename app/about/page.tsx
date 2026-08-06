@@ -37,49 +37,15 @@ export default function AboutPage() {
     );
   }
 
-  const title = about?.title || "Engineering High-Performance";
-  const subtitle = about?.subtitle || "Software";
-  const description =
-    about?.description ||
-    "Elevix Technologies is a specialized software engineering studio building performant digital tools, secure enterprise portals, and bespoke AI applications.";
-  const missionTitle = about?.missionTitle || "Our Core Mission";
-  const missionPoints = about?.missionPoints || [
-    "We believe that software should fit your business operations perfectly, rather than forcing you to adjust your workflows to generic template solutions.",
-    "Our focus remains squarely on software architecture, clean state management, security boundaries, and responsive interfaces that load instantly across all form factors.",
-    "We deliver our work as fast as possible with high-quality code, utilizing industry-standard methods and agile development practices.",
-  ];
-  const stats = about?.stats || [
-    { value: "100+", label: "Projects Delivered" },
-    { value: "20+", label: "Active Clients" },
-    { value: "3+", label: "Years of Operations" },
-    { value: "99%", label: "Client Retention" },
-  ];
-  const values = about?.values || [
-    {
-      title: "Performance First",
-      desc: "We measure system speeds in milliseconds and page loading times in sub-seconds. Speed directly impacts conversions and business efficiency.",
-      icon: "Zap",
-    },
-    {
-      title: "Secure-by-Design",
-      desc: "From strict role-based access controls to encrypted file handling, data integrity and compliance form the baseline of every architecture we deploy.",
-      icon: "Shield",
-    },
-    {
-      title: "Client-Centric Collaboration",
-      desc: "We act as your technical engineering partners, translating business operations directly into custom, maintainable digital platforms.",
-      icon: "Heart",
-    },
-    {
-      title: "Rapid & Reliable Delivery",
-      desc: "We deliver your projects as fast as possible using industry-standard methodologies and high-quality, maintainable code.",
-      icon: "Target",
-    },
-  ];
-  const ctaTitle = about?.ctaTitle || "Want to Collaborate with Us?";
-  const ctaDescription =
-    about?.ctaDescription ||
-    "Let's build software that makes your business operations run automatically.";
+  const title = about?.title || "";
+  const subtitle = about?.subtitle || "";
+  const description = about?.description || "";
+  const missionTitle = about?.missionTitle || "";
+  const missionPoints = about?.missionPoints || [];
+  const stats = about?.stats || [];
+  const values = about?.values || [];
+  const ctaTitle = about?.ctaTitle || "";
+  const ctaDescription = about?.ctaDescription || "";
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground antialiased transition-colors duration-300">

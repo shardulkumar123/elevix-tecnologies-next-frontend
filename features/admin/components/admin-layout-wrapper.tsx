@@ -26,6 +26,8 @@ export function AdminLayoutWrapper({ children }: AdminLayoutWrapperProps) {
     if (pathname.includes("/admin/projects")) return "projects";
     if (pathname.includes("/admin/staff")) return "staff";
     if (pathname.includes("/admin/queries")) return "queries";
+    if (pathname.includes("/admin/feedback")) return "feedback";
+    if (pathname.includes("/admin/about")) return "about-cms";
     if (pathname.includes("/admin/settings")) return "settings";
     return "dashboard";
   };
