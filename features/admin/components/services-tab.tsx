@@ -4,11 +4,20 @@ import React, { useState } from "react";
 
 import { CheckCircle, Code, Cpu, Edit, Plus, Search, Trash2, X } from "lucide-react";
 
-import { useServices } from "@/features/services/hooks/use-services";
+import {
+  useCreateService,
+  useDeleteService,
+  useServices,
+  useUpdateService,
+} from "@/features/services/hooks/use-services";
 import { Service } from "../types";
 
 export function ServicesTab() {
   const { data: apiServices = [], isLoading } = useServices();
+  const createMutation = useCreateService();
+  const updateMutation = useUpdateService();
+  const deleteMutation = useDeleteService();
+
   const services = apiServices;
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -44,7 +53,7 @@ export function ServicesTab() {
 
   const handleDelete = (id: string) => {
     if (confirm("Are you sure you want to delete this service?")) {
-      // Deletion handled via API backend
+      deleteMutation.mutate(id);
     }
   };
 
@@ -64,10 +73,18 @@ export function ServicesTab() {
       .map((t) => t.trim())
       .filter((t) => t !== "");
 
+    const payload = {
+      name,
+      description,
+      features: featureArray,
+      technologies: techArray,
+      status,
+    };
+
     if (editingService) {
-      // Editing handled via API backend
+      updateMutation.mutate({ id: editingService.id, data: payload });
     } else {
-      // Creation handled via API backend
+      createMutation.mutate(payload);
     }
 
     setIsModalOpen(false);
