@@ -15,6 +15,7 @@ import {
   LogOut,
   MessageSquare,
   Settings,
+  Star,
   Users,
 } from "lucide-react";
 
@@ -29,6 +30,7 @@ export type AdminTab =
   | "services"
   | "staff"
   | "queries"
+  | "feedback"
   | "settings"
   | "projects";
 
@@ -55,6 +57,7 @@ export function AdminSidebar({
     { id: "projects", label: "Projects", icon: FolderGit, href: "/admin/projects" },
     { id: "staff", label: "Staff & Roles", icon: Users, href: "/admin/staff" },
     { id: "queries", label: "Queries", icon: MessageSquare, href: "/admin/queries" },
+    { id: "feedback", label: "Client Feedback", icon: Star, href: "/admin/feedback" },
     { id: "settings", label: "Portal Settings", icon: Settings, href: "/admin/settings" },
   ] as const;
 
@@ -86,12 +89,7 @@ export function AdminSidebar({
       {/* Header section */}
       <div className="flex h-16 items-center justify-between px-4 border-b border-border/40">
         <Link href="/" className="flex items-center gap-3" onClick={onNavigate}>
-          <Logo size={collapsed ? 28 : 34} />
-          {!collapsed && (
-            <span className="font-extrabold text-sm tracking-tight bg-gradient-to-r from-indigo-600 to-cyan-500 bg-clip-text text-transparent">
-              ELEVIX TECH
-            </span>
-          )}
+          <Logo height={collapsed ? 30 : 80} />
         </Link>
         <button
           onClick={() => setCollapsed(!collapsed)}

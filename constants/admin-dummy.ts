@@ -1,6 +1,7 @@
 import {
   About,
   ContactQuery,
+  FeedbackItem,
   Industry,
   Job,
   Project,
@@ -21,6 +22,8 @@ export const INITIAL_SERVICES: Service[] = [];
 export const INITIAL_INDUSTRIES: Industry[] = [];
 
 export const INITIAL_QUERIES: ContactQuery[] = [];
+
+export const INITIAL_FEEDBACK: FeedbackItem[] = [];
 
 export const INITIAL_SETTINGS: SystemSettings = {
   siteName: "Elevix Technologies",

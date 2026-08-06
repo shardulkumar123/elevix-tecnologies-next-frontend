@@ -51,6 +51,8 @@ export function AdminHeader({ activeTab, onMenuToggle }: AdminHeaderProps) {
         return "Staff & Permissions";
       case "queries":
         return "Customer Queries & Leads";
+      case "feedback":
+        return "Client Feedback & Reviews";
       case "settings":
         return "System Settings";
       default:

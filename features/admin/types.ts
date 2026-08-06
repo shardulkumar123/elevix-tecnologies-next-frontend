@@ -39,6 +39,18 @@ export interface Service {
   createdAt: string;
 }
 
+export interface FeedbackItem {
+  id: string;
+  author: string;
+  role: string;
+  company?: string;
+  quote: string;
+  stars: number;
+  status: "Published" | "Pending" | "Archived";
+  createdAt: string;
+  avatarUrl?: string;
+}
+
 export interface StaffMember {
   id: string;
   name: string;
@@ -57,6 +69,7 @@ export interface RolePermissions {
     staff: { read: boolean; write: boolean; delete: boolean };
     queries: { read: boolean; write: boolean; delete: boolean };
     settings: { read: boolean; write: boolean; delete: boolean };
+    feedback?: { read: boolean; write: boolean; delete: boolean };
   };
 }
 

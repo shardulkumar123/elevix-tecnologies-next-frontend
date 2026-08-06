@@ -1,4 +1,5 @@
 import {
+  INITIAL_FEEDBACK,
   INITIAL_INDUSTRIES,
   INITIAL_JOBS,
   INITIAL_PROJECTS,
@@ -12,6 +13,7 @@ import {
 import {
   About,
   ContactQuery,
+  FeedbackItem,
   Industry,
   Job,
   Project,
@@ -62,6 +64,11 @@ export const saveRoles = (roles: RolePermissions[]): void => setStorageItem("adm
 export const getQueries = (): ContactQuery[] => getStorageItem("admin_queries", INITIAL_QUERIES);
 export const saveQueries = (queries: ContactQuery[]): void =>
   setStorageItem("admin_queries", queries);
+
+export const getFeedback = (): FeedbackItem[] =>
+  getStorageItem("admin_feedback", INITIAL_FEEDBACK as FeedbackItem[]);
+export const saveFeedback = (feedback: FeedbackItem[]): void =>
+  setStorageItem("admin_feedback", feedback);
 
 export const getSettings = (): SystemSettings => getStorageItem("admin_settings", INITIAL_SETTINGS);
 export const saveSettings = (settings: SystemSettings): void =>

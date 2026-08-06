@@ -45,20 +45,78 @@ import { Project } from "@/features/admin/types";
 
 import { INITIAL_PROJECTS } from "@/constants/admin-dummy";
 
-// Testimonials data
-const testimonials = [
+import { getFeedback } from "@/features/admin/services/mock-data";
+
+// Initial Testimonials & Client Feedback data
+const INITIAL_TESTIMONIALS = [
   {
     quote:
-      "Elevix Technologies transformed our backend system into a high-performance engine. Their architecture scales seamlessly and their attention to detail is outstanding.",
+      "Elevix Technologies transformed our legacy backend into a high-performance microservices engine. Their architectural foresight and execution scaled our daily transaction capacity 5x with zero downtime.",
     author: "Elena Rostova",
     role: "VP of Engineering, Justravels",
     stars: 5,
   },
   {
     quote:
-      "The Redux-driven configurations and clean Next.js structure they built for our team decreased our time-to-market by nearly 40%. Highly recommended.",
+      "The modular design system and Next.js frontend structure delivered by Elevix reduced our feature delivery cycles by nearly 40%. Their team feels like a seamless extension of our core product engineering team.",
     author: "Marcus Chen",
-    role: "Co-Founder, Aegis Systems",
+    role: "Co-Founder & CTO, Aegis Health Tech",
+    stars: 5,
+  },
+  {
+    quote:
+      "Working with Elevix on our TravelERP migration was phenomenal. They integrated complex multi-currency payment gateways and real-time inventory synchronization without interrupting live customer bookings.",
+    author: "Sophia Al-Mansoor",
+    role: "Head of Digital Transformation, Oasis Global Logistics",
+    stars: 5,
+  },
+  {
+    quote:
+      "Their data engineering capabilities are top tier. Elevix built real-time streaming analytics pipelines using Cloud Dataflow and BigQuery that powered our executive dashboards with sub-second queries.",
+    author: "David Vance",
+    role: "Director of Analytics, Nexus Financial",
+    stars: 5,
+  },
+  {
+    quote:
+      "Elevix took our concept from initial wireframes to a fully responsive, enterprise-grade SaaS application in record time. Their code quality and test coverage gave us total peace of mind for our Series A audit.",
+    author: "Priya Sharma",
+    role: "Product Lead, Innovate Retail Solutions",
+    stars: 5,
+  },
+  {
+    quote:
+      "The team's deep mastery of Cloud Native architectures, Kubernetes deployments, and automated CI/CD pipelines saved our internal DevOps team months of trial and error. Exceptional execution throughout.",
+    author: "Liam O'Connor",
+    role: "Principal Infrastructure Architect, CoreCloud Technologies",
+    stars: 5,
+  },
+  {
+    quote:
+      "Elevix redesigned our guest booking workflow for our hotel chain portfolio. Conversion rates increased by 28% within the first month post-launch due to optimized UX micro-interactions and blazing fast web performance.",
+    author: "Isabella Rossi",
+    role: "Chief Operating Officer, Vesta Hospitality Group",
+    stars: 5,
+  },
+  {
+    quote:
+      "Security and strict compliance were non-negotiable for our healthcare platform. Elevix delivered HIPAA-compliant RBAC controls and encrypted data pipelines that passed our external security audit seamlessly.",
+    author: "Dr. Jonathan Hayes",
+    role: "Chief Information Security Officer, CarePulse Network",
+    stars: 5,
+  },
+  {
+    quote:
+      "Our AI customer support engine required complex backend integrations with LLM APIs and Vector databases. Elevix designed an asynchronous queue pipeline that slashed latency by over 60%.",
+    author: "Samantha Wright",
+    role: "VP of Product AI, NextGen Automations",
+    stars: 5,
+  },
+  {
+    quote:
+      "From technical scoping to final deployment, Elevix demonstrated unmatched professionalism. Their bi-weekly sprint reviews and transparent code reviews made collaboration effortless and predictable.",
+    author: "Vikram Patel",
+    role: "Founder & CEO, Apex Supply Chain",
     stars: 5,
   },
 ];
@@ -151,6 +209,21 @@ export default function Home() {
   const config = useAppSelector((state) => state.config);
   const [activeTab, setActiveTab] = useState<string>("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  const [testimonials] = useState(() => {
+    if (typeof window === "undefined") return INITIAL_TESTIMONIALS;
+    const storedFeedback = getFeedback();
+    const published = storedFeedback.filter((f) => f.status === "Published");
+    if (published.length > 0) {
+      return published.map((item) => ({
+        quote: item.quote,
+        author: item.author,
+        role: item.company ? `${item.role}, ${item.company}` : item.role,
+        stars: item.stars,
+      }));
+    }
+    return INITIAL_TESTIMONIALS;
+  });
 
   const { data: apiProjectsList = [] } = useProjects();
   const { data: apiIndustries = [] } = useIndustries();
@@ -715,40 +788,44 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mx-auto mt-16 max-w-4xl grid grid-cols-1 gap-8 md:grid-cols-2">
-            {testimonials.map((t, index) => (
-              <div
-                key={index}
-                className="flex flex-col justify-between rounded-3xl border border-border bg-card p-8 shadow-sm relative overflow-hidden"
-              >
-                {/* Background quote icon */}
-                <Quote className="absolute right-6 top-6 h-20 w-20 text-muted/5 -z-0 pointer-events-none" />
+          {/* Marquee Container with side gradients & pause on hover */}
+          <div className="relative mt-12 overflow-hidden py-4 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+            <div className="flex animate-marquee gap-6">
+              {/* Duplicate array twice for continuous seamless marquee */}
+              {[...testimonials, ...testimonials].map((t, index) => (
+                <div
+                  key={index}
+                  className="w-[380px] shrink-0 flex flex-col justify-between rounded-3xl border border-border/60 bg-card p-6 shadow-sm relative overflow-hidden transition-all hover:border-primary/40 hover:shadow-md"
+                >
+                  {/* Background quote icon */}
+                  <Quote className="absolute right-5 top-5 h-16 w-16 text-muted/5 -z-0 pointer-events-none" />
 
-                <div className="relative z-10">
-                  {/* Star Rating */}
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(t.stars)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                    ))}
+                  <div className="relative z-10">
+                    {/* Star Rating */}
+                    <div className="flex gap-1 mb-3">
+                      {[...Array(t.stars)].map((_, i) => (
+                        <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                      ))}
+                    </div>
+
+                    <p className="text-xs italic text-muted-foreground leading-relaxed line-clamp-4">
+                      &quot;{t.quote}&quot;
+                    </p>
                   </div>
 
-                  <p className="text-sm italic text-muted-foreground leading-relaxed">
-                    &quot;{t.quote}&quot;
-                  </p>
+                  <div className="mt-6 pt-4 border-t border-border/30 flex items-center gap-3 relative z-10">
+                    {/* Avatar mockup */}
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-xs">
+                      {t.author.charAt(0)}
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="text-xs font-bold truncate">{t.author}</h4>
+                      <p className="text-[11px] text-muted-foreground truncate">{t.role}</p>
+                    </div>
+                  </div>
                 </div>
-
-                <div className="mt-8 pt-6 border-t border-border/30 flex items-center gap-3 relative z-10">
-                  {/* Avatar mockup */}
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-sm">
-                    {t.author.charAt(0)}
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold">{t.author}</h4>
-                    <p className="text-xs text-muted-foreground">{t.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
       </main>
