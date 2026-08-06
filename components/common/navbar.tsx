@@ -18,6 +18,7 @@ export function Navbar() {
 
   const navItems = [
     // { name: "Products", href: "/products/travelerp" },
+    { name: "Home", href: "/" },
     { name: "Services", href: "/services" },
     { name: "Industries", href: "/industries" },
     { name: "Projects", href: "/projects" },
