@@ -49,9 +49,9 @@ export default function AboutPage() {
     "We deliver our work as fast as possible with high-quality code, utilizing industry-standard methods and agile development practices.",
   ];
   const stats = about?.stats || [
-    { value: "150+", label: "Projects Delivered" },
-    { value: "50+", label: "Active Clients" },
-    { value: "5+", label: "Years of Operations" },
+    { value: "100+", label: "Projects Delivered" },
+    { value: "20+", label: "Active Clients" },
+    { value: "3+", label: "Years of Operations" },
     { value: "99%", label: "Client Retention" },
   ];
   const values = about?.values || [

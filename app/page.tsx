@@ -47,6 +47,7 @@ import { useIndustries } from "@/features/industries/hooks/use-industries";
 import { useProjects } from "@/features/projects/hooks/use-projects";
 import { useServices } from "@/features/services/hooks/use-services";
 
+import { useAbout } from "@/features/about/hooks/use-about";
 import { Footer } from "@/components/common/footer";
 import { Navbar } from "@/components/common/navbar";
 import { Button } from "@/components/ui/button";
@@ -55,8 +56,6 @@ import { useAppSelector } from "@/lib/redux/hooks";
 
 import { getSettings } from "@/features/admin/services/mock-data";
 import { Project, SystemSettings } from "@/features/admin/types";
-
-import { INITIAL_PROJECTS } from "@/constants/admin-dummy";
 
 import { getFeedback } from "@/features/admin/services/mock-data";
 
@@ -157,8 +156,16 @@ type ContactFormData = yup.InferType<typeof contactFormSchema>;
 
 export default function Home() {
   const config = useAppSelector((state) => state.config);
+  const { data: aboutData } = useAbout();
   const [activeTab, setActiveTab] = useState<string>("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  const stats = aboutData?.stats || [
+    { value: "100+", label: "Projects Delivered" },
+    { value: "20+", label: "Active Clients" },
+    { value: "3+", label: "Years of Operations" },
+    { value: "99%", label: "Client Retention" },
+  ];
 
   const [testimonials] = useState(() => {
     if (typeof window === "undefined") return [];
@@ -225,7 +232,7 @@ export default function Home() {
     ...apiIndustries.map((ind) => ({ value: ind.name, label: `${ind.name} (Industry Solution)` })),
   ];
 
-  const activeProjectsList = apiProjectsList.length > 0 ? apiProjectsList : INITIAL_PROJECTS;
+  const activeProjectsList = apiProjectsList;
 
   // Map API models directly
   const resolvedIndustries = apiIndustries.map((ind) => ({
@@ -264,7 +271,7 @@ export default function Home() {
                 {/* Badge */}
                 <div className="inline-flex items-center gap-2 rounded-full bg-indigo-50 dark:bg-indigo-950/40 px-3.5 py-1.5 text-xs font-bold tracking-wide text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/40">
                   <span className="h-2 w-2 rounded-full bg-indigo-600 dark:bg-indigo-400 animate-pulse" />
-                  Trusted by 50+ businesses across India
+                  Trusted by 40+ businesses across India
                 </div>
 
                 {/* Main Heading */}
@@ -310,30 +317,14 @@ export default function Home() {
 
                 {/* Metric Statistics Row */}
                 <div className="pt-8 border-t border-border/40 grid grid-cols-2 gap-y-6 sm:grid-cols-4 gap-x-4">
-                  <div>
-                    <div className="text-3xl font-extrabold text-neutral-900 dark:text-white">
-                      150+
+                  {stats.map((stat, idx) => (
+                    <div key={idx}>
+                      <div className="text-3xl font-extrabold text-neutral-900 dark:text-white">
+                        {stat.value}
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-1">{stat.label}</div>
                     </div>
-                    <div className="text-xs text-muted-foreground mt-1">Projects Delivered</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-extrabold text-neutral-900 dark:text-white">
-                      50+
-                    </div>
-                    <div className="text-xs text-muted-foreground mt-1">Happy Clients</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-extrabold text-neutral-900 dark:text-white">
-                      5+
-                    </div>
-                    <div className="text-xs text-muted-foreground mt-1">Years Experience</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-extrabold text-neutral-900 dark:text-white">
-                      99%
-                    </div>
-                    <div className="text-xs text-muted-foreground mt-1">Client Retention</div>
-                  </div>
+                  ))}
                 </div>
               </div>
 

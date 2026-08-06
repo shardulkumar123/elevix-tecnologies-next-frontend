@@ -47,14 +47,9 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5 lg:gap-8">
           {/* Brand Info Column */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center">
-                <Logo size={28} />
-              </div>
-              <span className="text-lg font-black tracking-tight text-neutral-900 dark:text-white">
-                {brandName}
-              </span>
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center gap-3 -mb-2">
+              <Logo height={80} />
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed max-w-sm">
               We engineer custom software systems, automation pipelines, and high-performance

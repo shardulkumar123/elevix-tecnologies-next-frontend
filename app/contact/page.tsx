@@ -3,6 +3,9 @@
 import React, { Suspense, useEffect, useState } from "react";
 
 import { useSearchParams } from "next/navigation";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 
 import { CheckCircle, Clock, Mail, MapPin, Send } from "lucide-react";
 
@@ -16,6 +19,17 @@ import { Button } from "@/components/ui/button";
 
 import { getSettings } from "@/features/admin/services/mock-data";
 import { SystemSettings } from "@/features/admin/types";
+
+const contactFormSchema = yup.object({
+  name: yup.string().trim().required("Full name is required").min(2, "Name must be at least 2 characters"),
+  email: yup.string().trim().required("Business email is required").email("Please enter a valid email address"),
+  phone: yup.string().trim().optional(),
+  company: yup.string().trim().optional(),
+  projectType: yup.string().trim().required("Please select a project type"),
+  message: yup.string().trim().required("Message / Project scope is required").min(10, "Please provide at least 10 characters describing your project"),
+});
+
+type ContactFormData = yup.InferType<typeof contactFormSchema>;
 
 function ContactFormContent() {
   const searchParams = useSearchParams();
@@ -50,14 +64,37 @@ function ContactFormContent() {
           { value: "Operational Tech Consulting", label: "Operational Tech Consulting" },
         ];
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    projectType: "",
-    message: "",
+  const defaultProjectType =
+    (() => {
+      const match = finalOptions.find(
+        (opt) => opt.value.toLowerCase() === initialType.toLowerCase()
+      );
+      return match ? match.value : initialType || finalOptions[0]?.value || "";
+    })();
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(contactFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      company: "",
+      projectType: defaultProjectType,
+      message: "",
+    },
   });
+
+  useEffect(() => {
+    if (defaultProjectType) {
+      setValue("projectType", defaultProjectType);
+    }
+  }, [defaultProjectType, setValue]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -66,31 +103,20 @@ function ContactFormContent() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Compute selected project type dynamically on-the-fly to avoid cascading renders
-  const selectedProjectType =
-    formData.projectType ||
-    (() => {
-      const match = finalOptions.find(
-        (opt) => opt.value.toLowerCase() === initialType.toLowerCase()
-      );
-      return match ? match.value : initialType || finalOptions[0]?.value || "";
-    })();
-
   const contactEmail = settings?.siteEmail || "hello@elevixtechnologies.com";
   const address = settings?.address || "Indiranagar, Bangalore, Karnataka, India — 560038";
   const supportHours = settings?.supportHours || "Monday - Friday: 9:00 AM - 6:00 PM IST";
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmitContact = (data: ContactFormData) => {
     createQueryMutation.mutate(
       {
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        company: formData.company,
-        projectType: selectedProjectType,
-        subject: selectedProjectType,
-        message: formData.message,
+        name: data.name,
+        email: data.email,
+        phone: data.phone || "",
+        company: data.company || "",
+        projectType: data.projectType,
+        subject: data.projectType,
+        message: data.message,
       },
       {
         onSuccess: () => {
@@ -198,9 +224,19 @@ function ContactFormContent() {
                         and contact you shortly.
                       </p>
                     </div>
+                    <Button
+                      onClick={() => {
+                        setFormSubmitted(false);
+                        reset();
+                      }}
+                      variant="outline"
+                      className="rounded-xl font-bold border-border/50"
+                    >
+                      Send Another Specification
+                    </Button>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={handleSubmit(onSubmitContact)} className="space-y-6" noValidate>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                       <div className="space-y-1.5">
                         <label className="text-xs font-bold text-muted-foreground uppercase">
@@ -208,12 +244,13 @@ function ContactFormContent() {
                         </label>
                         <input
                           type="text"
-                          required
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          {...register("name")}
                           className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-indigo-600 transition-colors"
                           placeholder="Elena Rostova"
                         />
+                        {errors.name && (
+                          <p className="text-xs font-medium text-red-500">{errors.name.message}</p>
+                        )}
                       </div>
 
                       <div className="space-y-1.5">
@@ -222,12 +259,13 @@ function ContactFormContent() {
                         </label>
                         <input
                           type="email"
-                          required
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          {...register("email")}
                           className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-indigo-600 transition-colors"
                           placeholder="elena@example.com"
                         />
+                        {errors.email && (
+                          <p className="text-xs font-medium text-red-500">{errors.email.message}</p>
+                        )}
                       </div>
                     </div>
 
@@ -238,11 +276,13 @@ function ContactFormContent() {
                         </label>
                         <input
                           type="tel"
-                          value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          {...register("phone")}
                           className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-indigo-600 transition-colors"
                           placeholder="+1 (555) 019-9000"
                         />
+                        {errors.phone && (
+                          <p className="text-xs font-medium text-red-500">{errors.phone.message}</p>
+                        )}
                       </div>
 
                       <div className="space-y-1.5">
@@ -251,21 +291,22 @@ function ContactFormContent() {
                         </label>
                         <input
                           type="text"
-                          value={formData.company}
-                          onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                          {...register("company")}
                           className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-indigo-600 transition-colors"
                           placeholder="Justravels"
                         />
+                        {errors.company && (
+                          <p className="text-xs font-medium text-red-500">{errors.company.message}</p>
+                        )}
                       </div>
                     </div>
 
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-muted-foreground uppercase">
-                        Project Type
+                        Project Type *
                       </label>
                       <select
-                        value={selectedProjectType}
-                        onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
+                        {...register("projectType")}
                         className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-indigo-600 transition-colors"
                       >
                         {finalOptions.map((opt) => (
@@ -274,27 +315,33 @@ function ContactFormContent() {
                           </option>
                         ))}
                       </select>
+                      {errors.projectType && (
+                        <p className="text-xs font-medium text-red-500">{errors.projectType.message}</p>
+                      )}
                     </div>
 
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-muted-foreground uppercase">
-                        Message / Project Scope
+                        Message / Project Scope *
                       </label>
                       <textarea
-                        required
                         rows={4}
-                        value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        {...register("message")}
                         className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-indigo-600 transition-colors resize-none"
                         placeholder="Briefly describe what system you want built, target schedules, and primary integrations required."
                       />
+                      {errors.message && (
+                        <p className="text-xs font-medium text-red-500">{errors.message.message}</p>
+                      )}
                     </div>
 
                     <Button
                       type="submit"
+                      disabled={createQueryMutation.isPending}
                       className="w-full rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-11 flex items-center justify-center gap-2"
                     >
-                      Submit Specification <Send className="h-4 w-4" />
+                      {createQueryMutation.isPending ? "Submitting..." : "Submit Specification"}{" "}
+                      <Send className="h-4 w-4" />
                     </Button>
                   </form>
                 )}
