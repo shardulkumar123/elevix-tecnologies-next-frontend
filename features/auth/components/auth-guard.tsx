@@ -34,8 +34,8 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children, allowedRoles }) 
       <div className="flex-1 min-h-screen flex items-center justify-center bg-background text-foreground">
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
-          <span className="text-xs font-bold text-muted-foreground tracking-wide">
-            Authorizing secure session...
+          <span className="text-xs font-bold text-muted-foreground">
+            Loading...
           </span>
         </div>
       </div>

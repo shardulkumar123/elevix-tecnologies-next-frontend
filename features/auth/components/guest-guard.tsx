@@ -32,11 +32,14 @@ export const GuestGuard: React.FC<GuestGuardProps> = ({ children }) => {
   if (isLoading) {
     return (
       <div className="flex-1 min-h-screen flex items-center justify-center bg-background text-foreground">
-        <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
-          <span className="text-xs font-bold text-muted-foreground tracking-wide">
-            Checking session...
-          </span>
+        <div className="flex flex-col items-center gap-4 animate-pulse">
+          <div className="relative flex items-center justify-center">
+            <div className="absolute inset-0 rounded-full bg-indigo-500/20 blur-xl animate-ping" />
+            <Loader2 className="h-9 w-9 animate-spin text-indigo-600 dark:text-indigo-400 relative z-10" />
+          </div>
+            <span className="text-xs font-bold text-muted-foreground">
+              Loading...
+            </span>
         </div>
       </div>
     );
