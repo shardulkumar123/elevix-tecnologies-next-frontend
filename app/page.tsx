@@ -10,7 +10,9 @@ import {
   BarChart3,
   BedDouble,
   CalendarDays,
+  CheckCircle,
   CheckCircle2,
+  Clock,
   Cpu,
   Factory,
   GitMerge,
@@ -18,10 +20,14 @@ import {
   Heart,
   Hotel,
   LayoutDashboard,
+  Mail,
+  MapPin,
   Package,
+  Phone,
   Plane,
   Play,
   Quote,
+  Send,
   ShieldCheck,
   ShoppingBag,
   Star,
@@ -32,8 +38,10 @@ import {
   X,
 } from "lucide-react";
 
+import { useCreateContactQuery } from "@/features/contact/hooks/use-contact";
 import { useIndustries } from "@/features/industries/hooks/use-industries";
 import { useProjects } from "@/features/projects/hooks/use-projects";
+import { useServices } from "@/features/services/hooks/use-services";
 
 import { Footer } from "@/components/common/footer";
 import { Navbar } from "@/components/common/navbar";
@@ -41,7 +49,8 @@ import { Button } from "@/components/ui/button";
 
 import { useAppSelector } from "@/lib/redux/hooks";
 
-import { Project } from "@/features/admin/types";
+import { getSettings } from "@/features/admin/services/mock-data";
+import { Project, SystemSettings } from "@/features/admin/types";
 
 import { INITIAL_PROJECTS } from "@/constants/admin-dummy";
 
@@ -148,8 +157,53 @@ export default function Home() {
     }));
   });
 
+  const createContactMutation = useCreateContactQuery();
+  const [contactSubmitted, setContactSubmitted] = useState(false);
+  const [contactFormData, setContactFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    company: "",
+    projectType: "Custom Enterprise Software / ERP",
+    message: "",
+  });
+
+  const [settings] = useState<SystemSettings | null>(() => {
+    if (typeof window === "undefined") return null;
+    return getSettings();
+  });
+
+  const contactEmail = settings?.siteEmail || "hello@elevixtechnologies.com";
+  const contactAddress = settings?.address || "Indiranagar, Bangalore, Karnataka, India — 560038";
+  const contactHours = settings?.supportHours || "Monday - Friday: 9:00 AM - 6:00 PM IST";
+
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    createContactMutation.mutate(
+      {
+        name: contactFormData.name,
+        email: contactFormData.email,
+        phone: contactFormData.phone,
+        company: contactFormData.company,
+        projectType: contactFormData.projectType,
+        subject: contactFormData.projectType,
+        message: contactFormData.message,
+      },
+      {
+        onSuccess: () => setContactSubmitted(true),
+        onError: () => setContactSubmitted(true),
+      }
+    );
+  };
+
   const { data: apiProjectsList = [] } = useProjects();
   const { data: apiIndustries = [] } = useIndustries();
+  const { data: apiServices = [] } = useServices();
+
+  const serviceOptions = [
+    ...apiServices.map((s) => ({ value: s.name, label: s.name })),
+    ...apiIndustries.map((ind) => ({ value: ind.name, label: `${ind.name} (Industry Solution)` })),
+  ];
 
   const activeProjectsList = apiProjectsList.length > 0 ? apiProjectsList : INITIAL_PROJECTS;
 
@@ -748,6 +802,239 @@ export default function Home() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Us Section */}
+        <section id="contact" className="py-20 bg-muted/20 border-t border-border/40 relative overflow-hidden">
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-500/5 via-transparent to-transparent" />
+          
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-3xl text-center space-y-4 mb-16">
+              <div className="inline-flex items-center gap-2 rounded-full bg-indigo-50 dark:bg-indigo-950/40 px-3.5 py-1.5 text-xs font-bold tracking-wide text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/40">
+                Get In Touch
+              </div>
+              <h2 className="text-3xl font-black tracking-tight sm:text-5xl text-neutral-900 dark:text-white">
+                Ready to Start Your{" "}
+                <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 bg-clip-text text-transparent">
+                  Next Project?
+                </span>
+              </h2>
+              <p className="text-base text-muted-foreground leading-relaxed">
+                Connect with our technical architects and engineering team to turn your ideas into enterprise-grade software.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-start">
+              {/* Left Info Column */}
+              <div className="lg:col-span-5 space-y-6 text-left">
+                <div className="rounded-3xl border border-border/40 bg-card p-6 sm:p-8 shadow-lg space-y-6">
+                  <h3 className="text-xl font-extrabold text-neutral-900 dark:text-white">
+                    Contact Information
+                  </h3>
+                  
+                  <div className="space-y-5">
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-100/50 dark:border-indigo-900/40 shrink-0">
+                        <Mail className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Email Support</h4>
+                        <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 mt-0.5 select-all">
+                          {contactEmail}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-100/50 dark:border-indigo-900/40 shrink-0">
+                        <MapPin className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Headquarters</h4>
+                        <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-0.5 leading-relaxed">
+                          {contactAddress}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-100/50 dark:border-indigo-900/40 shrink-0">
+                        <Clock className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Operating Hours</h4>
+                        <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-0.5 leading-relaxed">
+                          {contactHours}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-3xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent p-6 text-left space-y-3">
+                  <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-sm">
+                    <CheckCircle2 className="h-4 w-4" /> 24-Hour Response SLA
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Our technical leads respond within 24 business hours with initial architectural assessments and project estimates.
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Form Card */}
+              <div className="lg:col-span-7">
+                <div className="rounded-3xl border border-border/50 bg-card p-6 sm:p-10 shadow-2xl relative overflow-hidden text-left">
+                  <div className="absolute top-0 right-0 -mt-6 -mr-6 h-32 w-32 rounded-full bg-indigo-600/10 blur-2xl pointer-events-none" />
+
+                  {contactSubmitted ? (
+                    <div className="py-12 text-center space-y-6">
+                      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border border-emerald-100/50 dark:border-emerald-900/30">
+                        <CheckCircle className="h-8 w-8" />
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="text-2xl font-black text-neutral-900 dark:text-white">
+                          Inquiry Received!
+                        </h3>
+                        <p className="mx-auto max-w-sm text-sm text-muted-foreground leading-relaxed">
+                          Thank you for contacting Elevix Technologies. Our lead architect will review your project details and respond shortly.
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => {
+                          setContactSubmitted(false);
+                          setContactFormData({ name: "", email: "", phone: "", company: "", projectType: "Custom Enterprise Software / ERP", message: "" });
+                        }}
+                        variant="outline"
+                        className="rounded-xl font-bold border-border/50"
+                      >
+                        Send Another Inquiry
+                      </Button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleContactSubmit} className="space-y-6">
+                      <div className="space-y-2">
+                        <h3 className="text-2xl font-black text-neutral-900 dark:text-white">
+                          Send Us a Message
+                        </h3>
+                        <p className="text-xs text-muted-foreground">
+                          Fill out the form below and we will tailor our response to your specific technical requirements.
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <div className="space-y-2">
+                          <label htmlFor="home-contact-name" className="text-xs font-bold text-neutral-700 dark:text-neutral-300">
+                            Full Name <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            id="home-contact-name"
+                            type="text"
+                            required
+                            placeholder="John Doe"
+                            value={contactFormData.name}
+                            onChange={(e) => setContactFormData({ ...contactFormData, name: e.target.value })}
+                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <label htmlFor="home-contact-email" className="text-xs font-bold text-neutral-700 dark:text-neutral-300">
+                            Business Email <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            id="home-contact-email"
+                            type="email"
+                            required
+                            placeholder="john@company.com"
+                            value={contactFormData.email}
+                            onChange={(e) => setContactFormData({ ...contactFormData, email: e.target.value })}
+                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <div className="space-y-2">
+                          <label htmlFor="home-contact-phone" className="text-xs font-bold text-neutral-700 dark:text-neutral-300">
+                            Phone Number
+                          </label>
+                          <input
+                            id="home-contact-phone"
+                            type="tel"
+                            placeholder="+1 (555) 000-0000"
+                            value={contactFormData.phone}
+                            onChange={(e) => setContactFormData({ ...contactFormData, phone: e.target.value })}
+                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <label htmlFor="home-contact-company" className="text-xs font-bold text-neutral-700 dark:text-neutral-300">
+                            Company / Organization
+                          </label>
+                          <input
+                            id="home-contact-company"
+                            type="text"
+                            placeholder="Acme Corp"
+                            value={contactFormData.company}
+                            onChange={(e) => setContactFormData({ ...contactFormData, company: e.target.value })}
+                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label htmlFor="home-contact-project" className="text-xs font-bold text-neutral-700 dark:text-neutral-300">
+                          Primary Service Interest
+                        </label>
+                        <select
+                          id="home-contact-project"
+                          value={contactFormData.projectType}
+                          onChange={(e) => setContactFormData({ ...contactFormData, projectType: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                        >
+                          {serviceOptions.map((option, idx) => (
+                            <option key={idx} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label htmlFor="home-contact-message" className="text-xs font-bold text-neutral-700 dark:text-neutral-300">
+                          Project Requirements & Overview <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          id="home-contact-message"
+                          required
+                          rows={4}
+                          placeholder="Describe your project, timelines, or key challenges..."
+                          value={contactFormData.message}
+                          onChange={(e) => setContactFormData({ ...contactFormData, message: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none"
+                        />
+                      </div>
+
+                      <Button
+                        type="submit"
+                        disabled={createContactMutation.isPending}
+                        className="w-full rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 h-auto text-sm shadow-lg shadow-indigo-600/25 transition-all flex items-center justify-center gap-2"
+                      >
+                        {createContactMutation.isPending ? (
+                          "Submitting Inquiry..."
+                        ) : (
+                          <>
+                            Submit Technical Inquiry <Send className="h-4 w-4" />
+                          </>
+                        )}
+                      </Button>
+                    </form>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </section>
