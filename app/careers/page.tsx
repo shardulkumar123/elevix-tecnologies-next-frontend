@@ -21,52 +21,6 @@ import { Footer } from "@/components/common/footer";
 import { Navbar } from "@/components/common/navbar";
 import { Button } from "@/components/ui/button";
 
-// Dummy career opportunities data
-const jobsData = [
-  {
-    id: "sfse-01",
-    title: "Senior Full Stack Engineer",
-    department: "Engineering",
-    location: "Remote (India)",
-    type: "Full-Time",
-    salary: "₹18L - ₹24L / year",
-    desc: "We are looking for an engineer with deep expertise in Next.js, React 19, Nest.js, and Redux Toolkit to build and optimize custom business dashboards and state-of-the-art portals.",
-    requirements: [
-      "4+ years of professional web development experience.",
-      "Proficient with TypeScript, Tailwind CSS, PostgreSQL, and Redis.",
-      "Experience optimizing page performance and core web vitals.",
-    ],
-  },
-  {
-    id: "aime-02",
-    title: "AI / ML Operations Lead",
-    department: "Engineering",
-    location: "Remote (India)",
-    type: "Full-Time",
-    salary: "₹22L - ₹30L / year",
-    desc: "Lead the development of context-aware agentic LLM integrations. You will write robust tooling execution layers, structured parser scripts, and code execution sandboxes.",
-    requirements: [
-      "3+ years experience with OpenAI/Anthropic APIs, LangChain, or LlamaIndex.",
-      "Strong coding proficiency in Python and TypeScript.",
-      "Familiarity with vector databases (Pinecone, pgvector) and prompt engineering optimization.",
-    ],
-  },
-  {
-    id: "pd-03",
-    title: "Lead Product Designer (UI/UX)",
-    department: "Design",
-    location: "Remote",
-    type: "Full-Time",
-    salary: "₹14L - ₹20L / year",
-    desc: "Own the visual identity of our client platforms. You will design premium dashboards, booking interfaces, and landing systems utilizing modern typography, HSL schemes, and micro-animations.",
-    requirements: [
-      "3+ years designing complex SaaS products and high-converting landing pages.",
-      "Expert skills in Figma, component design libraries, and user research.",
-      "Basic understanding of Tailwind CSS and layout structures.",
-    ],
-  },
-];
-
 const perks = [
   {
     title: "100% Remote Operations",
@@ -86,10 +40,10 @@ const perks = [
 ];
 
 export default function CareersPage() {
-  const { data: apiJobs = [] } = useCareers();
+  const { data: apiJobs = [], isLoading } = useCareers();
   const [activeDept, setActiveDept] = useState("All");
 
-  const jobsList = apiJobs.length > 0 ? apiJobs : jobsData;
+  const jobsList = apiJobs;
 
   const filteredJobs =
     activeDept === "All" ? jobsList : jobsList.filter((job) => job.department === activeDept);
