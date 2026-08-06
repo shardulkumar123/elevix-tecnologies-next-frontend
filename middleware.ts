@@ -4,9 +4,16 @@ export function middleware(request: NextRequest) {
   const host = request.headers.get("host");
   const { pathname } = request.nextUrl;
 
+  const isAdminSubdomain = host?.startsWith("admin.");
+
   // Handle admin subdomain routing
-  if (host?.startsWith("admin.")) {
-    return NextResponse.rewrite(new URL("/admin", request.url));
+  if (isAdminSubdomain) {
+    if (pathname.startsWith("/admin")) {
+      // If URL is admin.domain.com/admin/login, strip extra /admin to prevent /admin/admin/login
+      const newPath = pathname.replace(/^\/admin/, "") || "/";
+      return NextResponse.rewrite(new URL(`/admin${newPath}`, request.url));
+    }
+    return NextResponse.rewrite(new URL(`/admin${pathname === "/" ? "" : pathname}`, request.url));
   }
 
   // Handle maintenance mode check
