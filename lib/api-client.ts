@@ -1,7 +1,7 @@
 import { ERROR_MESSAGES, LOCAL_STORAGE_KEYS } from "@/constants";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
