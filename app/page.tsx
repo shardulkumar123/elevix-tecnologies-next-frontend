@@ -38,6 +38,10 @@ import {
   X,
 } from "lucide-react";
 
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import { useCreateContactQuery } from "@/features/contact/hooks/use-contact";
 import { useIndustries } from "@/features/industries/hooks/use-industries";
 import { useProjects } from "@/features/projects/hooks/use-projects";
@@ -140,6 +144,17 @@ const products = [
   },
 ];
 
+const contactFormSchema = yup.object({
+  name: yup.string().trim().required("Full name is required").min(2, "Name must be at least 2 characters"),
+  email: yup.string().trim().required("Business email is required").email("Please enter a valid email address"),
+  phone: yup.string().trim().optional(),
+  company: yup.string().trim().optional(),
+  projectType: yup.string().trim().required("Please select a primary service interest"),
+  message: yup.string().trim().required("Project requirements are required").min(10, "Please provide at least 10 characters describing your project"),
+});
+
+type ContactFormData = yup.InferType<typeof contactFormSchema>;
+
 export default function Home() {
   const config = useAppSelector((state) => state.config);
   const [activeTab, setActiveTab] = useState<string>("All");
@@ -159,30 +174,44 @@ export default function Home() {
 
   const createContactMutation = useCreateContactQuery();
   const [contactSubmitted, setContactSubmitted] = useState(false);
-  const [contactFormData, setContactFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    projectType: "Custom Enterprise Software / ERP",
-    message: "",
+
+  const {
+    register,
+    handleSubmit: handleFormSubmit,
+    reset: resetContactForm,
+    formState: { errors: contactErrors },
+  } = useForm({
+    resolver: yupResolver(contactFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      company: "",
+      projectType: "Custom Enterprise Software / ERP",
+      message: "",
+    },
   });
 
-  const handleContactSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmitContact = (data: ContactFormData) => {
     createContactMutation.mutate(
       {
-        name: contactFormData.name,
-        email: contactFormData.email,
-        phone: contactFormData.phone,
-        company: contactFormData.company,
-        projectType: contactFormData.projectType,
-        subject: contactFormData.projectType,
-        message: contactFormData.message,
+        name: data.name,
+        email: data.email,
+        phone: data.phone || "",
+        company: data.company || "",
+        projectType: data.projectType,
+        subject: data.projectType,
+        message: data.message,
       },
       {
-        onSuccess: () => setContactSubmitted(true),
-        onError: () => setContactSubmitted(true),
+        onSuccess: () => {
+          setContactSubmitted(true);
+          resetContactForm();
+        },
+        onError: () => {
+          setContactSubmitted(true);
+          resetContactForm();
+        },
       }
     );
   };
@@ -839,7 +868,7 @@ export default function Home() {
                       <Button
                         onClick={() => {
                           setContactSubmitted(false);
-                          setContactFormData({ name: "", email: "", phone: "", company: "", projectType: "Custom Enterprise Software / ERP", message: "" });
+                          resetContactForm();
                         }}
                         variant="outline"
                         className="rounded-xl font-bold border-border/50"
@@ -848,7 +877,7 @@ export default function Home() {
                       </Button>
                     </div>
                   ) : (
-                    <form onSubmit={handleContactSubmit} className="space-y-6">
+                    <form onSubmit={handleFormSubmit(onSubmitContact)} className="space-y-6" noValidate>
                       <div className="space-y-2">
                         <h3 className="text-2xl font-black text-neutral-900 dark:text-white">
                           Send Us a Message
@@ -866,12 +895,17 @@ export default function Home() {
                           <input
                             id="home-contact-name"
                             type="text"
-                            required
                             placeholder="John Doe"
-                            value={contactFormData.name}
-                            onChange={(e) => setContactFormData({ ...contactFormData, name: e.target.value })}
-                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                            {...register("name")}
+                            className={`w-full rounded-xl border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 transition-all ${
+                              contactErrors.name
+                                ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                                : "border-border focus:border-indigo-500 focus:ring-indigo-500/20"
+                            }`}
                           />
+                          {contactErrors.name && (
+                            <p className="text-xs font-medium text-red-500">{contactErrors.name.message}</p>
+                          )}
                         </div>
 
                         <div className="space-y-2">
@@ -881,12 +915,17 @@ export default function Home() {
                           <input
                             id="home-contact-email"
                             type="email"
-                            required
                             placeholder="john@company.com"
-                            value={contactFormData.email}
-                            onChange={(e) => setContactFormData({ ...contactFormData, email: e.target.value })}
-                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                            {...register("email")}
+                            className={`w-full rounded-xl border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 transition-all ${
+                              contactErrors.email
+                                ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                                : "border-border focus:border-indigo-500 focus:ring-indigo-500/20"
+                            }`}
                           />
+                          {contactErrors.email && (
+                            <p className="text-xs font-medium text-red-500">{contactErrors.email.message}</p>
+                          )}
                         </div>
                       </div>
 
@@ -899,8 +938,7 @@ export default function Home() {
                             id="home-contact-phone"
                             type="tel"
                             placeholder="+1 (555) 000-0000"
-                            value={contactFormData.phone}
-                            onChange={(e) => setContactFormData({ ...contactFormData, phone: e.target.value })}
+                            {...register("phone")}
                             className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
                           />
                         </div>
@@ -913,8 +951,7 @@ export default function Home() {
                             id="home-contact-company"
                             type="text"
                             placeholder="Acme Corp"
-                            value={contactFormData.company}
-                            onChange={(e) => setContactFormData({ ...contactFormData, company: e.target.value })}
+                            {...register("company")}
                             className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
                           />
                         </div>
@@ -926,8 +963,7 @@ export default function Home() {
                         </label>
                         <select
                           id="home-contact-project"
-                          value={contactFormData.projectType}
-                          onChange={(e) => setContactFormData({ ...contactFormData, projectType: e.target.value })}
+                          {...register("projectType")}
                           className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
                         >
                           {serviceOptions.map((option, idx) => (
@@ -936,6 +972,9 @@ export default function Home() {
                             </option>
                           ))}
                         </select>
+                        {contactErrors.projectType && (
+                          <p className="text-xs font-medium text-red-500">{contactErrors.projectType.message}</p>
+                        )}
                       </div>
 
                       <div className="space-y-2">
@@ -944,13 +983,18 @@ export default function Home() {
                         </label>
                         <textarea
                           id="home-contact-message"
-                          required
                           rows={4}
                           placeholder="Describe your project, timelines, or key challenges..."
-                          value={contactFormData.message}
-                          onChange={(e) => setContactFormData({ ...contactFormData, message: e.target.value })}
-                          className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none"
+                          {...register("message")}
+                          className={`w-full rounded-xl border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 transition-all resize-none ${
+                            contactErrors.message
+                              ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                              : "border-border focus:border-indigo-500 focus:ring-indigo-500/20"
+                          }`}
                         />
+                        {contactErrors.message && (
+                          <p className="text-xs font-medium text-red-500">{contactErrors.message.message}</p>
+                        )}
                       </div>
 
                       <Button
