@@ -5,18 +5,10 @@ import React, { useEffect, useState } from "react";
 import { Footer } from "@/components/common/footer";
 import { Navbar } from "@/components/common/navbar";
 
-import { getSettings } from "@/features/admin/services/mock-data";
-import { SystemSettings } from "@/features/admin/types";
+import { useSettings } from "@/features/settings/hooks/use-settings";
 
 export default function PrivacyPolicyPage() {
-  const [settings, setSettings] = useState<SystemSettings | null>(null);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSettings(getSettings());
-    }, 0);
-    return () => clearTimeout(timer);
-  }, []);
+  const { data: settings } = useSettings();
 
   const privacyText = settings?.privacyPolicy || "Privacy Policy has not been configured yet.";
 

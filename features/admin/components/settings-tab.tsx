@@ -15,36 +15,49 @@ import {
   ToggleRight,
 } from "lucide-react";
 
-import { useAbout, useUpdateAbout } from "@/features/about/hooks/use-about";
-
 import { useToast } from "@/components/ui/toast";
+import { useSettings, useUpdateSettings } from "@/features/settings/hooks/use-settings";
 
-import { getSettings, saveSettings } from "../services/mock-data";
 import { SystemSettings } from "../types";
 
 export function SettingsTab() {
   const { success, error } = useToast();
-  const [settings, setSettings] = useState<SystemSettings>(() => getSettings());
-
-  const { data: aboutData } = useAbout();
-  const updateAboutMutation = useUpdateAbout();
+  const { data: settingsData, isLoading } = useSettings();
+  const updateSettingsMutation = useUpdateSettings();
 
   // System settings states
-  const [siteName, setSiteName] = useState(() => settings.siteName || "");
-  const [siteEmail, setSiteEmail] = useState(() => settings.siteEmail || "");
-  const [contactPhone, setContactPhone] = useState(() => settings.contactPhone || "");
-  const [address, setAddress] = useState(() => settings.address || "");
-  const [maintenanceMode, setMaintenanceMode] = useState(() => settings.maintenanceMode ?? false);
-  const [allowPublicApplications, setAllowPublicApplications] = useState(() => settings.allowPublicApplications ?? true);
-  const [maxUploadSizeMb, setMaxUploadSizeMb] = useState(() => settings.maxUploadSizeMb ?? 10);
-  const [supportHours, setSupportHours] = useState(() => settings.supportHours || "");
-  const [privacyPolicy, setPrivacyPolicy] = useState(() => settings.privacyPolicy || "");
-  const [termsOfService, setTermsOfService] = useState(() => settings.termsOfService || "");
+  const [siteName, setSiteName] = useState("");
+  const [siteEmail, setSiteEmail] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [allowPublicApplications, setAllowPublicApplications] = useState(true);
+  const [maxUploadSizeMb, setMaxUploadSizeMb] = useState(10);
+  const [supportHours, setSupportHours] = useState("");
+  const [privacyPolicy, setPrivacyPolicy] = useState("");
+  const [termsOfService, setTermsOfService] = useState("");
+
+  useEffect(() => {
+    if (settingsData) {
+      const timer = setTimeout(() => {
+        setSiteName(settingsData.siteName || "");
+        setSiteEmail(settingsData.siteEmail || "");
+        setContactPhone(settingsData.contactPhone || "");
+        setAddress(settingsData.address || "");
+        setMaintenanceMode(settingsData.maintenanceMode ?? false);
+        setAllowPublicApplications(settingsData.allowPublicApplications ?? true);
+        setMaxUploadSizeMb(settingsData.maxUploadSizeMb ?? 10);
+        setSupportHours(settingsData.supportHours || "");
+        setPrivacyPolicy(settingsData.privacyPolicy || "");
+        setTermsOfService(settingsData.termsOfService || "");
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  }, [settingsData]);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    const updatedSettings: SystemSettings = {
-      ...settings,
+    const updatedSettings: Partial<SystemSettings> = {
       siteName,
       siteEmail,
       contactPhone,
@@ -57,9 +70,14 @@ export function SettingsTab() {
       termsOfService,
     };
 
-    saveSettings(updatedSettings);
-    setSettings(updatedSettings);
-    success("Settings saved successfully");
+    updateSettingsMutation.mutate(updatedSettings, {
+      onSuccess: () => {
+        success("Settings saved successfully");
+      },
+      onError: (err) => {
+        error(err.message || "Failed to save settings");
+      },
+    });
   };
 
   return (
@@ -263,10 +281,11 @@ export function SettingsTab() {
         <div className="flex justify-end pt-4 border-t border-border/40">
           <button
             type="submit"
-            className="flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 px-6 py-2.5 text-xs font-bold text-white shadow-lg shadow-indigo-600/10 transition-all"
+            disabled={isLoading || updateSettingsMutation.isPending}
+            className="flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 px-6 py-2.5 text-xs font-bold text-white shadow-lg shadow-indigo-600/10 transition-all disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
-            <span>Save Portal Settings</span>
+            <span>{updateSettingsMutation.isPending ? "Saving..." : "Save Portal Settings"}</span>
           </button>
         </div>
       </form>
