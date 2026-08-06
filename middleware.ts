@@ -21,14 +21,14 @@ export function middleware(request: NextRequest) {
     return response;
   }
 
-  // Handle maintenance mode check
+  // Handle maintenance mode check (applies only to root landing page /)
   const maintenanceModeCookie = request.cookies.get("elevix_maintenance_mode")?.value;
   const isMaintenanceActive = maintenanceModeCookie === "true";
 
-  const isAdminRoute = pathname.startsWith("/admin");
+  const isLandingPage = pathname === "/";
   const isMaintenanceRoute = pathname === "/maintenance";
 
-  if (isMaintenanceActive && !isAdminRoute && !isMaintenanceRoute) {
+  if (isMaintenanceActive && isLandingPage) {
     return NextResponse.redirect(new URL("/maintenance", request.url));
   }
 

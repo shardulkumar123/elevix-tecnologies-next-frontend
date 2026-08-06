@@ -72,6 +72,10 @@ export function SettingsTab() {
 
     updateSettingsMutation.mutate(updatedSettings, {
       onSuccess: () => {
+        // Set maintenance mode cookie for middleware check
+        if (typeof document !== "undefined") {
+          document.cookie = `elevix_maintenance_mode=${maintenanceMode ? "true" : "false"}; path=/; max-age=31536000`;
+        }
         success("Settings saved successfully");
       },
       onError: (err) => {
