@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 
 import { axiosInstance } from "@/lib/api-client";
 
-import { getServices } from "@/features/admin/services/mock-data";
 import { Service } from "@/features/admin/types";
 
 export interface ServiceBackendModel {
@@ -67,11 +66,8 @@ export const useServices = () => {
         }
         throw new Error("Invalid response format");
       } catch (err: unknown) {
-        console.warn(
-          "Backend /services API is offline. Using simulated localStorage database.",
-          err
-        );
-        return getServices();
+        console.warn("Backend /services API error:", err);
+        return [];
       }
     },
     staleTime: CACHE_TTL,

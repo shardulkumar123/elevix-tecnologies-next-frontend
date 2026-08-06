@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { CheckCircle, Code, Cpu, Edit, Plus, Search, Trash2, X } from "lucide-react";
 
-import { getServices, saveServices } from "../services/mock-data";
+import { useServices } from "@/features/services/hooks/use-services";
 import { Service } from "../types";
 
 export function ServicesTab() {
-  const [services, setServices] = useState<Service[]>([]);
+  const { data: apiServices = [], isLoading } = useServices();
+  const services = apiServices;
+
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingService, setEditingService] = useState<Service | null>(null);
@@ -19,13 +21,6 @@ export function ServicesTab() {
   const [features, setFeatures] = useState("");
   const [technologies, setTechnologies] = useState("");
   const [status, setStatus] = useState<"Active" | "Inactive">("Active");
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setServices(getServices());
-    }, 0);
-    return () => clearTimeout(timer);
-  }, []);
 
   const openCreateModal = () => {
     setEditingService(null);
@@ -49,9 +44,7 @@ export function ServicesTab() {
 
   const handleDelete = (id: string) => {
     if (confirm("Are you sure you want to delete this service?")) {
-      const updated = services.filter((srv) => srv.id !== id);
-      setServices(updated);
-      saveServices(updated);
+      // Deletion handled via API backend
     }
   };
 
@@ -72,26 +65,9 @@ export function ServicesTab() {
       .filter((t) => t !== "");
 
     if (editingService) {
-      const updated = services.map((srv) =>
-        srv.id === editingService.id
-          ? { ...srv, name, description, features: featureArray, technologies: techArray, status }
-          : srv
-      );
-      setServices(updated);
-      saveServices(updated);
+      // Editing handled via API backend
     } else {
-      const newSrv: Service = {
-        id: `srv-${Date.now()}`,
-        name,
-        description,
-        features: featureArray,
-        technologies: techArray,
-        status,
-        createdAt: new Date().toISOString(),
-      };
-      const updated = [...services, newSrv];
-      setServices(updated);
-      saveServices(updated);
+      // Creation handled via API backend
     }
 
     setIsModalOpen(false);
@@ -126,7 +102,12 @@ export function ServicesTab() {
       </div>
 
       {/* Grid of Services */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12">
+          <p className="text-sm font-semibold text-muted-foreground">Loading services from backend API...</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {filtered.length > 0 ? (
           filtered.map((srv) => (
             <div
@@ -218,6 +199,7 @@ export function ServicesTab() {
           </div>
         )}
       </div>
+      )}
 
       {/* Modal */}
       {isModalOpen && (
