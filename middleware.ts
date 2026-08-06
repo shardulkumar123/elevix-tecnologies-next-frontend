@@ -45,7 +45,7 @@ export function middleware(request: NextRequest) {
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'none';
-    connect-src 'self' https: wss: http://localhost:* ws://localhost:*;
+    connect-src 'self' https: wss:;
     upgrade-insecure-requests;
   `
     .replace(/\s{2,}/g, " ")
