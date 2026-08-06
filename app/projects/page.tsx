@@ -172,31 +172,32 @@ export default function ProjectsPage() {
           onClick={() => setSelectedProject(null)}
         >
           <div
-            className="relative w-full max-w-2xl rounded-3xl border border-border/40 bg-card p-0 overflow-hidden shadow-2xl space-y-0"
+            className="relative w-full max-w-2xl max-h-[85vh] flex flex-col rounded-3xl border border-border/40 bg-card p-0 shadow-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header Graphic Gradient */}
-            <div className={`h-2.5 bg-gradient-to-r ${selectedProject.color}`} />
+            <div className={`h-2.5 shrink-0 bg-gradient-to-r ${selectedProject.color}`} />
 
-            <div className="p-8 space-y-6">
-              <div className="flex items-center justify-between">
-                <div className="flex flex-wrap gap-2 items-center">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded bg-muted text-muted-foreground border border-border/40">
-                    {selectedProject.category}
-                  </span>
-                  <span className="text-xs font-bold font-mono text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/30 px-2.5 py-0.5 rounded border border-indigo-100/50 dark:border-indigo-900/30">
-                    {selectedProject.stats}
-                  </span>
-                </div>
-                <button
-                  onClick={() => setSelectedProject(null)}
-                  className="h-9 w-9 inline-flex items-center justify-center rounded-xl border border-border hover:bg-muted text-muted-foreground hover:text-foreground transition-all"
-                  aria-label="Close"
-                >
-                  <X className="h-4 w-4" />
-                </button>
+            <div className="p-6 pb-4 shrink-0 flex items-start justify-between gap-4 border-b border-border/20">
+              <div className="flex flex-wrap gap-2 items-center flex-1 min-w-0 pr-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded bg-muted text-muted-foreground border border-border/40">
+                  {selectedProject.category}
+                </span>
+                <span className="text-xs font-bold font-mono text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/30 px-2.5 py-0.5 rounded border border-indigo-100/50 dark:border-indigo-900/30">
+                  {selectedProject.stats}
+                </span>
               </div>
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="h-9 w-9 shrink-0 inline-flex items-center justify-center rounded-xl border border-border hover:bg-muted text-muted-foreground hover:text-foreground transition-all"
+                aria-label="Close"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
 
+            {/* Scrollable Content Body */}
+            <div className="p-6 md:p-8 space-y-6 overflow-y-auto flex-1">
               <div className="space-y-4">
                 <h3 className="text-2xl font-black tracking-tight text-neutral-900 dark:text-white">
                   {selectedProject.title}
@@ -231,26 +232,27 @@ export default function ProjectsPage() {
                   ))}
                 </div>
               </div>
+            </div>
 
-              <div className="border-t border-border/25 pt-6 flex items-center justify-between">
-                <Button
-                  asChild
-                  className="rounded-xl px-5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-11"
+            {/* Footer */}
+            <div className="p-6 shrink-0 border-t border-border/25 bg-card flex items-center justify-between">
+              <Button
+                asChild
+                className="rounded-xl px-5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-11"
+              >
+                <Link
+                  href={`/contact?type=${encodeURIComponent(selectedProject.title)}`}
+                  className="flex items-center gap-2"
                 >
-                  <Link
-                    href={`/contact?type=${encodeURIComponent(selectedProject.title)}`}
-                    className="flex items-center gap-2"
-                  >
-                    Request Integration Details <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </Button>
-                <button
-                  onClick={() => setSelectedProject(null)}
-                  className="text-xs font-bold text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Close Case Study
-                </button>
-              </div>
+                  Request Integration Details <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="text-xs font-bold text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Close Case Study
+              </button>
             </div>
           </div>
         </div>
