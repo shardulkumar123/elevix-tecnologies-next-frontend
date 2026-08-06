@@ -168,15 +168,6 @@ export default function Home() {
     message: "",
   });
 
-  const [settings] = useState<SystemSettings | null>(() => {
-    if (typeof window === "undefined") return null;
-    return getSettings();
-  });
-
-  const contactEmail = settings?.siteEmail || "hello@elevixtechnologies.com";
-  const contactAddress = settings?.address || "Indiranagar, Bangalore, Karnataka, India — 560038";
-  const contactHours = settings?.supportHours || "Monday - Friday: 9:00 AM - 6:00 PM IST";
-
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     createContactMutation.mutate(
@@ -826,65 +817,9 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-start">
-              {/* Left Info Column */}
-              <div className="lg:col-span-5 space-y-6 text-left">
-                <div className="rounded-3xl border border-border/40 bg-card p-6 sm:p-8 shadow-lg space-y-6">
-                  <h3 className="text-xl font-extrabold text-neutral-900 dark:text-white">
-                    Contact Information
-                  </h3>
-                  
-                  <div className="space-y-5">
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-100/50 dark:border-indigo-900/40 shrink-0">
-                        <Mail className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Email Support</h4>
-                        <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 mt-0.5 select-all">
-                          {contactEmail}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-100/50 dark:border-indigo-900/40 shrink-0">
-                        <MapPin className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Headquarters</h4>
-                        <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-0.5 leading-relaxed">
-                          {contactAddress}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-100/50 dark:border-indigo-900/40 shrink-0">
-                        <Clock className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Operating Hours</h4>
-                        <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-0.5 leading-relaxed">
-                          {contactHours}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="rounded-3xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent p-6 text-left space-y-3">
-                  <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-sm">
-                    <CheckCircle2 className="h-4 w-4" /> 24-Hour Response SLA
-                  </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    Our technical leads respond within 24 business hours with initial architectural assessments and project estimates.
-                  </p>
-                </div>
-              </div>
-
-              {/* Right Form Card */}
-              <div className="lg:col-span-7">
+            <div className="mx-auto max-w-3xl">
+              {/* Contact Form Card */}
+              <div className="w-full">
                 <div className="rounded-3xl border border-border/50 bg-card p-6 sm:p-10 shadow-2xl relative overflow-hidden text-left">
                   <div className="absolute top-0 right-0 -mt-6 -mr-6 h-32 w-32 rounded-full bg-indigo-600/10 blur-2xl pointer-events-none" />
 
