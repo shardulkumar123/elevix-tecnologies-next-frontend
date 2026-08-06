@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { LOCAL_STORAGE_KEYS } from "@/constants";
 import { ArrowRight, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
+import Image from "next/image";
 
 import { useLogin } from "@/features/auth/hooks/use-login";
 
@@ -149,13 +150,6 @@ export default function AdminLoginPage() {
     }
   };
 
-  const handleQuickFill = (testEmail: string) => {
-    setEmail(testEmail);
-    setPassword("admin123");
-    setFieldErrors({});
-    setErrorMsg("");
-  };
-
   return (
     <React.Suspense
       fallback={
@@ -170,155 +164,181 @@ export default function AdminLoginPage() {
       }
     >
       <GuestGuard>
-        <div className="flex-1 min-h-screen flex items-center justify-center bg-background text-foreground px-4 relative overflow-hidden">
-          {/* Background patterns */}
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(99,102,241,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(99,102,241,0.02)_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_75%,transparent_100%)] opacity-80" />
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[35rem] h-[35rem] bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-[100px] -z-20" />
-
-          <div className="w-full max-w-md space-y-8 animate-fade-in relative z-10">
-            {/* Branding header */}
-            <div className="text-center space-y-4">
-              <div className="inline-flex h-16 w-16 items-center justify-center">
-                <Logo size={48} />
-              </div>
-              <div className="space-y-1.5">
-                <h2 className="text-2xl font-black tracking-tight text-neutral-900 dark:text-white">
-                  Admin Portal
-                </h2>
-                <p className="text-xs text-muted-foreground font-semibold">
-                  Enter your corporate credentials to access the console
-                </p>
-              </div>
+        <div className="flex-1 min-h-screen flex bg-background text-foreground relative overflow-hidden">
+          {/* Left Column: Tech Graphic Banner */}
+          <div className="hidden lg:flex lg:w-1/2 relative bg-neutral-950 items-center justify-center p-12 border-r border-border/40 overflow-hidden">
+            {/* Background Image */}
+            <div className="absolute inset-0 z-0 opacity-60">
+              <Image
+                src="/images/admin-login-tech.png"
+                alt="Tech Infrastructure"
+                className="w-full h-full object-cover object-center"
+                width={1000}
+                height={1000}
+                loading='eager'
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-transparent" />
             </div>
 
-            {/* Card Form */}
-            <div className="bg-card/75 border border-border/40 rounded-3xl p-8 shadow-xl backdrop-blur-md space-y-6">
-              {errorMsg && (
-                <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-100 dark:border-rose-900/30 text-rose-600 dark:text-rose-400 rounded-xl p-3.5 text-xs font-bold leading-relaxed text-center">
-                  {errorMsg}
-                </div>
-              )}
+            {/* Glowing Accent Orbs */}
+            <div className="absolute -top-24 -left-24 w-96 h-96 bg-indigo-600/30 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-cyan-500/20 rounded-full blur-[120px] pointer-events-none" />
 
-              {successMsg && (
-                <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-xl p-3.5 text-xs font-bold leading-relaxed text-center">
-                  {successMsg}
-                </div>
-              )}
+            {/* Floating Info Overlay Card */}
+            <div className="relative z-10 max-w-lg space-y-6 bg-neutral-900/60 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-2xl text-left">
+              <div className="inline-flex items-center gap-2 rounded-full bg-indigo-500/20 px-3.5 py-1 text-xs font-bold text-indigo-400 border border-indigo-500/30">
+                Enterprise Infrastructure Console
+              </div>
+              <h1 className="text-3xl font-black text-white leading-tight">
+                Architecting Performant & Secure Cloud Systems
+              </h1>
+              <p className="text-xs text-neutral-300 leading-relaxed font-medium">
+                Elevix Technologies Admin Console provides unified access to service offerings,
+                talent databases, analytics, and operational metrics.
+              </p>
+              <div className="pt-2 flex items-center gap-4 border-t border-white/10 text-neutral-400 text-[11px] font-mono">
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                  System Operational
+                </span>
+                <span>•</span>
+                <span>Role: RBAC Admin</span>
+              </div>
+            </div>
+          </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Right Column: Login Form */}
+          <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative">
+            {/* Background patterns */}
+            <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(99,102,241,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(99,102,241,0.02)_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_75%,transparent_100%)] opacity-80" />
+
+            <div className="w-full max-w-md space-y-8 animate-fade-in relative z-10">
+              {/* Branding header */}
+              <div className="text-center space-y-4">
+                <div className="inline-flex items-center justify-center">
+                  <Logo height={100} />
+                </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                    Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail
-                      className={`absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 ${fieldErrors.email ? "text-rose-500" : "text-muted-foreground"}`}
-                    />
-                    <input
-                      type="email"
-                      required
-                      placeholder="name@company.com"
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        if (fieldErrors.email)
-                          setFieldErrors((prev) => ({ ...prev, email: undefined }));
-                      }}
-                      className={`w-full rounded-xl border bg-muted/10 pl-10 pr-4 py-2.5 text-xs font-semibold focus:outline-none transition-colors ${
-                        fieldErrors.email
-                          ? "border-rose-500/80 focus:border-rose-500 text-rose-600 dark:text-rose-400"
-                          : "border-border focus:border-indigo-600"
-                      }`}
-                    />
+                  <h2 className="text-2xl font-black tracking-tight text-neutral-900 dark:text-white">
+                    Admin Portal
+                  </h2>
+                  <p className="text-xs text-muted-foreground font-semibold">
+                    Enter your corporate credentials to access the console
+                  </p>
+                </div>
+              </div>
+
+              {/* Card Form */}
+              <div className="bg-card/75 border border-border/40 rounded-3xl p-8 shadow-xl backdrop-blur-md space-y-6">
+                {errorMsg && (
+                  <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-100 dark:border-rose-900/30 text-rose-600 dark:text-rose-400 rounded-xl p-3.5 text-xs font-bold leading-relaxed text-center">
+                    {errorMsg}
                   </div>
-                  {fieldErrors.email && (
-                    <p className="text-[10px] font-bold text-rose-600 dark:text-rose-400 animate-slide-in mt-1 pl-1">
-                      {fieldErrors.email}
-                    </p>
-                  )}
-                </div>
+                )}
 
-                <div className="space-y-1.5">
-                  <div className="flex justify-between items-center">
+                {successMsg && (
+                  <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-xl p-3.5 text-xs font-bold leading-relaxed text-center">
+                    {successMsg}
+                  </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="space-y-1.5">
                     <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                      Password
+                      Email Address
                     </label>
+                    <div className="relative">
+                      <Mail
+                        className={`absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 ${fieldErrors.email ? "text-rose-500" : "text-muted-foreground"}`}
+                      />
+                      <input
+                        type="email"
+                        required
+                        placeholder="name@company.com"
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          if (fieldErrors.email)
+                            setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                        }}
+                        className={`w-full rounded-xl border bg-muted/10 pl-10 pr-4 py-2.5 text-xs font-semibold focus:outline-none transition-colors ${
+                          fieldErrors.email
+                            ? "border-rose-500/80 focus:border-rose-500 text-rose-600 dark:text-rose-400"
+                            : "border-border focus:border-indigo-600"
+                        }`}
+                      />
+                    </div>
+                    {fieldErrors.email && (
+                      <p className="text-[10px] font-bold text-rose-600 dark:text-rose-400 animate-slide-in mt-1 pl-1">
+                        {fieldErrors.email}
+                      </p>
+                    )}
                   </div>
-                  <div className="relative">
-                    <Lock
-                      className={`absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 ${fieldErrors.password ? "text-rose-500" : "text-muted-foreground"}`}
-                    />
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      required
-                      placeholder="••••••••"
-                      value={password}
-                      onChange={(e) => {
-                        setPassword(e.target.value);
-                        if (fieldErrors.password)
-                          setFieldErrors((prev) => ({ ...prev, password: undefined }));
-                      }}
-                      className={`w-full rounded-xl border bg-muted/10 pl-10 pr-10 py-2.5 text-xs font-semibold focus:outline-none transition-colors ${
-                        fieldErrors.password
-                          ? "border-rose-500/80 focus:border-rose-500 text-rose-600 dark:text-rose-400"
-                          : "border-border focus:border-indigo-600"
-                      }`}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
+
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center">
+                      <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                        Password
+                      </label>
+                    </div>
+                    <div className="relative">
+                      <Lock
+                        className={`absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 ${fieldErrors.password ? "text-rose-500" : "text-muted-foreground"}`}
+                      />
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        required
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => {
+                          setPassword(e.target.value);
+                          if (fieldErrors.password)
+                            setFieldErrors((prev) => ({ ...prev, password: undefined }));
+                        }}
+                        className={`w-full rounded-xl border bg-muted/10 pl-10 pr-10 py-2.5 text-xs font-semibold focus:outline-none transition-colors ${
+                          fieldErrors.password
+                            ? "border-rose-500/80 focus:border-rose-500 text-rose-600 dark:text-rose-400"
+                            : "border-border focus:border-indigo-600"
+                        }`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
+                    {fieldErrors.password && (
+                      <p className="text-[10px] font-bold text-rose-600 dark:text-rose-400 animate-slide-in mt-1 pl-1">
+                        {fieldErrors.password}
+                      </p>
+                    )}
                   </div>
-                  {fieldErrors.password && (
-                    <p className="text-[10px] font-bold text-rose-600 dark:text-rose-400 animate-slide-in mt-1 pl-1">
-                      {fieldErrors.password}
-                    </p>
-                  )}
-                </div>
 
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 px-6 py-3 text-xs font-bold text-white shadow-lg shadow-indigo-600/10 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed mt-2"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>Verifying Credentials...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Sign In to Console</span>
-                      <ArrowRight className="h-4 w-4" />
-                    </>
-                  )}
-                </button>
-              </form>
-
-              {/* Quick Sandbox Users */}
-              <div className="border-t border-border/40 pt-5 space-y-3">
-                <p className="text-[9px] font-bold text-center text-muted-foreground uppercase tracking-wider">
-                  Quick Sandbox Profiles
-                </p>
-                <div className="grid grid-cols-2 gap-2">
                   <button
-                    type="button"
-                    onClick={() => handleQuickFill("shardul@elevixtechnologies.com")}
-                    className="rounded-lg border border-border hover:bg-muted py-1.5 text-[10px] font-bold text-muted-foreground hover:text-foreground transition-colors"
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 px-6 py-3 text-xs font-bold text-white shadow-lg shadow-indigo-600/10 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed mt-2"
                   >
-                    Shardul (Admin)
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <span>Verifying Credentials...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Log In</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </>
+                    )}
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => handleQuickFill("neha.s@elevixtechnologies.com")}
-                    className="rounded-lg border border-border hover:bg-muted py-1.5 text-[10px] font-bold text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    Neha (Editor)
-                  </button>
-                </div>
+                </form>
               </div>
             </div>
           </div>
