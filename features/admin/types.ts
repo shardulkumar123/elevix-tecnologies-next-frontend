@@ -7,7 +7,12 @@ export interface Job {
   type: "Full-time" | "Part-time" | "Contract" | "Internship";
   salaryRange: string;
   description: string;
+  responsibilities?: string[];
   requirements: string[]; // split by newlines in form
+  tools?: string[];
+  requiredSkills?: string[];
+  preferredSkills?: string[];
+  perks?: string[];
   benefits: string[]; // split by newlines in form
   status: "Active" | "Draft" | "Closed";
   createdAt: string;

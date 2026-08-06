@@ -15,7 +15,12 @@ export interface CareerBackendModel {
   type: string;
   salaryRange: string;
   description: string;
+  responsibilities?: string[];
   requirements: string[];
+  tools?: string[];
+  requiredSkills?: string[];
+  preferredSkills?: string[];
+  perks?: string[];
   benefits: string[];
   status: "Active" | "Draft" | "Closed";
   createdAt: string;
@@ -31,7 +36,12 @@ export const mapBackendToFrontendJob = (c: CareerBackendModel): Job => ({
   type: c.type as Job["type"],
   salaryRange: c.salaryRange,
   description: c.description,
-  requirements: c.requirements,
+  responsibilities: c.responsibilities || [],
+  requirements: c.requirements || [],
+  tools: c.tools || [],
+  requiredSkills: c.requiredSkills || [],
+  preferredSkills: c.preferredSkills || [],
+  perks: c.perks || [],
   benefits: c.benefits || [],
   status: c.status,
   createdAt: c.createdAt,
@@ -46,7 +56,12 @@ export const mapFrontendToBackendCareer = (j: Partial<Job>) => ({
   type: j.type,
   salaryRange: j.salaryRange,
   description: j.description,
+  responsibilities: j.responsibilities || [],
   requirements: j.requirements || [],
+  tools: j.tools || [],
+  requiredSkills: j.requiredSkills || [],
+  preferredSkills: j.preferredSkills || [],
+  perks: j.perks || [],
   benefits: j.benefits || [],
   status: j.status,
 });

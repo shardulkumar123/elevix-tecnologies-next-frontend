@@ -128,21 +128,9 @@ export default function CareersPage() {
 
             {/* List */}
             <div className="space-y-6">
-              {filteredJobs.map((item) => {
-                const job = item as {
-                  id: string;
-                  title: string;
-                  department: string;
-                  location: string;
-                  type: string;
-                  salary?: string;
-                  salaryRange?: string;
-                  desc?: string;
-                  description?: string;
-                  requirements: string[];
-                };
-                const displaySalary = job.salary || job.salaryRange || "";
-                const displayDesc = job.desc || job.description || "";
+              {filteredJobs.map((job) => {
+                const displaySalary = job.salaryRange || "";
+                const displayDesc = job.description || "";
 
                 return (
                   <div
@@ -182,16 +170,93 @@ export default function CareersPage() {
                       {displayDesc}
                     </p>
 
-                    <div className="space-y-2 pt-2 border-t border-border/20">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                        Requirements:
-                      </h4>
-                      <ul className="list-disc pl-4 text-xs space-y-1.5 text-neutral-700 dark:text-neutral-300">
-                        {job.requirements.map((req, index) => (
-                          <li key={index}>{req}</li>
-                        ))}
-                      </ul>
-                    </div>
+                    {job.responsibilities && job.responsibilities.length > 0 && (
+                      <div className="space-y-2 pt-2 border-t border-border/20">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                        Responsibilities:
+                        </h4>
+                        <ul className="list-disc pl-4 text-xs space-y-1.5 text-neutral-700 dark:text-neutral-300">
+                          {job.responsibilities.map((resp, index) => (
+                            <li key={index}>{resp}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {job.requirements && job.requirements.length > 0 && (
+                      <div className="space-y-2 pt-2 border-t border-border/20">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                          Requirements:
+                        </h4>
+                        <ul className="list-disc pl-4 text-xs space-y-1.5 text-neutral-700 dark:text-neutral-300">
+                          {job.requirements.map((req, index) => (
+                            <li key={index}>{req}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {job.tools && job.tools.length > 0 && (
+                      <div className="space-y-2 pt-2 border-t border-border/20">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                          🛠️ Tools Used:
+                        </h4>
+                        <div className="flex flex-wrap gap-1.5">
+                          {job.tools.map((tool, index) => (
+                            <span
+                              key={index}
+                              className="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-muted text-neutral-700 dark:text-neutral-300 border border-border/40"
+                            >
+                              {tool}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {job.requiredSkills && job.requiredSkills.length > 0 && (
+                      <div className="space-y-2 pt-2 border-t border-border/20">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                          💡 Required Skills:
+                        </h4>
+                        <div className="flex flex-wrap gap-1.5">
+                          {job.requiredSkills.map((skill, index) => (
+                            <span
+                              key={index}
+                              className="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/30"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {job.preferredSkills && job.preferredSkills.length > 0 && (
+                      <div className="space-y-2 pt-2 border-t border-border/20">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                          ⭐ Preferred Skills:
+                        </h4>
+                        <ul className="list-disc pl-4 text-xs space-y-1.5 text-neutral-700 dark:text-neutral-300">
+                          {job.preferredSkills.map((skill, index) => (
+                            <li key={index}>{skill}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {job.perks && job.perks.length > 0 && (
+                      <div className="space-y-2 pt-2 border-t border-border/20">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                          🎁 Perks & Benefits:
+                        </h4>
+                        <ul className="list-disc pl-4 text-xs space-y-1.5 text-neutral-700 dark:text-neutral-300">
+                          {job.perks.map((perk, index) => (
+                            <li key={index}>{perk}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 );
               })}

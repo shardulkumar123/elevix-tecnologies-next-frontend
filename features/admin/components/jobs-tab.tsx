@@ -35,7 +35,12 @@ export function JobsTab() {
   );
   const [salaryRange, setSalaryRange] = useState("");
   const [description, setDescription] = useState("");
+  const [responsibilities, setResponsibilities] = useState("");
   const [requirements, setRequirements] = useState("");
+  const [tools, setTools] = useState("");
+  const [requiredSkills, setRequiredSkills] = useState("");
+  const [preferredSkills, setPreferredSkills] = useState("");
+  const [perks, setPerks] = useState("");
   const [benefits, setBenefits] = useState("");
   const [status, setStatus] = useState<"Active" | "Draft" | "Closed">("Active");
   const [isActive, setIsActive] = useState(true);
@@ -64,7 +69,12 @@ export function JobsTab() {
     setType("Full-time");
     setSalaryRange("");
     setDescription("");
+    setResponsibilities("");
     setRequirements("");
+    setTools("");
+    setRequiredSkills("");
+    setPreferredSkills("");
+    setPerks("");
     setBenefits("");
     setStatus("Active");
     setIsActive(true);
@@ -80,8 +90,13 @@ export function JobsTab() {
     setType(job.type);
     setSalaryRange(job.salaryRange);
     setDescription(job.description);
-    setRequirements(job.requirements.join("\n"));
-    setBenefits(job.benefits.join("\n"));
+    setResponsibilities((job.responsibilities || []).join("\n"));
+    setRequirements((job.requirements || []).join("\n"));
+    setTools((job.tools || []).join("\n"));
+    setRequiredSkills((job.requiredSkills || []).join("\n"));
+    setPreferredSkills((job.preferredSkills || []).join("\n"));
+    setPerks((job.perks || []).join("\n"));
+    setBenefits((job.benefits || []).join("\n"));
     setStatus(job.status);
     setIsActive(job.status === "Active");
     setIsModalOpen(true);
@@ -111,8 +126,22 @@ export function JobsTab() {
       return;
     }
 
-    const reqArray = requirements.split("\n").filter((r) => r.trim() !== "");
-    const benArray = benefits.split("\n").filter((b) => b.trim() !== "");
+    const parseListInput = (input: string): string[] => {
+      if (!input) return [];
+      // Split by commas or newlines, then clean whitespace and filter out empties
+      return input
+        .split(/[\n,]+/)
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0);
+    };
+
+    const respArray = parseListInput(responsibilities);
+    const reqArray = parseListInput(requirements);
+    const toolArray = parseListInput(tools);
+    const reqSkillArray = parseListInput(requiredSkills);
+    const prefSkillArray = parseListInput(preferredSkills);
+    const perkArray = parseListInput(perks);
+    const benArray = parseListInput(benefits);
 
     const payload = {
       title,
@@ -122,7 +151,12 @@ export function JobsTab() {
       type,
       salaryRange,
       description,
+      responsibilities: respArray,
       requirements: reqArray,
+      tools: toolArray,
+      requiredSkills: reqSkillArray,
+      preferredSkills: prefSkillArray,
+      perks: perkArray,
       benefits: benArray,
       status: status as "Active" | "Draft" | "Closed",
     };
@@ -485,7 +519,7 @@ export function JobsTab() {
                 </label>
                 <textarea
                   required
-                  rows={4}
+                  rows={3}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Provide a comprehensive summary of role expectations, objectives, and responsibilities..."
@@ -495,26 +529,91 @@ export function JobsTab() {
 
               <div className="space-y-1">
                 <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-                  Requirements (One per line)
+                  Responsibilities (Separated by commas or newlines)
                 </label>
                 <textarea
-                  rows={3}
-                  value={requirements}
-                  onChange={(e) => setRequirements(e.target.value)}
-                  placeholder="e.g. 3+ years React experience&#10;BS in Computer Science"
+                  rows={4}
+                  value={responsibilities}
+                  onChange={(e) => setResponsibilities(e.target.value)}
+                  placeholder="e.g. Identify and generate new business opportunities, Schedule meetings and product demonstrations, Prepare proposals"
                   className="w-full rounded-xl border border-border bg-muted/10 px-3 py-2 text-xs font-semibold focus:border-indigo-600 focus:outline-none"
                 />
               </div>
 
               <div className="space-y-1">
                 <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-                  Benefits (One per line)
+                  Requirements / Qualifications (Separated by commas or newlines)
+                </label>
+                <textarea
+                  rows={4}
+                  value={requirements}
+                  onChange={(e) => setRequirements(e.target.value)}
+                  placeholder="e.g. Bachelor's degree in Business, Marketing, or IT, Excellent verbal and written English communication"
+                  className="w-full rounded-xl border border-border bg-muted/10 px-3 py-2 text-xs font-semibold focus:border-indigo-600 focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                  Tools Used (Separated by commas or newlines)
                 </label>
                 <textarea
                   rows={3}
+                  value={tools}
+                  onChange={(e) => setTools(e.target.value)}
+                  placeholder="e.g. HubSpot, Zoho CRM, Salesforce, LinkedIn Sales Navigator, Apollo.io, Slack, Zoom"
+                  className="w-full rounded-xl border border-border bg-muted/10 px-3 py-2 text-xs font-semibold focus:border-indigo-600 focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                  Required Skills (Separated by commas or newlines)
+                </label>
+                <textarea
+                  rows={4}
+                  value={requiredSkills}
+                  onChange={(e) => setRequiredSkills(e.target.value)}
+                  placeholder="e.g. Lead Generation, Cold Calling, Cold Emailing, LinkedIn Outreach, Sales Prospecting, Negotiation"
+                  className="w-full rounded-xl border border-border bg-muted/10 px-3 py-2 text-xs font-semibold focus:border-indigo-600 focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                  Preferred Skills (Separated by commas or newlines)
+                </label>
+                <textarea
+                  rows={3}
+                  value={preferredSkills}
+                  onChange={(e) => setPreferredSkills(e.target.value)}
+                  placeholder="e.g. Experience selling IT services or SaaS products, Knowledge of AI/Web Dev, Experience using CRM software"
+                  className="w-full rounded-xl border border-border bg-muted/10 px-3 py-2 text-xs font-semibold focus:border-indigo-600 focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                  Perks & Benefits (Separated by commas or newlines)
+                </label>
+                <textarea
+                  rows={3}
+                  value={perks}
+                  onChange={(e) => setPerks(e.target.value)}
+                  placeholder="e.g. Performance-based incentives (No cap), Career growth opportunities, Flexible work environment"
+                  className="w-full rounded-xl border border-border bg-muted/10 px-3 py-2 text-xs font-semibold focus:border-indigo-600 focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                  Additional Benefits (Separated by commas or newlines)
+                </label>
+                <textarea
+                  rows={2}
                   value={benefits}
                   onChange={(e) => setBenefits(e.target.value)}
-                  placeholder="e.g. Health insurance&#10;401k match"
+                  placeholder="e.g. Health insurance coverage, 401k match"
                   className="w-full rounded-xl border border-border bg-muted/10 px-3 py-2 text-xs font-semibold focus:border-indigo-600 focus:outline-none"
                 />
               </div>
