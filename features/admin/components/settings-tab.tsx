@@ -59,6 +59,7 @@ export function SettingsTab() {
       setContactPhone(s.contactPhone);
       setAddress(s.address);
       setMaintenanceMode(s.maintenanceMode);
+      document.cookie = `elevix_maintenance_mode=${s.maintenanceMode}; path=/; max-age=31536000; SameSite=Lax`;
       setAllowPublicApplications(s.allowPublicApplications);
       setMaxUploadSizeMb(s.maxUploadSizeMb);
       setSupportHours(s.supportHours || "");
@@ -99,6 +100,9 @@ export function SettingsTab() {
     };
     saveSettings(updated);
     setSettings(updated);
+
+    // Set maintenance mode cookie for Next.js middleware
+    document.cookie = `elevix_maintenance_mode=${maintenanceMode}; path=/; max-age=31536000; SameSite=Lax`;
 
     // Save About settings
     const aboutPayload = {
