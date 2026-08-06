@@ -8,12 +8,17 @@ export function middleware(request: NextRequest) {
 
   // Handle admin subdomain routing
   if (isAdminSubdomain) {
+    let targetPath = `/admin${pathname === "/" ? "" : pathname}`;
     if (pathname.startsWith("/admin")) {
-      // If URL is admin.domain.com/admin/login, strip extra /admin to prevent /admin/admin/login
       const newPath = pathname.replace(/^\/admin/, "") || "/";
-      return NextResponse.rewrite(new URL(`/admin${newPath}`, request.url));
+      targetPath = `/admin${newPath === "/" ? "" : newPath}`;
     }
-    return NextResponse.rewrite(new URL(`/admin${pathname === "/" ? "" : pathname}`, request.url));
+
+    const response = NextResponse.rewrite(new URL(targetPath, request.url));
+    response.headers.set("X-Content-Type-Options", "nosniff");
+    response.headers.set("X-Frame-Options", "DENY");
+    response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    return response;
   }
 
   // Handle maintenance mode check
