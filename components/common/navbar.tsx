@@ -17,7 +17,7 @@ export function Navbar() {
   const pathname = usePathname();
 
   const navItems = [
-    { name: "Products", href: "/products/travelerp" },
+    // { name: "Products", href: "/products/travelerp" },
     { name: "Services", href: "/services" },
     { name: "Industries", href: "/industries" },
     { name: "Projects", href: "/projects" },
