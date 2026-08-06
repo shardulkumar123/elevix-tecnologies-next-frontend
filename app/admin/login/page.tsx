@@ -28,13 +28,7 @@ export default function AdminLoginPage() {
   const [successMsg, setSuccessMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
 
-  useEffect(() => {
-    // If already authenticated, redirect to /admin directly
-    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.token);
-    if (token) {
-      router.push("/admin");
-    }
-  }, [router]);
+
 
   const validateForm = (): boolean => {
     const errors: { email?: string; password?: string } = {};
@@ -191,14 +185,13 @@ export default function AdminLoginPage() {
             {/* Floating Info Overlay Card */}
             <div className="relative z-10 max-w-lg space-y-6 bg-neutral-900/60 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-2xl text-left">
               <div className="inline-flex items-center gap-2 rounded-full bg-indigo-500/20 px-3.5 py-1 text-xs font-bold text-indigo-400 border border-indigo-500/30">
-                Enterprise Infrastructure Console
+                Management Portal
               </div>
               <h1 className="text-3xl font-black text-white leading-tight">
-                Architecting Performant & Secure Cloud Systems
+                Elevix Management Portal
               </h1>
               <p className="text-xs text-neutral-300 leading-relaxed font-medium">
-                Elevix Technologies Admin Console provides unified access to service offerings,
-                talent databases, analytics, and operational metrics.
+                Unified console for Admins, Editors, and Authorized Roles to manage projects, services, queries, and system settings.
               </p>
               <div className="pt-2 flex items-center gap-4 border-t border-white/10 text-neutral-400 text-[11px] font-mono">
                 <span className="flex items-center gap-1.5">
@@ -206,7 +199,7 @@ export default function AdminLoginPage() {
                   System Operational
                 </span>
                 <span>•</span>
-                <span>Role: RBAC Admin</span>
+                <span>Role-Based Console</span>
               </div>
             </div>
           </div>
@@ -224,10 +217,10 @@ export default function AdminLoginPage() {
                 </div>
                 <div className="space-y-1.5">
                   <h2 className="text-2xl font-black tracking-tight text-neutral-900 dark:text-white">
-                    Admin Portal
+                    Elevix Portal
                   </h2>
                   <p className="text-xs text-muted-foreground font-semibold">
-                    Enter your corporate credentials to access the console
+                    Sign in to access your role-based dashboard
                   </p>
                 </div>
               </div>

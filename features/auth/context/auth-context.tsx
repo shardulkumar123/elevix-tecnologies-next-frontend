@@ -20,9 +20,23 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<DecodedUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [token, setToken] = useState<string | null>(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem(LOCAL_STORAGE_KEYS.token);
+      if (stored && !isTokenExpired(stored)) return stored;
+    }
+    return null;
+  });
+
+  const [user, setUser] = useState<DecodedUser | null>(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem(LOCAL_STORAGE_KEYS.token);
+      if (stored && !isTokenExpired(stored)) return decodeToken(stored);
+    }
+    return null;
+  });
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
 
   const logout = useCallback(() => {
