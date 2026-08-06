@@ -199,17 +199,16 @@ export default function Home() {
 
                 {/* Main Heading */}
                 <h1 className="text-4xl font-extrabold tracking-tight text-neutral-900 dark:text-white sm:text-6xl lg:text-[4rem] leading-[1.1] max-w-2xl">
-                  Software & Websites{" "}
+                  Your Digital{" "}
                   <span className="block bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 bg-clip-text text-transparent font-black mt-2">
-                    Built For Real
+                    Transformation
                   </span>{" "}
-                  Businesses
+                  Partner
                 </h1>
 
                 {/* Subtitle Description */}
                 <p className="max-w-xl text-lg leading-relaxed text-muted-foreground">
-                  From cafes and hotels to enterprise operations — we build digital systems that
-                  simplify business and help companies grow.
+                  We help organizations establish and grow their online presence through tailored Web Solutions, custom Business Software, and continuous Digital Growth.
                 </p>
 
                 {/* CTA Buttons */}

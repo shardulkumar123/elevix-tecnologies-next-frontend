@@ -14,64 +14,12 @@ import { Button } from "@/components/ui/button";
 
 import { Project } from "@/features/admin/types";
 
-// Expanded projects list matching homepage
-const defaultProjectsData: Project[] = [
-  {
-    id: "project-1",
-    title: "Justravels Booking Engine",
-    category: "Web Apps",
-    desc: "A highly-scalable Nest.js and Next.js booking infrastructure built for rapid seat allocation and automated platform dues calculations.",
-    longDesc:
-      "Justravels required a complete modernization of their central booking system. We re-engineered their booking pipeline using a microservices-based Nest.js architecture, caching high-volume lookups with Redis, and integrating real-time ledger accounting.",
-    stats: "2.5M+ requests/day",
-    techStack: ["Next.js", "Nest.js", "Redis", "PostgreSQL", "Docker"],
-    color: "from-blue-500 to-indigo-500",
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "project-2",
-    title: "Aegis AI Agent",
-    category: "AI/ML",
-    desc: "A context-aware developer assistant capable of scanning directory contexts and suggesting secure edits via structured tool calls.",
-    longDesc:
-      "Aegis AI scans large-scale codebases to automatically fix syntax warnings, resolve type mismatches, and format output. It executes actions in sandboxed environments with precise feedback loops.",
-    stats: "99.8% precision",
-    techStack: ["TypeScript", "Python", "OpenAI API", "LangChain", "VectorDB"],
-    color: "from-purple-500 to-pink-500",
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "project-3",
-    title: "Vatsalya Portal",
-    category: "Web Apps",
-    desc: "A secure state welfare portal ensuring reliable distribution workflows, supporting encrypted PDF/TIFF uploads and strict compliance audits.",
-    longDesc:
-      "Vatsalya provides a unified portal for citizen benefits distribution. We implemented robust verification checkpoints, secure cloud storage with pre-signed URLs, and high-performance server side rendering.",
-    stats: "500k+ active users",
-    techStack: ["React", "Express.js", "AWS S3", "Tailwind CSS", "Jest"],
-    color: "from-emerald-500 to-teal-500",
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "project-4",
-    title: "LionStream Edge Cache",
-    category: "Cloud API",
-    desc: "Custom edge routing middleware designed to optimize dynamic API requests and reduce database stress under extreme load spikes.",
-    longDesc:
-      "Built for dynamic e-commerce catalog API loads, LionStream caches complex database query results at the network edge, ensuring sub-15ms response latencies and seamless auto-scaling.",
-    stats: "15ms avg latency",
-    techStack: ["Go", "Cloudflare Workers", "gRPC", "Redis Enterprise"],
-    color: "from-amber-500 to-orange-500",
-    createdAt: new Date().toISOString(),
-  },
-];
-
 export default function ProjectsPage() {
   const { data: apiProjects = [], isLoading } = useProjects();
   const [activeTab, setActiveTab] = useState("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const activeProjectsList = apiProjects.length > 0 ? apiProjects : defaultProjectsData;
+  const activeProjectsList = apiProjects;
 
   const categories = [
     "All",

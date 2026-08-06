@@ -20,6 +20,7 @@ export interface ServiceBackendModel {
 export const mapBackendToFrontendService = (s: ServiceBackendModel): Service => ({
   id: s.id,
   name: s.title,
+  category: s.category,
   description: s.desc,
   features: s.features || [],
   technologies: [],

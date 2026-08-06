@@ -90,19 +90,27 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Services */}
+          {/* Column 2: Offerings */}
           <div className="space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-white">
-              Solutions
+              Offerings
             </h4>
             <ul className="space-y-2.5 text-xs text-muted-foreground">
-              {solutionsList.map((sol) => (
-                <li key={sol.id}>
-                  <Link href={sol.href} className="hover:text-foreground transition-colors">
-                    {sol.name}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link href="/services#web-solutions" className="hover:text-foreground transition-colors">
+                  Web Solutions
+                </Link>
+              </li>
+              <li>
+                <Link href="/services#business-software" className="hover:text-foreground transition-colors">
+                  Business Software
+                </Link>
+              </li>
+              <li>
+                <Link href="/services#digital-growth" className="hover:text-foreground transition-colors">
+                  Digital Growth
+                </Link>
+              </li>
             </ul>
           </div>
 

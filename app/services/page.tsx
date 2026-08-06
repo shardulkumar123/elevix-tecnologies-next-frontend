@@ -1,8 +1,10 @@
 "use client";
 
-import React from "react";
-
+import React, { useState } from "react";
 import Link from "next/link";
+import { Navbar } from "@/components/common/navbar";
+import { Footer } from "@/components/common/footer";
+import { Button } from "@/components/ui/button";
 
 import {
   ArrowRight,
@@ -11,122 +13,45 @@ import {
   CheckCircle2,
   Factory,
   GitMerge,
-  LayoutDashboard,
-  Package,
-  ShoppingBag,
-  Utensils,
+  Cpu,
+  Globe,
+  TrendingUp,
 } from "lucide-react";
 
-import { Footer } from "@/components/common/footer";
-import { Navbar } from "@/components/common/navbar";
-import { Button } from "@/components/ui/button";
+import { useServices } from "@/features/services/hooks/use-services";
 
-const detailedServices = [
+const pillarMetadata: Record<
+  string,
   {
-    title: "Restaurants & Hospitality POS",
-    category: "Hospitality",
-    desc: "Complete digital ecosystem for food service businesses. From table booking to multi-terminal POS and kitchen display integration.",
-    icon: Utensils,
-    color: "from-orange-500 to-amber-500",
-    features: [
-      "Real-time Table Ordering & QR Codes",
-      "Multi-station Kitchen Display Systems (KDS)",
-      "Aggregator Integrations (Zomato, Swiggy)",
-      "Inventory & Ingredient Tracking",
-    ],
+    pillar: string;
+    icon: React.ElementType;
+    desc: string;
+    color: string;
+    colorBg: string;
+  }
+> = {
+  "Web Solutions": {
+    pillar: "Web Solutions",
+    icon: Globe,
+    desc: "Position your business online with custom, high-speed, and conversion-focused web solutions.",
+    color: "from-indigo-500 to-cyan-500",
+    colorBg: "bg-indigo-500/10 border-indigo-500/20 text-indigo-500 dark:bg-indigo-500/8 dark:border-indigo-500/20",
   },
-  {
-    title: "Hotel Management & Booking",
-    category: "Hospitality",
-    desc: "Robust Property Management Systems (PMS) and customized direct booking engines that reduce OTA commissions.",
-    icon: BedDouble,
-    color: "from-blue-500 to-indigo-500",
-    features: [
-      "Channel Manager Integrations",
-      "Interactive Room & Floor Plans",
-      "Mobile Check-in & Digital Keys",
-      "Automated Guest Communication",
-    ],
-  },
-  {
-    title: "Manufacturing & ERP Systems",
-    category: "Enterprise",
-    desc: "End-to-end supply chain visibility, production floor tracking, shift scheduling, and raw materials planning.",
-    icon: Factory,
-    color: "from-slate-600 to-zinc-700",
-    features: [
-      "BOM (Bill of Materials) Management",
-      "Machine Downtime Tracking",
-      "Compliance & Quality Control Audits",
-      "Live Production Dashboards",
-    ],
-  },
-  {
-    title: "Inventory & Warehousing",
-    category: "Operations",
-    desc: "Intelligent stock optimization with barcode/RFID scanning, automatic reorder levels, and vendor management.",
-    icon: Package,
-    color: "from-amber-500 to-yellow-600",
-    features: [
-      "Multi-warehouse Sync",
-      "LIFO/FIFO Valuation Engines",
-      "Pick & Pack Optimization Systems",
-      "Supplier Performance Dashboards",
-    ],
-  },
-  {
-    title: "Booking & Scheduling Engines",
-    category: "Service",
-    desc: "Custom scheduling software for service providers, clinics, and consulting firms with automatic reminders.",
-    icon: CalendarDays,
-    color: "from-emerald-500 to-teal-500",
-    features: [
-      "Smart Calendar Sync (Google, Outlook)",
-      "Automated SMS/Email Reminders",
-      "Deposit & Pre-payment Collection",
-      "Resource & Staff Allocation",
-    ],
-  },
-  {
-    title: "Enterprise Business Automation",
-    category: "Enterprise",
-    desc: "Connect legacy systems, automate repetitive tasks, and design custom ETL pipelines to eliminate human error.",
-    icon: GitMerge,
+  "Business Software": {
+    pillar: "Business Software",
+    icon: Cpu,
+    desc: "Streamline workflows, automate tasks, and govern operations with robust, custom software systems.",
     color: "from-purple-500 to-violet-600",
-    features: [
-      "Custom RESTful/GraphQL API Gateways",
-      "RPA (Robotic Process Automation) Workflows",
-      "Automated Document & Invoice Parsers",
-      "Real-time Webhook Systems",
-    ],
+    colorBg: "bg-purple-500/10 border-purple-500/20 text-purple-500 dark:bg-purple-500/8 dark:border-purple-500/20",
   },
-  {
-    title: "E-Commerce Platforms",
-    category: "Retail",
-    desc: "High-performance headless B2C storefronts and complex wholesale B2B portals built for conversion.",
-    icon: ShoppingBag,
-    color: "from-rose-500 to-pink-500",
-    features: [
-      "Sub-second Page Load Speeds",
-      "Dynamic Pricing & Discount Engines",
-      "Native Payment Gateway Integrations",
-      "Abandoned Cart Recovery Funnels",
-    ],
+  "Digital Growth": {
+    pillar: "Digital Growth",
+    icon: TrendingUp,
+    desc: "Scale your reach, secure your assets, and keep systems performing at peak levels.",
+    color: "from-emerald-500 to-teal-500",
+    colorBg: "bg-emerald-500/10 border-emerald-500/20 text-emerald-500 dark:bg-emerald-500/8 dark:border-emerald-500/20",
   },
-  {
-    title: "Custom Portals & Dashboards",
-    category: "Enterprise",
-    desc: "Secure, tailored portals for your employees, vendors, or premium clients with granular permissions.",
-    icon: LayoutDashboard,
-    color: "from-teal-500 to-cyan-500",
-    features: [
-      "Role-Based Access Control (RBAC)",
-      "Interactive Charts & Canvas PDF Export",
-      "Audit Trail & Security Logging",
-      "Custom White-labeling Options",
-    ],
-  },
-];
+};
 
 const processes = [
   {
@@ -157,13 +82,44 @@ const processes = [
 ];
 
 export default function ServicesPage() {
+  const { data: apiServices = [], isLoading } = useServices();
+
+  // Group services by category/pillar
+  const groupedPillars = React.useMemo(() => {
+    const categoriesMap: Record<string, typeof apiServices> = {};
+
+    apiServices.forEach((service) => {
+      const category = service.category || "Web Solutions";
+      if (!categoriesMap[category]) {
+        categoriesMap[category] = [];
+      }
+      categoriesMap[category].push(service);
+    });
+
+    return Object.keys(categoriesMap).map((catName) => {
+      const meta = pillarMetadata[catName] || {
+        pillar: catName,
+        icon: Globe,
+        desc: "High-performance software and digital capabilities tailored for modern enterprises.",
+        color: "from-indigo-500 to-cyan-500",
+        colorBg: "bg-indigo-500/10 border-indigo-500/20 text-indigo-500 dark:bg-indigo-500/8 dark:border-indigo-500/20",
+      };
+
+      return {
+        id: catName.toLowerCase().replace(/\s+/g, "-"),
+        ...meta,
+        services: categoriesMap[catName],
+      };
+    });
+  }, [apiServices]);
+
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground antialiased transition-colors duration-300">
       <Navbar />
 
       <main className="flex-1">
         {/* Header Hero Section */}
-        <section className="relative overflow-hidden px-4 pt-10 pb-10 lg:pt-12 lg:pb-12 border-b border-border/40">
+        <section className="relative overflow-hidden px-4 py-20 lg:py-24 border-b border-border/40">
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(99,102,241,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(99,102,241,0.04)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_40%,#000_80%,transparent_100%)] opacity-80" />
 
           <div className="mx-auto max-w-5xl text-center space-y-6">
@@ -171,75 +127,93 @@ export default function ServicesPage() {
               Capabilities
             </div>
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl text-neutral-900 dark:text-white">
-              Our Services &{" "}
+              Digital Transformation{" "}
               <span className="bg-gradient-to-r from-indigo-600 to-cyan-500 bg-clip-text text-transparent font-black">
-                Expertise
+                Offerings
               </span>
             </h1>
             <p className="mx-auto max-w-2xl text-lg text-muted-foreground leading-relaxed">
-              We engineer custom software systems, automation pipelines, and high-performance
-              applications designed to scale with your business requirements.
+              We partner with organizations to establish, optimize, and scale their online presence through modern engineering offerings.
             </p>
           </div>
         </section>
 
-        {/* Detailed Grid Section */}
-        <section className="mx-auto max-w-7xl px-4 pt-10 pb-10 sm:pt-12 sm:pb-12 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {detailedServices.map((service, index) => {
-              const IconComp = service.icon;
+        {/* Pillars & Detailed Grid Section */}
+        <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 space-y-24">
+          {isLoading ? (
+            <div className="py-20 text-center text-muted-foreground">
+              <div className="flex flex-col justify-center items-center gap-3">
+                <span className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent" />
+                <span className="text-sm font-bold tracking-wide">Syncing services...</span>
+              </div>
+            </div>
+          ) : (
+            groupedPillars.map((pillar) => {
+              const PillarIcon = pillar.icon;
               return (
-                <div
-                  key={index}
-                  className="group relative flex flex-col justify-between rounded-3xl border border-border/60 bg-card p-8 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
-                >
-                  {/* Decorative background gradient */}
-                  <div
-                    className={`absolute top-0 right-0 h-32 w-32 bg-gradient-to-br ${service.color} opacity-5 blur-2xl group-hover:opacity-10 transition-opacity`}
-                  />
-
-                  <div>
-                    {/* Header */}
-                    <div className="flex items-center justify-between">
-                      <div
-                        className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${service.color} text-white shadow-md`}
-                      >
-                        <IconComp className="h-6 w-6" />
-                      </div>
-                      <span className="text-[10px] font-extrabold tracking-wider px-3 py-1 rounded-full bg-muted text-muted-foreground border border-border/40">
-                        {service.category}
-                      </span>
+                <div key={pillar.id} className="space-y-10" id={pillar.id}>
+                  {/* Pillar Header */}
+                  <div className="flex flex-col md:flex-row md:items-center gap-6 pb-6 border-b border-border/40">
+                    <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${pillar.colorBg} shadow-md`}>
+                      <PillarIcon className="h-7 w-7" />
                     </div>
+                    <div className="space-y-1">
+                      <h2 className="text-2xl font-extrabold text-neutral-900 dark:text-white flex items-center gap-2">
+                        {pillar.pillar}
+                      </h2>
+                      <p className="text-muted-foreground text-sm max-w-2xl">
+                        {pillar.desc}
+                      </p>
+                    </div>
+                  </div>
 
-                    <h3 className="mt-6 text-xl font-bold text-neutral-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                      {service.title}
-                    </h3>
+                  {/* Sub-services Grid */}
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {pillar.services.map((service, index) => (
+                      <div
+                        key={service.id || index}
+                        className="group relative flex flex-col justify-between rounded-3xl border border-border/60 bg-card p-6 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
+                      >
+                        {/* Decorative background gradient */}
+                        <div
+                          className={`absolute top-0 right-0 h-24 w-24 bg-gradient-to-br ${pillar.color} opacity-5 blur-xl group-hover:opacity-10 transition-opacity`}
+                        />
 
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                      {service.desc}
-                    </p>
+                        <div>
+                          <h3 className="text-lg font-bold text-neutral-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                            {service.name}
+                          </h3>
 
-                    {/* Features checklist */}
-                    <ul className="mt-6 space-y-2.5">
-                      {service.features.map((feat, idx) => (
-                        <li
-                          key={idx}
-                          className="flex items-start gap-2.5 text-xs text-neutral-700 dark:text-neutral-300"
-                        >
-                          <CheckCircle2 className="h-4.5 w-4.5 text-indigo-500 shrink-0 mt-0.5" />
-                          <span>{feat}</span>
-                        </li>
-                      ))}
-                    </ul>
+                          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                            {service.description}
+                          </p>
+
+                          {/* Features checklist */}
+                          {service.features && service.features.length > 0 && (
+                            <ul className="mt-5 space-y-2">
+                              {service.features.map((feat, idx) => (
+                                <li
+                                  key={idx}
+                                  className="flex items-start gap-2 text-xs text-neutral-700 dark:text-neutral-300"
+                                >
+                                  <CheckCircle2 className="h-4 w-4 text-indigo-500 shrink-0 mt-0.5" />
+                                  <span>{feat}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               );
-            })}
-          </div>
+            })
+          )}
         </section>
 
         {/* Development Process / How We Work */}
-        <section className="border-t border-b border-border/40 bg-muted/20 py-10 sm:py-14">
+        <section className="border-t border-b border-border/40 bg-muted/20 py-20 sm:py-28">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center space-y-4">
               <h2 className="text-xs font-semibold leading-7 text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">
@@ -274,7 +248,7 @@ export default function ServicesPage() {
         </section>
 
         {/* CTA section */}
-        <section className="mx-auto max-w-5xl px-4 py-10 sm:py-14 text-center space-y-8">
+        <section className="mx-auto max-w-5xl px-4 py-20 sm:py-28 text-center space-y-8">
           <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
             Ready to Build Your System?
           </h2>

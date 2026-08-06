@@ -22,7 +22,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Elevix Technologies | IT Services & Consulting",
   description:
-    "Enterprise-grade software engineering, IT systems consulting, and state-of-the-art AI solutions.",
+    "Your digital transformation partner helping organizations establish and grow their online presence through custom Web Solutions, Business Software, and Digital Growth.",
 };
 
 export default function RootLayout({

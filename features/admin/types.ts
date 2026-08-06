@@ -31,6 +31,7 @@ export interface Industry {
 export interface Service {
   id: string;
   name: string;
+  category?: string;
   description: string;
   features: string[];
   technologies: string[];
